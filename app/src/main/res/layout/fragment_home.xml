@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/homefragmentdrawerlayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.HomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/loc_filter_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/_8sdp"
+                android:weightSum="1"
+                android:baselineAligned="false">
+                <RelativeLayout
+                    android:id="@+id/search_view"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:background="@drawable/gray_curved_rect_box">
+                    <!--   <ImageView
+                           android:id="@+id/imgLoc"
+                           android:layout_width="@dimen/_14sdp"
+                           android:layout_height="@dimen/_14sdp"
+                           android:src="@drawable/loc_pin"
+                           android:layout_marginStart="@dimen/_10sdp"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toTopOf="parent"
+                           app:layout_constraintBottom_toBottomOf="parent"/>-->
+                    <ImageView
+                        android:id="@+id/imgSearch"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:padding="@dimen/_3sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:src="@drawable/search_gray_icon"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"/>
+                    <TextView
+                        android:id="@+id/textSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toEndOf="@id/imgSearch"
+                        android:textColor="@color/dark_gray"
+                        android:text="@string/search_in_seen"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:textSize="@dimen/_9ssp"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:fontFamily="@font/expressway_rg"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/loc_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:background="@drawable/gray_curved_rect_box">
+                    <ImageView
+                        android:id="@+id/iv_loc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/loc_pin"
+                        android:padding="@dimen/_6sdp"
+                        android:contentDescription="@string/filter" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/filter_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:background="@drawable/gray_curved_rect_box">
+                    <ImageView
+                        android:id="@+id/iv_filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/filter_icon"
+                        android:contentDescription="@string/filter" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@+id/loc_filter_view"
+                app:layout_constraintBottom_toTopOf="@id/sponsors_layout">
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <!--  <androidx.viewpager2.widget.ViewPager2
+                              android:id="@+id/viewPager2"
+                              android:layout_width="match_parent"
+                              android:layout_height="@dimen/_140sdp"
+                              android:orientation="horizontal"
+                              app:layout_constraintStart_toStartOf="parent"
+                              app:layout_constraintTop_toBottomOf="@+id/loc_view"
+                              android:layout_marginTop="@dimen/_15sdp"
+                              android:layout_marginStart="@dimen/_15sdp"
+                              android:layout_marginEnd="@dimen/_15sdp"/>
+                          <com.google.android.material.tabs.TabLayout
+                              android:id="@+id/tabLayout"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+                              android:layout_marginStart="@dimen/_15sdp"
+                              android:layout_marginEnd="@dimen/_15sdp"
+                              app:tabGravity="center"
+                              app:tabIndicatorHeight="0dp"
+                              android:background="@color/white"
+                              app:tabBackground="@drawable/tab_selector"/>-->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvListCat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/_140sdp"
+                            android:background="@color/white"
+                            android:clipToPadding="false"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginTop="@dimen/_10sdp" />
+
+                        <!--                <androidx.viewpager.widget.ViewPager
+                                            android:id="@+id/rvListCat"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:minHeight="@dimen/_140sdp"
+                                            android:background="@color/white"
+                                            android:clipToPadding="false"
+                                            android:paddingStart="@dimen/_15sdp"
+                                            android:paddingEnd="@dimen/_15sdp"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            android:layout_marginTop="@dimen/_10sdp"/>-->
+
+                        <com.chahinem.pageindicator.PageIndicator
+                            android:id="@+id/pageIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:piSelectedColor="@color/gold"
+                            app:piDefaultColor="@color/black"
+                            app:piDotSpacing="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            app:layout_constraintTop_toBottomOf="@+id/rvListCat"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvList1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/pageIndicator"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:nestedScrollingEnabled="false"
+                            android:scrollbars="horizontal"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_recent_products_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            app:layout_constraintTop_toBottomOf="@id/rvList1">
+                            <TextView
+                                android:id="@+id/tv_recent_products"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:fontFamily="@font/farsi_simple_bold"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/txt_gray"
+                                android:gravity="start"
+                                android:textSize="@dimen/_12ssp"
+                                android:textStyle="bold"
+                                android:textAllCaps="false"
+                                android:elevation="@dimen/_5sdp"
+                                android:text="@string/recent_products"/>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_recent_products"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:elevation="@dimen/_20sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:paddingBottom="@dimen/_30sdp">
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvList3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scrollbars="vertical"
+                                    android:nestedScrollingEnabled="false"
+                                    android:layout_marginStart="@dimen/_15sdp"
+                                    android:layout_marginEnd="@dimen/_15sdp"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:layoutAnimation="@anim/layout_animation"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_recent_products_layout">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/viewCat"
+                                android:layout_width="@dimen/_140sdp"
+                                android:layout_height="@dimen/_35sdp"
+                                android:background="@drawable/black_top_end_corner_radius_rect"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent">
+                                <TextView
+                                    android:id="@+id/catTxt"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:fontFamily="@font/farsi_simple_bold"
+                                    android:includeFontPadding="false"
+                                    android:textColor="@color/gold"
+                                    android:gravity="center"
+                                    android:textSize="@dimen/_17ssp"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="@dimen/_10sdp"
+                                    android:textAllCaps="true"
+                                    android:elevation="@dimen/_5sdp"
+                                    android:text="@string/categories"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/viewCat"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:elevation="@dimen/_20sdp"
+                                android:paddingBottom="@dimen/_30sdp">
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvList2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scrollbars="vertical"
+                                    android:nestedScrollingEnabled="false"
+                                    android:layout_marginStart="@dimen/_15sdp"
+                                    android:layout_marginEnd="@dimen/_15sdp"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:layoutAnimation="@anim/layout_animation"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.core.widget.NestedScrollView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+            <!-- <ProgressBar
+                 android:id="@+id/progressBar"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 app:layout_constraintTop_toTopOf="parent"
+                 android:elevation="@dimen/_5sdp"
+                 android:visibility="gone"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"/>-->
+
+            <LinearLayout
+                android:id="@+id/sponsors_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:background="@drawable/filter_bg_shadow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/tv_sponsors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/expressway_rg"
+                    android:text="@string/sponsors"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/gray_color"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sponsors_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_60sdp"
+                    android:weightSum="1"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:background="@color/transparent"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardCornerRadius="@dimen/_8sdp">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/adcb_logo"
+                            android:scaleType="fitXY"/>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardElevation="0dp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:cardCornerRadius="@dimen/_8sdp">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/sponsor_demo"
+                            android:scaleType="fitXY"/>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+            <include
+                layout="@layout/shimmer_view"
+                />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_gravity="end">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include
+                android:id="@+id/navHeaderView"
+                layout="@layout/categories_side_top_view"/>
+            <include
+                android:id="@+id/navSideMenu"
+                layout="@layout/categories_side_menu_layout"/>
+        </LinearLayout>
+
+
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.CategoriesDetailsFragment">
+
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/categories"
+        android:fontFamily="@font/expressway_rg"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textColor="@color/txt_dark_gray"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:textSize="@dimen/_15ssp"/>
+
+    <TextView
+        android:id="@+id/tv_no_of_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_category"
+        app:layout_constraintBottom_toBottomOf="@id/tv_category"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/categories"
+        android:fontFamily="@font/expressway_rg"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:textColor="@color/txt_dark_gray"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:textSize="@dimen/_11ssp"/>
+
+    <TextView
+        android:id="@+id/tv_dropdown_items_names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_no_of_results"
+        android:hint="@string/all"
+        android:fontFamily="@font/expressway_rg"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/txt_dark_gray"
+        android:background="@drawable/outer_black_white_rect_filled_box"
+        android:textAllCaps="false"
+        android:padding="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:textStyle="normal"
+        android:drawablePadding="@dimen/_8sdp"
+        app:drawableEndCompat="@drawable/down_arrow_icon" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_dropdown_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_dropdown_items_names"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/outer_black_white_rect_filled_box"
+        android:padding="@dimen/_8sdp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="@dimen/_8sdp">
+
+        <TextView
+            android:id="@+id/tv_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           app:layout_constraintTop_toTopOf="parent"
+            android:hint="@string/all"
+            android:fontFamily="@font/expressway_rg"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/txt_dark_gray"
+            android:textAllCaps="false"
+            android:padding="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textStyle="normal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/gray"
+            app:layout_constraintTop_toBottomOf="@id/tv_all"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:id="@+id/divider"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_categories_acc_type"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_120sdp"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            android:padding="@dimen/_8sdp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:padding="@dimen/_8sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/cl_dropdown_layout">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_filtered_products_categories_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:scrollbars="vertical"/>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/txtNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:text="@string/no_data_found"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13ssp"
+        android:fontFamily="@font/expressway_rg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

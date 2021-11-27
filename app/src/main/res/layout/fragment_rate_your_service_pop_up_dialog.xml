@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_bg_rect_box"
+    android:elevation="@dimen/_12sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".dialog.RateYourServicePopUpDialog">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_15sdp">
+        <TextView
+            android:id="@+id/tv_rate_your_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/farsi_simple_bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Rate your service:"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginVertical="@dimen/_10sdp"/>
+
+        <TextView
+            android:id="@+id/ratings_desc_tv"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/expressway_rg"
+            android:text="By adding your honest product rating, you are helping our community to have a standard of quality products for all our customers.\n\n Thank you for your cooperation!"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_9ssp"
+            android:textStyle="bold"
+            android:textColor="#9F9F9F"
+            android:layout_margin="@dimen/_15sdp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tv_rate_your_service"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/product_desc_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/ratings_desc_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginVertical="@dimen/_20sdp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/productimgview"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:cardCornerRadius="@dimen/_10sdp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/productimg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/default_icon"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/prod_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/expressway_rg"
+                android:text="Product Name"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_9ssp"
+                android:textStyle="bold"
+                android:textColor="#9F9F9F"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/add_your_ratings_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/productRatingBar"
+            style="?attr/ratingBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rating="3.5"
+            android:theme="@style/orangeRatingBar"
+            android:layout_marginVertical="@dimen/_20sdp"
+            app:layout_constraintTop_toBottomOf="@+id/product_desc_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/btnOk"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_40sdp"
+            app:layout_constraintTop_toBottomOf="@+id/productRatingBar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:background="@drawable/gold_filled_small_radius_box_curved"
+            android:fontFamily="@font/expressway_rg"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:text="OK"/>
+
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_40sdp"
+            app:layout_constraintTop_toBottomOf="@+id/productRatingBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:background="@drawable/transparent_gray_outer_rect_box_curved"
+            android:fontFamily="@font/expressway_rg"
+            android:includeFontPadding="false"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="normal"
+            android:textAllCaps="true"
+            android:text="Cancel"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

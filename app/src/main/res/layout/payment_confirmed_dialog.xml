@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/_25sdp"
+    android:elevation="@dimen/_10sdp"
+    app:cardBackgroundColor="@color/light_gray">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_14sdp">
+
+        <TextView
+            android:id="@+id/tv_payment_confirmed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/payment_confirmed"
+            android:textAllCaps="true"
+            android:textSize="@dimen/_14ssp"
+            android:fontFamily="@font/expressway_rg"
+            android:textColor="#515151"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_thanks_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           app:layout_constraintTop_toBottomOf="@id/tv_payment_confirmed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/thank_you_for_purchasing_n_please_check_the_details_below_of_your_delivery"
+            android:textAllCaps="false"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:lineHeight="@dimen/_18sdp"
+            android:textSize="@dimen/_11ssp"
+            android:fontFamily="@font/expressway_rg"
+            android:textColor="#9F9F9F"
+            android:textStyle="bold"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/orderView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thanks_text"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:visibility="visible">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/orderNumCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/order_hess"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/roboto_medium_numbers"/>
+
+                <TextView
+                    android:id="@+id/pricetvCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="AED 1,699"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/roboto_medium_numbers"/>
+                <!-- <TextView
+                     android:id="@+id/deliveryDate"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:textDirection="locale"
+                     android:textAlignment="viewStart"
+                     android:text="Delivery Date:  01/01/2022"
+                     android:textColor="@color/black"
+                     android:textSize="@dimen/_11ssp"
+                     android:textStyle="normal"
+                     android:layout_marginTop="@dimen/_10sdp"
+                     android:layout_marginStart="@dimen/_10sdp"
+                     android:layout_marginEnd="@dimen/_10sdp"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toTopOf="parent"
+                     android:textAllCaps="false"
+                     android:fontFamily="@font/expressway_rg"/>-->
+
+                <!--   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/rvList"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       app:layout_constraintTop_toBottomOf="@+id/deliveryDate"/>-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/orderNumCard"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+                    <TextView
+                        android:id="@+id/deliveryDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:textDirection="locale"
+                        android:textAlignment="viewStart"
+                        android:text="@string/delivery_date"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="normal"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rvList"
+                        android:textAllCaps="false"
+                        android:fontFamily="@font/expressway_rg"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary_gray"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/btnViewOrder"
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/expressway_rg"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@string/check_status"
+            android:background="@drawable/gold_filled_small_radius_box_curved"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintTop_toBottomOf="@+id/orderView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

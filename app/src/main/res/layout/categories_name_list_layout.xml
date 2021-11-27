@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/_6sdp">
+
+    <TextView
+        android:id="@+id/tv_category_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Categories"
+        android:fontFamily="@font/expressway_rg"
+        android:textSize="@dimen/_12ssp"
+        android:paddingHorizontal="@dimen/_6sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:gravity="center_vertical"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        app:layout_constraintTop_toBottomOf="@id/tv_category_name"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@color/txt_dark_gray"
+        android:layout_marginHorizontal="@dimen/_8sdp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

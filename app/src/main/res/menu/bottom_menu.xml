@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemDiscount"
+        android:tooltipText="Discount"
+        android:icon="@drawable/discount"
+        android:title="Discount" />
+    <item
+        android:id="@+id/itemCart"
+        android:icon="@drawable/shopping_cart"
+        android:tooltipText="Cart"
+        android:title="Cart"/>
+
+    <item
+        android:id="@+id/itemHome"
+        android:icon="@drawable/home"
+        android:tooltipText="Home"
+        android:title="Home"/>
+    <item
+        android:id="@+id/itemSearch"
+        android:icon="@drawable/search"
+        android:tooltipText="Search"
+        android:title="Search"/>
+    <item
+        android:id="@+id/itemProfile"
+        android:icon="@drawable/profile_5"
+        android:tooltipText="Profile"
+        android:title="Profile"/>
+
+</menu>

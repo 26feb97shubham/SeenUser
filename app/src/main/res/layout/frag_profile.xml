@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_8sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profileView"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_140sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    app:civ_border_color="@color/gold"
+                    app:civ_border_width="@dimen/_3sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/user" />
+
+
+                <TextView
+                    android:id="@+id/tv_profileName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/expressway_rg"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14ssp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="@string/name"
+                    app:layout_constraintTop_toBottomOf="@id/img"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mainView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/profileView"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:paddingVertical="@dimen/_6sdp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/viewPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/txtPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/expressway_rg"
+                        android:text="@string/phone"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RelativeLayout
+                        android:id="@+id/phone_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/gray_gold_rect_box"
+                        app:layout_constraintTop_toBottomOf="@+id/txtPhone">
+
+
+                        <TextView
+                            android:id="@+id/tv_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/expressway_rg"
+                            android:includeFontPadding="false"
+                            android:textDirection="locale"
+                            android:hint="Phone Number"
+                            android:gravity="start|center_vertical"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:textAllCaps="false"
+                            android:maxLength="15"
+                            android:textColor="@color/txt_gray"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:textColorHint="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            app:drawableStartCompat="@drawable/phone_img" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/txtEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/expressway_rg"
+                        android:text="@string/email"
+                        android:visibility="gone"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:textSize="@dimen/_11ssp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/phone_layout"/>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@drawable/gray_gold_rect_box"
+                        app:layout_constraintTop_toBottomOf="@+id/txtEmail">
+
+
+                        <TextView
+                            android:id="@+id/tv_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/expressway_rg"
+                            android:includeFontPadding="false"
+                            android:textDirection="locale"
+                            android:hint="Email"
+                            android:gravity="start|center_vertical"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:textAllCaps="false"
+                            android:maxLength="15"
+                            android:textColor="@color/txt_gray"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:textColorHint="@color/gray"
+                            android:textSize="@dimen/_12ssp"
+                            app:drawableStartCompat="@drawable/email" />
+
+                    </RelativeLayout>
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/txtAddLocationLayout"
+                    android:layout_width="@dimen/_240sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/transparent_gray_outer_rect_box_curved"
+                    app:layout_constraintTop_toBottomOf="@id/viewPhone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/plus_icon"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/txtAddLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:text="@string/add_location"
+                        android:fontFamily="@font/expressway_rg"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:layout_gravity="center"
+                        android:textStyle="normal"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/txtAddCardLayout"
+                    android:layout_width="@dimen/_240sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/transparent_gray_outer_rect_box_curved"
+                    app:layout_constraintTop_toBottomOf="@id/txtAddLocationLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/plus_icon"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/txtAddCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="@string/add_card_details"
+                        android:fontFamily="@font/expressway_rg"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:gravity="start|center_vertical"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+
+                <!--    <RelativeLayout
+                        android:id="@+id/rlAddLoc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/viewPhone"
+                        app:layout_constraintStart_toStartOf="parent">
+                        <ImageView
+                            android:id="@+id/imgPlus"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/plus"/>
+                        <TextView
+                            android:id="@+id/txtAddLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_location"
+                            android:fontFamily="@font/expressway_rg"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12ssp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_toEndOf="@+id/imgPlus"
+                            android:textStyle="normal"/>
+                      &lt;!&ndash;  <View
+                            android:layout_width="@dimen/_75sdp"
+                            android:layout_height="@dimen/_1sdp"
+                            android:background="@color/black"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_below="@+id/txtAddLocation"
+                            android:layout_toEndOf="@+id/imgPlus"/>&ndash;&gt;
+
+
+                    </RelativeLayout>-->
+                <!--    <RelativeLayout
+                        android:id="@+id/rlAddCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/rlAddLoc"
+                        app:layout_constraintStart_toStartOf="parent">
+                        <ImageView
+                            android:id="@+id/imgPlus2"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/plus"/>
+                        <TextView
+                            android:id="@+id/txtAddCard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_card_details"
+                            android:fontFamily="@font/expressway_rg"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12ssp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_toEndOf="@+id/imgPlus2"
+                            android:textStyle="normal"/>
+                     &lt;!&ndash;   <View
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="@dimen/_1sdp"
+                            android:background="@color/black"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_below="@+id/txtAddCard"
+                            android:layout_toEndOf="@+id/imgPlus2"/>&ndash;&gt;
+
+
+                    </RelativeLayout>-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/btneditprofile"
+                android:layout_width="@dimen/_240sdp"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintTop_toBottomOf="@+id/mainView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@drawable/gold_filled_small_radius_box_curved"
+                android:fontFamily="@font/expressway_rg"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="normal"
+                android:textAllCaps="true"
+                android:text="@string/edit_profile"/>
+
+            <TextView
+                android:id="@+id/txtChangePass"
+                android:layout_width="@dimen/_240sdp"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintTop_toBottomOf="@+id/btneditprofile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@drawable/gold_filled_small_radius_box_curved"
+                android:fontFamily="@font/expressway_rg"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="normal"
+                android:textAllCaps="true"
+                android:text="@string/change_password_caps"/>
+            <!--            <RelativeLayout
+                            android:id="@+id/rlChangePass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            android:layout_marginEnd="@dimen/_15sdp"
+                            app:layout_constraintTop_toBottomOf="@+id/btnSubmit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent">
+                            <TextView
+                                android:id="@+id/txtChangePass"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/change_password_caps"
+                                android:fontFamily="@font/expressway_rg"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_12ssp"
+                                android:layout_centerHorizontal="true"
+                                android:textStyle="normal"/>
+                           &lt;!&ndash; <View
+                                android:layout_width="@dimen/_105sdp"
+                                android:layout_height="@dimen/_1sdp"
+                                android:background="@color/black"
+                                android:layout_centerHorizontal="true"
+                                android:layout_below="@+id/txtChangePass"
+                                />&ndash;&gt;
+
+                        </RelativeLayout>-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="@dimen/_5sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

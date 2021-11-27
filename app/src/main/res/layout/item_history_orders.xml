@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="#DBDBDB"
+    android:layout_margin="@dimen/_10sdp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+      <!--  <ImageView
+            android:id="@+id/img"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:elevation="@dimen/_3sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/default_icon"/>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_right_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/imgRightArrow"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:scaleType="fitXY"
+                android:elevation="@dimen/_3sdp"
+                android:visibility="visible"
+                android:padding="@dimen/_4sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_right_arrow"/>
+            <ImageView
+                android:id="@+id/imgDownArrow"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
+                android:scaleType="fitXY"
+                android:elevation="@dimen/_3sdp"
+                android:visibility="gone"
+                android:rotation="90"
+                android:padding="@dimen/_4sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_right_arrow"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <TextView
+            android:id="@+id/orderNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:fontFamily="@font/roboto_medium_numbers"
+            android:gravity="start"
+            android:textDirection="locale"
+            android:textAlignment="viewStart"
+            android:text="Order #2432434343"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/orderView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/orderNum"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:visibility="gone">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/orderNumCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/order_hess"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/roboto_medium_numbers"/>
+
+                <TextView
+                    android:id="@+id/pricetvCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="AED 1,699"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/roboto_medium_numbers"/>
+               <!-- <TextView
+                    android:id="@+id/deliveryDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textDirection="locale"
+                    android:textAlignment="viewStart"
+                    android:text="Delivery Date:  01/01/2022"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11ssp"
+                    android:textStyle="normal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/expressway_rg"/>-->
+
+             <!--   <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/deliveryDate"/>-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/orderNumCard"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:paddingBottom="@dimen/_10sdp">
+                    <TextView
+                        android:id="@+id/deliveryDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:textDirection="locale"
+                        android:textAlignment="viewStart"
+                        android:text="@string/delivery_date"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="normal"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rvList"
+                        android:textAllCaps="false"
+                        android:fontFamily="@font/expressway_rg"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary_gray"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:id="@+id/btnViewOrder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:fontFamily="@font/expressway_rg"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="@string/view_order_detail"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10ssp"
+                        app:layout_constraintTop_toBottomOf="@+id/rvList" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView
+                    android:id="@+id/btnViewOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginStart="@dimen/_25sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_25sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/gold_filled_rect_box"
+                    android:fontFamily="@font/expressway_rg"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/view_order_detail"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintTop_toBottomOf="@+id/rvList" />-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_12sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/orderView"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

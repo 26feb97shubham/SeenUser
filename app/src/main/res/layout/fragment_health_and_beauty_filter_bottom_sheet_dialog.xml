@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.HealthAndBeautyFilterBottomSheetDialogFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/filter_background"
+        android:elevation="@dimen/_12sdp"
+        android:theme="@style/BottomSheetDialogTheme">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:paddingBottom="@dimen/_12sdp">
+            <TextView
+                android:id="@+id/tv_filterSearch"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:text="Filter Search"
+                android:textAllCaps="true"
+                android:textColor="#515151"
+                android:fontFamily="@font/expressway_rg"
+                android:textStyle="bold"
+                android:textSize="@dimen/_14ssp"
+                android:gravity="center"
+                android:background="@drawable/gray_curved_rect_box_large"/>
+
+            <LinearLayout
+                android:id="@+id/price_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_filterSearch"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRICE"
+                    android:textSize="@dimen/_13ssp"
+                    android:fontFamily="@font/expressway_rg"
+                    android:textStyle="bold"
+                    android:textColor="#515151"
+                    android:layout_gravity="center_vertical"
+                    android:textAllCaps="true"/>
+
+                <LinearLayout
+                    android:id="@+id/price_filter_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/transparent_gray_outer_rect_box"
+                    android:layout_marginTop="@dimen/_6sdp">
+
+                    <TextView
+                        android:id="@+id/price_filter_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:text="LOWEST - HIGHEST"
+                        android:fontFamily="@font/expressway_rg"
+                        android:textColor="#515151"
+                        android:textSize="@dimen/_12ssp"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        app:drawableEndCompat="@drawable/down_arrow_icon" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/emi_layout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/price_layout"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textSize="@dimen/_13ssp"
+                    android:fontFamily="@font/expressway_rg"
+                    android:textStyle="bold"
+                    android:textColor="#515151"
+                    android:layout_gravity="center_vertical"
+                    android:textAllCaps="true"/>
+
+                <LinearLayout
+                    android:id="@+id/emi_filter_layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/transparent_gray_outer_rect_box"
+                    android:layout_marginTop="@dimen/_6sdp">
+
+                    <TextView
+                        android:id="@+id/emi_filter_tv1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:text="Dubai"
+                        android:fontFamily="@font/expressway_rg"
+                        android:textColor="#515151"
+                        android:textSize="@dimen/_12ssp"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        app:drawableEndCompat="@drawable/down_arrow_icon" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ll_countries_list1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:background="@drawable/transparent_gray_outer_rect_box"
+                    app:layout_constraintTop_toBottomOf="@id/emi_filter_layout"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:padding="@dimen/_6sdp"
+                    android:visibility="gone">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_countries_list1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/txtNoDataFound_countries1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone"
+                        android:text="@string/no_data_found"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13ssp"
+                        android:fontFamily="@font/expressway_rg"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/apply_filter_tv1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintTop_toBottomOf="@id/emi_layout1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_30sdp"
+                android:background="@drawable/gold_filled_small_radius_box_curved"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:text="APPLY FILTER"
+                android:textSize="@dimen/_14ssp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textAllCaps="true"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</FrameLayout>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/about_us_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="visible"
+                android:background="@android:color/transparent"
+                android:id="@+id/main_cl">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/frag_profile_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
+                    app:contentInsetStart="0dp"
+                    app:contentInsetEnd="0dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/frag_profile_toolbarView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_50sdp"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/frag_about_us_backImg"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/back_gray"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_15sdp"
+                            app:layout_goneMarginEnd="@dimen/_15sdp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <ImageView
+                                android:id="@+id/aboutUsFragment_addToBasketImg"
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_height="@dimen/_24sdp"
+                                android:src="@drawable/add_to_basket"
+                                android:layout_marginEnd="@dimen/_15sdp"
+                                app:layout_goneMarginStart="@dimen/_15sdp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            <TextView
+                                android:id="@+id/aboutUsFragment_cartWedgeCount"
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:textSize="@dimen/_8sdp"
+                                android:layout_marginEnd="@dimen/_15sdp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:singleLine="true"
+                                android:visibility="gone"
+                                android:fontFamily="@font/expressway_rg"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:background="@drawable/red_dot"/>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <TextView
+                            android:id="@+id/frag_profile_signup_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_20sdp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="center_vertical"
+                            android:fontFamily="@font/expressway_rg"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:includeFontPadding="false"
+                            android:textColor="#515151"
+                            android:textSize="@dimen/_18ssp"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            android:letterSpacing="0.6"
+                            android:text="SEEN"/>
+
+                        <ImageView
+                            android:id="@+id/aboutUsFragment_menuImg"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/menu_icon_1"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            app:layout_constraintStart_toEndOf="@+id/frag_about_us_backImg"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.appcompat.widget.Toolbar>
+                <ImageView
+                    android:id="@+id/backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_120sdp"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/about_us_more_info_toolbar_bg"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/about_us_image"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:src="@drawable/logo"
+        app:layout_constraintTop_toBottomOf="@id/main_cl"
+        app:layout_constraintBottom_toBottomOf="@id/main_cl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/main_cl"
+                    app:layout_constraintTop_toBottomOf="@id/main_cl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    android:background="@android:color/transparent">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/tv_arabic"
+                            android:layout_width="@dimen/_260sdp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            app:layout_constraintTop_toBottomOf="@id/about_us_image"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:textColor="@color/gold"
+                            android:fontFamily="@font/sane_jaleh"
+                            android:textStyle="normal"
+                            android:text="أول منصة إماراتية تجمع التجار"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:textSize="@dimen/_18ssp"/>
+
+                        <TextView
+                            android:id="@+id/tv_english"
+                            android:layout_width="@dimen/_240sdp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tv_arabic"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:textColor="@color/gold"
+                            android:fontFamily="@font/expressway_rg"
+                            android:text="@string/about_us_one"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:textStyle="normal"
+                            android:textSize="@dimen/_15ssp"/>
+
+                        <TextView
+                            android:id="@+id/tv_about_us_more_info"
+                            android:layout_width="@dimen/_240sdp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/tv_english"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/expressway_rg"
+                            android:text="@string/about_us_more_info"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:textStyle="normal"
+                            android:textSize="@dimen/_15ssp"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:background="@color/txt_gray"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginHorizontal="@dimen/_15sdp"/>
+
+                        <TextView
+                            android:id="@+id/about_us_content_home"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingVertical="@dimen/_15sdp"
+                            android:text="@string/hello_blank_fragment"
+                            android:paddingHorizontal="@dimen/_10sdp"/>
+                    </LinearLayout>
+                </ScrollView>
+
+          <!--  <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/ll_main"
+                android:background="@android:color/transparent">
+                <TextView
+                    android:id="@+id/about_us_content_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/_15sdp"
+                    android:text="@string/hello_blank_fragment"
+                    android:paddingHorizontal="@dimen/_10sdp"/>
+            </ScrollView>
+-->
+</androidx.constraintlayout.widget.ConstraintLayout>
