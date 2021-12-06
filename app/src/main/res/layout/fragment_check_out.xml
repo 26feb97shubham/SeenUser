@@ -388,7 +388,7 @@
                 android:textSize="@dimen/_9ssp"
                 android:textDirection="locale"
                 android:textAlignment="viewStart"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
@@ -405,7 +405,7 @@
                 android:textStyle="normal"
                 android:textColor="@color/txt_gray"
                 android:textSize="@dimen/_9ssp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:textDirection="locale"
                 android:textAlignment="viewEnd"
                 android:layout_marginTop="@dimen/_4sdp"
@@ -490,6 +490,7 @@
                 app:layout_constraintStart_toEndOf="@+id/txtTaxes"
                 android:textAllCaps="false"
                 />
+
             <View
                 android:id="@+id/view5"
                 android:layout_width="match_parent"

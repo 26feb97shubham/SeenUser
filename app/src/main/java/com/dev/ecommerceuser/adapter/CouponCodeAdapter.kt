@@ -35,7 +35,7 @@ class CouponCodeAdapter(private val context: Context, private val data:ArrayList
             holder.itemView.btnApply.startAnimation(AlphaAnimation(1f, .5f))
             clickInstance.clickPostionType(position, "apply")
         }
-        val underline = SpannableString(context.getString(R.string.change_password_caps))
+        val underline = SpannableString(context.getString(R.string.terms_amp_conditions))
         underline.setSpan(UnderlineSpan(), 0, underline.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         holder.itemView.txtTC.text=underline
 

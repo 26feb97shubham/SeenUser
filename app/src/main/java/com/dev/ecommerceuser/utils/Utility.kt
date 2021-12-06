@@ -13,6 +13,7 @@ import java.util.*
 class Utility {
     companion object{
         var showPass = false
+        var total_discount = 0.0
         fun changeLanguage(context:Context, language:String){
             val locale = Locale(language)
             Locale.setDefault(locale)

@@ -2,6 +2,7 @@ package com.dev.ecommerceuser.fragment
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.dev.ecommerceuser.rest.ApiClient
 import com.dev.ecommerceuser.rest.ApiInterface
 import com.dev.ecommerceuser.utils.LogUtils
 import com.dev.ecommerceuser.utils.SharedPreferenceUtility
+import com.dev.ecommerceuser.utils.Utility.Companion.total_discount
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_apply_coupon.view.*
 import okhttp3.ResponseBody
@@ -49,6 +51,7 @@ class ApplyCouponFragment : Fragment() {
     var supplier_id:Int=0
     var coupon_code=""
     var amount=""
+    var minPrice=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -61,6 +64,7 @@ class ApplyCouponFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_apply_coupon, container, false)
+        Log.e("amount", ""+amount)
         setUpViews()
         getCoupons(false)
         return mView
@@ -85,6 +89,12 @@ class ApplyCouponFragment : Fragment() {
             override fun clickPostionType(pos: Int, type: String) {
                 if(type=="apply") {
                     coupon_code = couponList[pos].code
+                    minPrice = couponList[pos].min_price
+                    /*if (minPrice<amount){
+                        LogUtils.shortToast(requireContext(), "Min Price for Coupans is not matching")
+                    }else{
+                        applyCoupons()
+                    }*/
                     applyCoupons()
                 }
                 else{
@@ -119,6 +129,11 @@ class ApplyCouponFragment : Fragment() {
     private fun checkCoupon() {
         coupon_code=mView!!.edtSearch.text.toString()
         if(!TextUtils.isEmpty(coupon_code)){
+           /* if (minPrice<amount){
+                LogUtils.shortToast(requireContext(), "Min Price for Coupans is not matching")
+            }else{
+                applyCoupons()
+            }*/
             applyCoupons()
         }
         else{
@@ -169,7 +184,6 @@ class ApplyCouponFragment : Fragment() {
                                 c.max_discount_price = obj.getString("max_discount_price")
                                 couponList.add(c)
                             }
-
                         }
 
                         else {
@@ -205,8 +219,6 @@ class ApplyCouponFragment : Fragment() {
     private fun applyCoupons() {
         mView!!.progressBar.visibility= View.VISIBLE
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-
-
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("user_id", "supplier_id", "code", "amount", "lang"),
             arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), supplier_id.toString(), coupon_code, amount, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
@@ -221,6 +233,7 @@ class ApplyCouponFragment : Fragment() {
                     if (response.body() != null) {
                         val jsonObject = JSONObject(response.body()!!.string())
                         LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                        total_discount = jsonObject.getDouble("total_discount")
                         findNavController().popBackStack()
                     }
                 } catch (e: IOException) {

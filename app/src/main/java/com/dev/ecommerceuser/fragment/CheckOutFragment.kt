@@ -25,6 +25,7 @@ import com.dev.ecommerceuser.rest.ApiInterface
 import com.dev.ecommerceuser.utils.LogUtils
 import com.dev.ecommerceuser.utils.SharedPreferenceUtility
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fragment_check_out.*
 import kotlinx.android.synthetic.main.fragment_check_out.view.*
 import kotlinx.android.synthetic.main.fragment_check_out.view.progressBar
 import okhttp3.ResponseBody
@@ -67,6 +68,7 @@ class CheckOutFragment : Fragment() {
     var card_id:Int=0
     var supplier_id:Int=0
     var amount:Float=0f
+    var allowCoupans = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -79,8 +81,8 @@ class CheckOutFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
             mView = inflater.inflate(R.layout.fragment_check_out, container, false)
-            setUpViews()
             myCart()
+            setUpViews()
            return mView
     }
 
@@ -105,7 +107,7 @@ class CheckOutFragment : Fragment() {
             mView!!.txtCoupon.startAnimation(AlphaAnimation(1f, .5f))
             val bundle=Bundle()
             bundle.putInt("supplier_id", supplier_id)
-            bundle.putString("amount", amount.toString())
+            bundle.putString("amount", total_price)
             findNavController().navigate(R.id.action_checkOutFragment_to_applyCouponFragment, bundle)
         }
 
@@ -131,6 +133,8 @@ class CheckOutFragment : Fragment() {
                     card_id=cardList[j].id
                 }
             }
+
+            Log.e("allowCoupans", ""+allowCoupans)
 
             if(location_id==0){
                 LogUtils.shortToast(requireContext(), getString(R.string.please_select_def_delivery_location))
@@ -204,6 +208,19 @@ class CheckOutFragment : Fragment() {
                             taxes=jsonObject.getString("taxes")
                             total_price=jsonObject.getString("total_price")
                             total_discount=jsonObject.getString("total_discount")
+                            allowCoupans = jsonObject.getInt("total_allow_coupons_count")
+
+                            if(allowCoupans>0){
+                                mView!!.txtCouponCode.visibility = View.VISIBLE
+                                mView!!.txtCoupon.visibility = View.VISIBLE
+                                mView!!.txtTotalDiscount.visibility = View.VISIBLE
+                                mView!!.totalDiscAmt.visibility = View.VISIBLE
+                            }else{
+                                mView!!.txtCouponCode.visibility = View.GONE
+                                mView!!.txtCoupon.visibility = View.GONE
+                                mView!!.txtTotalDiscount.visibility = View.GONE
+                                mView!!.totalDiscAmt.visibility = View.GONE
+                            }
 
                             if(total_discount!="0"){
                                 mView!!.txtTotalDiscount.visibility=View.VISIBLE
@@ -248,6 +265,7 @@ class CheckOutFragment : Fragment() {
 
                                 if(obj.getInt("allow_coupans")==1){
                                     amount += obj.getString("price").toFloat()
+                                    allowCoupans += 1
                                 }
                             }
                             itemListAdapter.notifyDataSetChanged()
@@ -285,7 +303,12 @@ class CheckOutFragment : Fragment() {
                             val location=jsonObject.getJSONObject("location")
                             location_id=location.getInt("id")
                             mView!!.txtTitle.text=location.getString("title")
-                            mView!!.txtAddress.text=location.getString("address")
+                            if (location.getString("address").equals("")){
+                                val address = location.getString("street") + " " + location.getString("city") + " " + location.getString("country")
+                                mView!!.txtAddress.text=address
+                            }else{
+                                mView!!.txtAddress.text=location.getString("address")
+                            }
                         }
                         else {
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
@@ -312,9 +335,11 @@ class CheckOutFragment : Fragment() {
             }
         })
 
+        Log.e("allowCoupans 1", ""+allowCoupans)
 
     }
     private fun placeOrder() {
+        Log.e("order_data", order_data.toString())
         mView!!.progressBar.visibility= View.VISIBLE
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)

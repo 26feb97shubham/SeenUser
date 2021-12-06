@@ -313,4 +313,5 @@
     <string name="emirate">Emirate</string>
     <string name="payment_options">Payment Options</string>
     <string name="tap_payments">TAP Payments</string>
+    <string name="discount">Discount</string>
 </resources>

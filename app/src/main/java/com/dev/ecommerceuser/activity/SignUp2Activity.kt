@@ -183,8 +183,8 @@ class SignUp2Activity : AppCompatActivity() {
                              bundle.putString("ref", "1")
                              bundle.putString("user_id", data.getInt("user_id").toString())
                              findNavController().navigate(R.id.action_signUpFragment_to_otpVerificationFragment, bundle)*/
-                            startActivity(Intent(this@SignUp2Activity, OtpVerificationActivity::class.java).putExtra("ref", "1")
-                                    .putExtra("user_id", data.getInt("user_id").toString()))
+                            startActivity(Intent(this@SignUp2Activity, LoginActivity::class.java))
+                            finish()
 
                         }
                         /*else if (jsonObject.getInt("response") == 2){
