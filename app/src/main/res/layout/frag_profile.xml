@@ -95,18 +95,18 @@
                             android:id="@+id/tv_phone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/_8sdp"
                             android:fontFamily="@font/expressway_rg"
-                            android:includeFontPadding="false"
-                            android:textDirection="locale"
-                            android:hint="Phone Number"
                             android:gravity="start|center_vertical"
+                            android:hint="Phone Number"
+                            android:includeFontPadding="false"
+                            android:maxLength="15"
                             android:paddingStart="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"
                             android:textAllCaps="false"
-                            android:maxLength="15"
                             android:textColor="@color/txt_gray"
-                            android:drawablePadding="@dimen/_8sdp"
                             android:textColorHint="@color/gray"
+                            android:textDirection="locale"
                             android:textSize="@dimen/_12ssp"
                             app:drawableStartCompat="@drawable/phone_img" />
 
@@ -138,25 +138,21 @@
                             android:id="@+id/tv_email"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/_8sdp"
                             android:fontFamily="@font/expressway_rg"
-                            android:includeFontPadding="false"
-                            android:textDirection="locale"
-                            android:hint="Email"
                             android:gravity="start|center_vertical"
+                            android:hint="Email"
+                            android:includeFontPadding="false"
+                            android:maxLength="30"
                             android:paddingStart="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"
                             android:textAllCaps="false"
-                            android:maxLength="15"
                             android:textColor="@color/txt_gray"
-                            android:drawablePadding="@dimen/_8sdp"
                             android:textColorHint="@color/gray"
+                            android:textDirection="locale"
                             android:textSize="@dimen/_12ssp"
                             app:drawableStartCompat="@drawable/email" />
-
                     </RelativeLayout>
-
-
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout

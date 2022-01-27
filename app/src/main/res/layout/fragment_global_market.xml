@@ -12,7 +12,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/_12sdp">
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_12sdp">
+
         <LinearLayout
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
@@ -31,224 +35,286 @@
                 android:id="@+id/card_uae"
                 android:layout_width="@dimen/_155sdp"
                 android:layout_height="@dimen/_160sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:cardCornerRadius="@dimen/_15sdp"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:strokeWidth="@dimen/_5sdp"
-                app:strokeColor="@color/gold">
+                app:cardCornerRadius="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/gold"
+                app:strokeWidth="@dimen/_5sdp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center">
+                    android:orientation="vertical">
+
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/flag"
                         android:layout_width="@dimen/_103sdp"
                         android:layout_height="@dimen/_103sdp"
-                        android:padding="@dimen/_4sdp"
-                        app:civ_border_color="@color/gold"
-                        app:civ_border_width="@dimen/_5sdp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/uae" />
+                        android:padding="@dimen/_4sdp"
+                        android:src="@drawable/uae"
+                        app:civ_border_color="@color/gold"
+                        app:civ_border_width="@dimen/_5sdp" />
+
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="match_parent"
-                        android:textColor="@color/black"
+                        android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/expressway_rg"
                         android:gravity="center"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="@dimen/_14ssp"
                         android:maxLines="2"
+                        android:src="@drawable/ic_launcher_foreground"
                         android:text="@string/united_arab_emirates"
-                        android:src="@drawable/ic_launcher_foreground"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14ssp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/_15sdp">
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="horizontal">
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_saudi_arabia"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="@dimen/_160sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:cardCornerRadius="@dimen/_15sdp"
                     android:layout_gravity="center"
-                    app:cardBackgroundColor="@color/white"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+                    android:layout_weight="1"
                     android:outlineAmbientShadowColor="@color/light_gray"
-                    android:outlineSpotShadowColor="@color/white">
+                    android:outlineSpotShadowColor="@color/white"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_15sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_gravity="center">
+                        android:orientation="vertical">
+
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/flag2"
                             android:layout_width="@dimen/_103sdp"
                             android:layout_height="@dimen/_103sdp"
-                            android:padding="@dimen/_4sdp"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/saudi_arabia" />
+                            android:padding="@dimen/_4sdp"
+                            android:src="@drawable/saudi_arabia"
+                            app:civ_border_color="@color/gold"
+                            app:civ_border_width="@dimen/_5sdp" />
+
                         <TextView
                             android:id="@+id/name2"
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/expressway_rg"
                             android:gravity="center"
-                            android:layout_gravity="center_horizontal"
-                            android:textSize="@dimen/_14ssp"
                             android:maxLines="2"
+                            android:src="@drawable/ic_launcher_foreground"
                             android:text="@string/saudi_arabia"
-                            android:src="@drawable/ic_launcher_foreground"/>
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14ssp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_onam"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="@dimen/_160sdp"
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/_8sdp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_weight="1"
                     app:cardCornerRadius="@dimen/_15sdp"
-                    android:layout_gravity="center">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_gravity="center">
+                        android:orientation="vertical">
+
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/flag3"
                             android:layout_width="@dimen/_103sdp"
                             android:layout_height="@dimen/_103sdp"
-                            android:padding="@dimen/_4sdp"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/oman" />
+                            android:padding="@dimen/_4sdp"
+                            android:src="@drawable/oman"
+                            app:civ_border_color="@color/gold"
+                            app:civ_border_width="@dimen/_5sdp" />
+
                         <TextView
                             android:id="@+id/name3"
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/expressway_rg"
                             android:gravity="center"
-                            android:layout_gravity="center_horizontal"
-                            android:textSize="@dimen/_14ssp"
                             android:maxLines="2"
+                            android:src="@drawable/ic_launcher_foreground"
                             android:text="@string/oman"
-                            android:src="@drawable/ic_launcher_foreground"/>
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14ssp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/_15sdp">
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="horizontal">
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_kuwait"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="@dimen/_160sdp"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:cardCornerRadius="@dimen/_15sdp"
                     android:layout_gravity="center"
-                    >
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="@dimen/_15sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_gravity="center">
+                        android:orientation="vertical">
+
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/flag4"
                             android:layout_width="@dimen/_103sdp"
                             android:layout_height="@dimen/_103sdp"
-                            android:padding="@dimen/_4sdp"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/kuwait" />
+                            android:padding="@dimen/_4sdp"
+                            android:src="@drawable/kuwait"
+                            app:civ_border_color="@color/gold"
+                            app:civ_border_width="@dimen/_5sdp" />
+
                         <TextView
                             android:id="@+id/name4"
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/expressway_rg"
                             android:gravity="center"
-                            android:layout_gravity="center_horizontal"
-                            android:textSize="@dimen/_14ssp"
                             android:maxLines="2"
+                            android:src="@drawable/ic_launcher_foreground"
                             android:text="@string/kuwait"
-                            android:src="@drawable/ic_launcher_foreground"/>
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14ssp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_bahrain"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="@dimen/_160sdp"
+                    android:layout_gravity="center"
                     android:layout_marginHorizontal="@dimen/_8sdp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_weight="1"
                     app:cardCornerRadius="@dimen/_15sdp"
-                    android:layout_gravity="center">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_gravity="center">
+                        android:orientation="vertical">
+
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/flag5"
                             android:layout_width="@dimen/_103sdp"
                             android:layout_height="@dimen/_103sdp"
-                            android:padding="@dimen/_4sdp"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/bahrain" />
+                            android:padding="@dimen/_4sdp"
+                            android:src="@drawable/bahrain"
+                            app:civ_border_color="@color/gold"
+                            app:civ_border_width="@dimen/_5sdp" />
+
                         <TextView
                             android:id="@+id/name5"
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
+                            android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/expressway_rg"
                             android:gravity="center"
-                            android:layout_gravity="center_horizontal"
-                            android:textSize="@dimen/_14ssp"
                             android:maxLines="2"
+                            android:src="@drawable/ic_launcher_foreground"
                             android:text="@string/bahrain"
-                            android:src="@drawable/ic_launcher_foreground"/>
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14ssp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_qatar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_160sdp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:cardCornerRadius="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/flag6"
+                        android:layout_width="@dimen/_103sdp"
+                        android:layout_height="@dimen/_103sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="@dimen/_4sdp"
+                        android:src="@drawable/qatar"
+                        app:civ_border_color="@color/gold"
+                        app:civ_border_width="@dimen/_5sdp" />
+
+                    <TextView
+                        android:id="@+id/name6"
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/expressway_rg"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:src="@drawable/ic_launcher_foreground"
+                        android:text="@string/qatar"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14ssp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
-
-
 
     <!--<ScrollView
         android:layout_width="match_parent"

@@ -18,6 +18,8 @@
         android:textStyle="bold"
         android:gravity="start"
         android:textColor="@color/gray_color"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

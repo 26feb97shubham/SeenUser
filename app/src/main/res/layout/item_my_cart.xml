@@ -97,35 +97,41 @@
             android:textAllCaps="false"
             android:fontFamily="@font/farsi_simple_bold"/>
 
-        <ImageView
-            android:id="@+id/supplierImg"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:src="@color/black"
-            android:layout_marginStart="@dimen/_10sdp"
-            app:layout_constraintStart_toEndOf="@id/view"/>
-        <TextView
-            android:id="@+id/supplierName"
+        <LinearLayout
+            android:id="@+id/ll_supplier_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textAlignment="viewStart"
-            android:textDirection="locale"
-            android:text="@string/supplier_name"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_10ssp"
-            android:textStyle="normal"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintStart_toEndOf="@+id/supplierImg"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:textAllCaps="false"
-            android:fontFamily="@font/expressway_rg"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:layout_constraintStart_toEndOf="@id/view">
+            <ImageView
+                android:id="@+id/supplierImg"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:src="@color/black" />
+            <TextView
+                android:id="@+id/supplierName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textAlignment="viewStart"
+                android:textDirection="locale"
+                android:text="@string/supplier_name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="normal"
+                android:maxLines="1"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:ellipsize="end"
+                android:textAllCaps="false"
+                android:fontFamily="@font/expressway_rg"/>
+        </LinearLayout>
+
+
+
         <TextView
             android:id="@+id/gadgets"
             android:layout_width="wrap_content"

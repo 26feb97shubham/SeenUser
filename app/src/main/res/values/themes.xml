@@ -51,6 +51,10 @@
         <item name="android:layout_marginBottom">@dimen/_6sdp</item>
     </style>
 
+    <style name="RadioButton" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorAccent">@color/gold</item>
+    </style>
+
 
 
 </resources>

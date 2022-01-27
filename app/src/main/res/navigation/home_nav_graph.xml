@@ -6,7 +6,7 @@
     app:startDestination="@+id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.dev.ecommerceuser.fragment.HomeFragment"
+        android:name="com.seen.user.fragment.HomeFragment"
         android:label="fragment_main_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -97,7 +97,7 @@
 
     <fragment
         android:id="@+id/findYourNextItemFragment"
-        android:name="com.dev.ecommerceuser.fragment.FindYournextItemFragment"
+        android:name="com.seen.user.fragment.FindYournextItemFragment"
         android:label="fragment_find_yournext_item"
         tools:layout="@layout/fragment_find_yournext_item" >
         
@@ -106,7 +106,7 @@
 
      <fragment
         android:id="@+id/fragmentaboutus"
-        android:name="com.dev.ecommerceuser.fragment.AboutUsFragment"
+        android:name="com.seen.user.fragment.AboutUsFragment"
         android:label="fragment_about_us"
         tools:layout="@layout/fragment_about_us" >
         
@@ -114,7 +114,7 @@
 
     <fragment
         android:id="@+id/brandsFragment"
-        android:name="com.dev.ecommerceuser.fragment.BrandsFragment"
+        android:name="com.seen.user.fragment.BrandsFragment"
         android:label="fragment_brands"
         tools:layout="@layout/fragment_brands" >
         <action
@@ -127,7 +127,7 @@
 
     <fragment
         android:id="@+id/homeMadeSuppliersFragment"
-        android:name="com.dev.ecommerceuser.fragment.HomeMadeSuppliersFragment"
+        android:name="com.seen.user.fragment.HomeMadeSuppliersFragment"
         android:label="fragment_home_made_suppliers"
         tools:layout="@layout/fragment_home_made_suppliers" >
         <action
@@ -139,7 +139,7 @@
     </fragment>
     <fragment
         android:id="@+id/bloggersFragment"
-        android:name="com.dev.ecommerceuser.fragment.BloggersFragment"
+        android:name="com.seen.user.fragment.BloggersFragment"
         android:label="BloggersFragment" >
         <action
             android:id="@+id/action_bloggersFragment_to_supplierDetailsFragment"
@@ -150,7 +150,7 @@
     </fragment>
     <fragment
         android:id="@+id/globalMarketFragment"
-        android:name="com.dev.ecommerceuser.fragment.GlobalMarketFragment"
+        android:name="com.seen.user.fragment.GlobalMarketFragment"
         android:label="fragment_global_market"
         tools:layout="@layout/fragment_global_market" >
         <action
@@ -159,7 +159,7 @@
     </fragment>
     <fragment
         android:id="@+id/galleryFragment"
-        android:name="com.dev.ecommerceuser.fragment.GalleryFragment"
+        android:name="com.seen.user.fragment.GalleryFragment"
         android:label="fragment_gallery"
         tools:layout="@layout/fragment_gallery" >
         <action
@@ -168,7 +168,7 @@
     </fragment>
     <fragment
         android:id="@+id/globalMarketDetailsFragment"
-        android:name="com.dev.ecommerceuser.fragment.GlobalMarketDetailsFragment"
+        android:name="com.seen.user.fragment.GlobalMarketDetailsFragment"
         android:label="GlobalMarketDetailsFragment" >
         <action
             android:id="@+id/action_globalMarketDetailsFragment_to_supplierDetailsFragment"
@@ -176,12 +176,12 @@
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
-        android:name="com.dev.ecommerceuser.fragment.NotificationsFragment"
+        android:name="com.seen.user.fragment.NotificationsFragment"
         android:label="NotificationsFragment" />
 
         <fragment
         android:id="@+id/healthandBeautyFragment"
-        android:name="com.dev.ecommerceuser.fragment.HealthAndBeautyFragment"
+        android:name="com.seen.user.fragment.HealthAndBeautyFragment"
         android:label="HealthAndBeautyFragment" >
             <action
                 android:id="@+id/action_healthandBeautyFragment_to_supplierDetailsFragment"
@@ -192,11 +192,11 @@
         </fragment>
     <fragment
         android:id="@+id/contactUSFragment"
-        android:name="com.dev.ecommerceuser.fragment.ContactUSFragment"
+        android:name="com.seen.user.fragment.ContactUSFragment"
         android:label="ContactUSFragment" />
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.dev.ecommerceuser.fragment.CartFragment"
+        android:name="com.seen.user.fragment.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" >
         <action
@@ -208,7 +208,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.dev.ecommerceuser.fragment.ProfileFragment"
+        android:name="com.seen.user.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -227,13 +227,13 @@
 
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.dev.ecommerceuser.fragment.EditProfileFragment"
+        android:name="com.seen.user.fragment.EditProfileFragment"
         android:label="EditProfileFragment" >
     </fragment>
 
     <fragment
         android:id="@+id/discountFragment"
-        android:name="com.dev.ecommerceuser.fragment.DiscountFragment"
+        android:name="com.seen.user.fragment.DiscountFragment"
         android:label="fragment_discount"
         tools:layout="@layout/fragment_discount" >
         <action
@@ -243,18 +243,18 @@
 
     <fragment
         android:id="@+id/hotdealsFragment"
-        android:name="com.dev.ecommerceuser.fragment.HotDealsFragment"
+        android:name="com.seen.user.fragment.HotDealsFragment"
         android:label="fragment_hot_deals"
         tools:layout="@layout/fragment_hot_deals">
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.dev.ecommerceuser.fragment.ChangePasswordFragment"
+        android:name="com.seen.user.fragment.ChangePasswordFragment"
         android:label="fragment_change_pass"
         tools:layout="@layout/fragment_change_password" />
          <fragment
         android:id="@+id/filteredproductsfragment"
-        android:name="com.dev.ecommerceuser.fragment.FilteredProductsFragment"
+        android:name="com.seen.user.fragment.FilteredProductsFragment"
         android:label="fragment_filtered_products"
         tools:layout="@layout/fragment_filtered_products">
            <action
@@ -263,15 +263,15 @@
         </fragment>
     <fragment
         android:id="@+id/privacyPolicyFragment"
-        android:name="com.dev.ecommerceuser.fragment.PrivacyPolicyFragment"
+        android:name="com.seen.user.fragment.PrivacyPolicyFragment"
         android:label="PrivacyPolicyFragment" />
     <fragment
         android:id="@+id/faqFragment"
-        android:name="com.dev.ecommerceuser.fragment.FaqFragment"
+        android:name="com.seen.user.fragment.FaqFragment"
         android:label="FaqFragment" />
     <fragment
         android:id="@+id/chooseLoginSingUpFragment"
-        android:name="com.dev.ecommerceuser.fragment.ChooseLoginSingUpFragment"
+        android:name="com.seen.user.fragment.ChooseLoginSingUpFragment"
         android:label="ChooseLoginSingUpFragment" >
         <action
             android:id="@+id/action_chooseLoginSingUpFragment_to_loginFragment"
@@ -282,7 +282,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.dev.ecommerceuser.fragment.LoginFragment"
+        android:name="com.seen.user.fragment.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
@@ -293,7 +293,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.dev.ecommerceuser.fragment.SignUpFragment"
+        android:name="com.seen.user.fragment.SignUpFragment"
         android:label="SignUpFragment" >
         <action
             android:id="@+id/action_signUpFragment_to_otpVerificationFragment"
@@ -301,7 +301,7 @@
     </fragment>
     <fragment
         android:id="@+id/otpVerificationFragment"
-        android:name="com.dev.ecommerceuser.fragment.OtpVerificationFragment"
+        android:name="com.seen.user.fragment.OtpVerificationFragment"
         android:label="OtpVerificationFragment" >
         <action
             android:id="@+id/action_otpVerificationFragment_to_resetPasswordFragment"
@@ -312,7 +312,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.dev.ecommerceuser.fragment.ForgotPasswordFragment"
+        android:name="com.seen.user.fragment.ForgotPasswordFragment"
         android:label="ForgotPasswordFragment" >
         <action
             android:id="@+id/action_forgotPasswordFragment_to_otpVerificationFragment"
@@ -320,7 +320,7 @@
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.dev.ecommerceuser.fragment.ResetPasswordFragment"
+        android:name="com.seen.user.fragment.ResetPasswordFragment"
         android:label="ResetPasswordFragment" >
         <action
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
@@ -329,7 +329,7 @@
     </fragment>
     <fragment
         android:id="@+id/checkOutFragment"
-        android:name="com.dev.ecommerceuser.fragment.CheckOutFragment"
+        android:name="com.seen.user.fragment.CheckOutFragment"
         android:label="CheckOutFragment" >
         <action
             android:id="@+id/action_checkOutFragment_to_addCardFragment"
@@ -343,11 +343,11 @@
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.dev.ecommerceuser.fragment.WebViewFragment"
+        android:name="com.seen.user.fragment.WebViewFragment"
         android:label="WebViewFragment" />
     <fragment
         android:id="@+id/supplierDetailsFragment"
-        android:name="com.dev.ecommerceuser.fragment.SupplierDetailsFragment"
+        android:name="com.seen.user.fragment.SupplierDetailsFragment"
         android:label="SupplierDetailsFragment" >
         <action
             android:id="@+id/action_supplierDetailsFragment_to_productsFragment"
@@ -361,7 +361,7 @@
     </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
-        android:name="com.dev.ecommerceuser.fragment.FavouritesFragment"
+        android:name="com.seen.user.fragment.FavouritesFragment"
         android:label="FavouritesFragment" >
         <action
             android:id="@+id/action_favouritesFragment_to_supplierDetailsFragment"
@@ -372,16 +372,16 @@
     </fragment>
     <fragment
         android:id="@+id/notificationSettingsFragment"
-        android:name="com.dev.ecommerceuser.fragment.NotificationSettingsFragment"
+        android:name="com.seen.user.fragment.NotificationSettingsFragment"
         android:label="fragment_notification_settings"
         tools:layout="@layout/fragment_notification_settings" />
     <fragment
         android:id="@+id/playerViewFragment"
-        android:name="com.dev.ecommerceuser.fragment.PlayerViewFragment"
+        android:name="com.seen.user.fragment.PlayerViewFragment"
         android:label="PlayerViewFragment" />
     <fragment
         android:id="@+id/myCardsFragment"
-        android:name="com.dev.ecommerceuser.fragment.MyCardsFragment"
+        android:name="com.seen.user.fragment.MyCardsFragment"
         android:label="MyCardsFragment" >
         <action
             android:id="@+id/action_myCardsFragment_to_addCardFragment"
@@ -389,7 +389,7 @@
     </fragment>
     <fragment
         android:id="@+id/myLocationFragment"
-        android:name="com.dev.ecommerceuser.fragment.MyLocationFragment"
+        android:name="com.seen.user.fragment.MyLocationFragment"
         android:label="MyLocationFragment" >
         <action
             android:id="@+id/action_myLocationFragment_to_addLocationFragment"
@@ -397,11 +397,11 @@
     </fragment>
     <fragment
         android:id="@+id/addLocationFragment"
-        android:name="com.dev.ecommerceuser.fragment.AddLocationFragment"
+        android:name="com.seen.user.fragment.AddLocationFragment"
         android:label="AddLocationFragment" />
     <fragment
         android:id="@+id/productDetailsFragment"
-        android:name="com.dev.ecommerceuser.fragment.ProductDetailsFragment"
+        android:name="com.seen.user.fragment.ProductDetailsFragment"
         android:label="ProductDetailsFragment" >
         <action
             android:id="@+id/action_productDetailsFragment_to_cartFragment"
@@ -409,7 +409,7 @@
     </fragment>
     <fragment
         android:id="@+id/productsFragment"
-        android:name="com.dev.ecommerceuser.fragment.ProductsFragment"
+        android:name="com.seen.user.fragment.ProductsFragment"
         android:label="ProductsFragment" >
         <action
             android:id="@+id/action_productsFragment_to_productDetailsFragment"
@@ -417,11 +417,11 @@
     </fragment>
     <fragment
         android:id="@+id/addCardFragment"
-        android:name="com.dev.ecommerceuser.fragment.AddCardFragment"
+        android:name="com.seen.user.fragment.AddCardFragment"
         android:label="AddCardFragment" />
     <fragment
         android:id="@+id/myOrdersFragment"
-        android:name="com.dev.ecommerceuser.fragment.MyOrdersFragment"
+        android:name="com.seen.user.fragment.MyOrdersFragment"
         android:label="MyOrdersFragment" >
         <action
             android:id="@+id/action_myOrdersFragment_to_orderDetailsFragment"
@@ -432,7 +432,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderStatusFragment"
-        android:name="com.dev.ecommerceuser.fragment.OrderStatusFragment"
+        android:name="com.seen.user.fragment.OrderStatusFragment"
         android:label="OrderStatusFragment"
         tools:layout="@layout/fragment_order_status">
          <action
@@ -442,20 +442,20 @@
 
          <fragment
         android:id="@+id/ratingFragment"
-        android:name="com.dev.ecommerceuser.fragment.RatingFragment"
+        android:name="com.seen.user.fragment.RatingFragment"
         android:label="fragment_rating_products"
         tools:layout="@layout/fragment_rating" />
 
         <fragment
         android:id="@+id/categoriesDetailsFragment"
-        android:name="com.dev.ecommerceuser.fragment.CategoriesDetailsFragment"
+        android:name="com.seen.user.fragment.CategoriesDetailsFragment"
         android:label="fragment_categories_details"
         tools:layout="@layout/fragment_categories_details" >
         
             </fragment>
     <fragment
         android:id="@+id/orderDetailsFragment"
-        android:name="com.dev.ecommerceuser.fragment.OrderDetailsFragment"
+        android:name="com.seen.user.fragment.OrderDetailsFragment"
         android:label="fragment_order_details"
         tools:layout="@layout/fragment_order_details" >
          <action
@@ -464,7 +464,7 @@
             </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.dev.ecommerceuser.fragment.CategoriesFragment"
+        android:name="com.seen.user.fragment.CategoriesFragment"
         android:label="CategoriesFragment" >
         <action
             android:id="@+id/action_categoriesFragment_to_productsFragment"
@@ -472,7 +472,7 @@
     </fragment>
     <fragment
         android:id="@+id/applyCouponFragment"
-        android:name="com.dev.ecommerceuser.fragment.ApplyCouponFragment"
+        android:name="com.seen.user.fragment.ApplyCouponFragment"
         android:label="fragment_apply_coupon"
         tools:layout="@layout/fragment_apply_coupon" >
         <action
@@ -481,16 +481,21 @@
     </fragment>
     <fragment
         android:id="@+id/cmsFragment"
-        android:name="com.dev.ecommerceuser.fragment.CmsFragment"
+        android:name="com.seen.user.fragment.CmsFragment"
         android:label="CmsFragment" />
     <fragment
         android:id="@+id/selectLangFragment"
-        android:name="com.dev.ecommerceuser.fragment.SelectLangFragment"
+        android:name="com.seen.user.fragment.SelectLangFragment"
         android:label="SelectLangFragment" />
 
         <fragment
         android:id="@+id/tapPaymentGatewayFragment"
-        android:name="com.dev.ecommerceuser.fragment.TapPaymentGatewayFragment"
+        android:name="com.seen.user.fragment.TapPaymentGatewayFragment"
         android:label="TapPaymentGatewayFragment" />
+
+        <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.seen.user.fragment.LocationFragment"
+        android:label="LocationFragment" />
 
 </navigation>

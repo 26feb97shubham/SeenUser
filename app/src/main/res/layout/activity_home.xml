@@ -115,8 +115,8 @@
 
                 <ImageView
                     android:id="@+id/addToBasketImg"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
                     android:src="@drawable/add_to_basket"
                     android:layout_marginEnd="@dimen/_15sdp"
                     app:layout_goneMarginStart="@dimen/_15sdp"
@@ -159,7 +159,7 @@
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
                     android:padding="@dimen/_3sdp"
-                    android:src="@drawable/arrow_left"
+                    android:src="@drawable/ic_baseline_arrow_back_24"
                     android:visibility="gone"
                     android:layout_marginStart="@dimen/_15sdp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -239,8 +239,8 @@
 
                 <ImageView
                     android:id="@+id/frag_other_addToBasketImg"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
                     android:src="@drawable/add_to_basket"
                     android:layout_marginEnd="@dimen/_15sdp"
                     app:layout_goneMarginStart="@dimen/_15sdp"
@@ -293,7 +293,7 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_6sdp"/>
+            android:layout_marginVertical="@dimen/_4sdp"/>
 
 
 
@@ -529,7 +529,7 @@
         <LinearLayout
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_height="@dimen/_40sdp"
             android:background="@color/white"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent">

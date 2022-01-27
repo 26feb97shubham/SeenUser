@@ -20,6 +20,7 @@
             android:layout_height="@dimen/_25sdp"
             android:src="@drawable/arrow_left_icons"
             android:padding="@dimen/_5sdp"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_15sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -146,20 +147,19 @@
                         android:id="@+id/edtName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fontFamily="@font/expressway_rg"
+                        android:layout_below="@id/txtName"
                         android:backgroundTint="@color/black_12"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
+                        android:fontFamily="@font/expressway_rg"
                         android:hint="@string/enter_full_name"
+                        android:imeOptions="actionNext"
                         android:includeFontPadding="false"
+                        android:maxLength="55"
+                        android:maxLines="1"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
                         android:textColorHint="@color/gray_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:imeOptions="actionNext"
-                        android:inputType="textCapSentences"
-                        android:maxLines="1"
-                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz"
-                        android:maxLength="55"
-                        android:layout_below="@id/txtName" />
+                        android:textSize="@dimen/_12ssp" />
 
                 </RelativeLayout>
 
@@ -186,17 +186,17 @@
                         android:id="@+id/edtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_below="@id/txtEmail"
+                        android:backgroundTint="@color/black_12"
                         android:fontFamily="@font/expressway_rg"
                         android:hint="@string/enter_a_valid_email"
+                        android:imeOptions="actionNext"
                         android:includeFontPadding="false"
-                        android:backgroundTint="@color/black_12"
                         android:inputType="textEmailAddress"
                         android:textAllCaps="false"
-                        android:imeOptions="actionNext"
                         android:textColor="@color/black"
                         android:textColorHint="@color/gray_color"
-                        android:textSize="@dimen/_12ssp"
-                        android:layout_below="@id/txtEmail"/>
+                        android:textSize="@dimen/_12ssp" />
 
                 </RelativeLayout>
 
@@ -216,7 +216,7 @@
                         android:fontFamily="@font/expressway_rg"
                         android:text="@string/phone"
                         android:textColor="@color/black_50"
-                        android:textSize="@dimen/_12ssp"/>
+                        android:textSize="@dimen/_12ssp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -228,29 +228,29 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:fontFamily="@font/expressway_rg"
-                            android:includeFontPadding="false"
                             android:gravity="center_vertical"
                             android:hint="+971"
-                            android:textColorHint="@color/gray_color"
+                            android:includeFontPadding="false"
                             android:padding="@dimen/_3sdp"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_12ssp"/>
+                            android:textColorHint="@color/gray_color"
+                            android:textSize="@dimen/_12ssp" />
 
                         <EditText
                             android:id="@+id/edtPhone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:fontFamily="@font/expressway_rg"
                             android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_toEndOf="@+id/txtCountryCode"
+                            android:backgroundTint="@color/black_12"
+                            android:fontFamily="@font/expressway_rg"
+                            android:hint="@string/enter_phone_number"
+                            android:imeOptions="actionDone"
                             android:includeFontPadding="false"
                             android:inputType="number"
-                            android:hint="@string/enter_phone_number"
-                            android:imeOptions="actionNext"
-                            android:backgroundTint="@color/black_12"
+                            android:maxLength="15"
                             android:padding="@dimen/_10sdp"
                             android:textAllCaps="false"
-                            android:maxLength="15"
-                            android:layout_toEndOf="@+id/txtCountryCode"
                             android:textColor="@color/black"
                             android:textColorHint="@color/gray_color"
                             android:textSize="@dimen/_12ssp" />
@@ -275,6 +275,45 @@
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/btnNext"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/_8sdp">
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/mtv_already_a_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/btnNext"
+                        app:layout_constraintStart_toStartOf="@id/btnNext"
+                        android:fontFamily="@font/farsi_simple_bold"
+                        android:textColor="@color/black"
+                        android:textAllCaps="false"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12ssp"
+                        android:text="@string/already_a_user"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/mtv_log_in"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/btnNext"
+                        app:layout_constraintStart_toEndOf="@id/mtv_already_a_user"
+                        android:fontFamily="@font/farsi_simple_bold"
+                        android:textColor="@color/black"
+                        android:layout_marginHorizontal="@dimen/_8sdp"
+                        android:textAllCaps="false"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12ssp"
+                        android:text="@string/log_in"/>
+                </LinearLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </LinearLayout>

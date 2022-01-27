@@ -44,17 +44,17 @@
             android:id="@+id/textSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@id/imgSearch"
-            android:textColor="@color/dark_gray"
-            android:hint="@string/search_in_seen"
-            android:gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:textSize="@dimen/_9ssp"
-            android:inputType="text"
             android:layout_marginStart="@dimen/_6sdp"
+            android:layout_toEndOf="@id/imgSearch"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
             android:fontFamily="@font/expressway_rg"
+            android:gravity="center_vertical"
+            android:hint="@string/search_in_seen"
+            android:inputType="text"
             android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/_9ssp" />
     </RelativeLayout>
 
    <com.google.android.material.card.MaterialCardView
@@ -67,12 +67,12 @@
        app:cardBackgroundColor="@color/primary_gray"
        app:cardCornerRadius="@dimen/_6sdp"
        android:visibility="gone">
-       <androidx.core.widget.NestedScrollView
+       <ScrollView
            android:layout_width="match_parent"
            android:layout_height="match_parent">
            <androidx.constraintlayout.widget.ConstraintLayout
                android:layout_width="match_parent"
-               android:layout_height="match_parent"
+               android:layout_height="wrap_content"
                android:padding="@dimen/_8sdp">
                <androidx.recyclerview.widget.RecyclerView
                    android:id="@+id/rv_all_searches"
@@ -86,7 +86,7 @@
                    app:layout_constraintTop_toBottomOf="@id/rv_all_searches"
                    android:layout_marginTop="@dimen/_8sdp"/>
            </androidx.constraintlayout.widget.ConstraintLayout>
-       </androidx.core.widget.NestedScrollView>
+       </ScrollView>
 
    </com.google.android.material.card.MaterialCardView>
 

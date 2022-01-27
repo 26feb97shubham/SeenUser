@@ -31,7 +31,7 @@
                             android:id="@+id/frag_about_us_backImg"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
-                            android:src="@drawable/back_gray"
+                            android:src="@drawable/ic_baseline_arrow_back_24"
                             android:layout_marginStart="@dimen/_15sdp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -50,8 +50,8 @@
 
                             <ImageView
                                 android:id="@+id/aboutUsFragment_addToBasketImg"
-                                android:layout_width="@dimen/_24sdp"
-                                android:layout_height="@dimen/_24sdp"
+                                android:layout_width="@dimen/_18sdp"
+                                android:layout_height="@dimen/_18sdp"
                                 android:src="@drawable/add_to_basket"
                                 android:layout_marginEnd="@dimen/_15sdp"
                                 app:layout_goneMarginStart="@dimen/_15sdp"

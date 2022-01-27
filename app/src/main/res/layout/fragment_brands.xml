@@ -58,7 +58,7 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/loc_view"
+                android:id="@+id/loc_view_brands"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.1"
@@ -108,7 +108,7 @@
         android:id="@+id/txtNoDataFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:layout_constraintTop_toBottomOf="@+id/brands_searchView"
         android:visibility="gone"
         android:text="@string/no_data_found"
         android:textColor="@color/black"

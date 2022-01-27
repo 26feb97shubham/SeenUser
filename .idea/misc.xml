@@ -3,13 +3,91 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable-hdpi/selected_switch_on_off.xml" value="0.375" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.375" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable/radio_button_selector.xml" value="0.375" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable/selected_tab_bg.xml" value="0.375" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable/un_selected_tab_bg.xml" value="0.375" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable/unselected_radio_button.xml" value="0.375" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/drawable/white_rect_box.xml" value="0.3828125" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/about_us_more_info_frag_toolbar.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_choose_lang.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_forgot_password.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_home.xml" value="0.30434782608695654" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_login.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_reset_password.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_sign_up.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_sign_up2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/activity_terms_and_conditions.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/categories_name_list_layout.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/custom_pop_up_toast.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/filter_bottom_sheet_dialog.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/frag_profile.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_about_us.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_add_location.xml" value="0.21105072463768115" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_addcard.xml" value="0.3482789855072464" />
         <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_apply_coupon.xml" value="0.30434782608695654" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_bloggers.xml" value="0.1421875" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_brands.xml" value="0.1421875" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_categories_details.xml" value="0.213768115942029" />
         <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_check_out.xml" value="0.30434782608695654" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_cms.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_contact_u_s.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_discount.xml" value="0.1421875" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_filtered_products.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_find_yournext_item.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_forgot_password.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_gallery.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_global_market.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_global_market_details.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_health_and_beauty.xml" value="0.1421875" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_home2.xml" value="0.3619791666666667" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_home_made_suppliers.xml" value="0.1421875" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_hot_deals.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_intro.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_location.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_my_location.xml" value="0.3482789855072464" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_my_orders.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_notification_settings.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_notifications.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_order_details.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_order_status.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_product_details.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_rate_your_service_pop_up_dialog.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_rating.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_supplier_details.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/fragment_tap_payment_gateway.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/health_and_beauty_list_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_attributes.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_cards.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_category_list.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_category_wise_searches_layout.xml" value="0.213768115942029" />
         <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_coupon_code.xml" value="0.13958333333333334" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_global_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_history_orders.xml" value="0.307518115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_item_list.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_my_cart.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_my_location.xml" value="0.3482789855072464" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_name_list.xml" value="0.213768115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_offers_discounts.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_order_products.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_order_products_design.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_payment_cards.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_product_wise_search_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_recent_products.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_supplier_products.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_texts.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/item_upcoming.xml" value="0.2259963768115942" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/layout_hot_deals_items.xml" value="0.5" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/layout_similar_items.xml" value="0.307518115942029" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/order_product_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/payment_confirmed_dialog.xml" value="0.17831813576494426" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/profile_toolbar_layout.xml" value="0.30027173913043476" />
+        <entry key="..\:/Shubham_Jain/Shubham Projects/eCommerceUser/app/src/main/res/layout/supplier_profile_fragment_toolbar.xml" value="0.30027173913043476" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

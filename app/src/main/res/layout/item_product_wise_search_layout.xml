@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textview.MaterialTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/product_name_mtv"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_20sdp"
+    android:text="Item Name"
+    android:fontFamily="@font/expressway_rg"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/_8sdp"
+    android:textSize="@dimen/_10ssp"
+    tools:ignore="RtlSymmetry">
+
+</com.google.android.material.textview.MaterialTextView>

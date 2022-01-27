@@ -299,4 +299,20 @@
     <string name="type">نوع</string>
     <string name="title_activity_view_image">عرض الصورة</string>
     <string name="hello_world">مرحبا جولة العالم!</string>
+    <string name="payment_confirmed">الدفع المؤكد</string>
+    <string name="thank_you_for_purchasing_n_please_check_the_details_below_of_your_delivery">شكرا لشراء!   يرجى التحقق من التفاصيل أدناه من التسليم الخاص بك.</string>
+    <string name="emirate">إمارة</string>
+    <string name="payment_options">خيارات الدفع</string>
+    <string name="tap_payments">TAP المدفوعات</string>
+    <string name="discount">خصم</string>
+    <string name="about_us_more_info">عنا مزيد من المعلومات</string>
+    <string name="create_account">إنشاء حساب</string>
+    <string name="no_recent_products">لم يتم العثور على أي بروتكتات حديثة</string>
+    <string name="already_a_user">مستخدم بالفعل؟</string>
+    <string name="qatar">قطر</string>
+    <string name="card">بطاقة</string>
+    <string name="card_ending_in">تنتهي البطاقة في</string>
+    <string name="item">بند</string>
+    <string name="items">العناصر</string>
+    <string name="read_more">اقرأ المزيد ...</string>
 </resources>

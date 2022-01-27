@@ -201,6 +201,7 @@
                 android:background="@drawable/dark_gray_filled_small_radius_curved"
                 android:fontFamily="@font/farsi_simple_bold"
                 android:gravity="center"
+                android:visibility="gone"
                 android:includeFontPadding="false"
                 android:layout_marginStart="@dimen/_30sdp"
                 android:layout_marginEnd="@dimen/_30sdp"

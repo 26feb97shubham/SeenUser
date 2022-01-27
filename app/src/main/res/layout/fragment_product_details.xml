@@ -133,7 +133,7 @@
             android:fontFamily="@font/expressway_rg"/>
         <TextView
             android:id="@+id/productCategory"
-            android:layout_width="@dimen/_30sdp"
+            android:layout_width="@dimen/_150sdp"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="Shoes"
@@ -235,7 +235,7 @@
 
         <TextView
             android:id="@+id/category"
-            android:layout_width="@dimen/_40sdp"
+            android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/gadgets"
@@ -361,7 +361,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Read more ..."
+            android:text="@string/read_more"
             android:textColor="@color/gold"
             android:textSize="@dimen/_7ssp"
             android:ellipsize="end"

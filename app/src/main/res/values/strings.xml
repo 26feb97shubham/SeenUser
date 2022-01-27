@@ -300,7 +300,7 @@
     <string name="please_enter_valid_expiry_date">Please enter valid expiry date</string>
     <string name="please_enter_cvv">Please enter CVV</string>
     <string name="please_enter_valid_cvv">Please enter valid CVV</string>
-    <string name="google_maps_api_key" translatable="false">AIzaSyDKnRXcoeORzLdIeQ1c-uy2HSFSyI7rJvg</string>
+<!--    <string name="google_maps_api_key" translatable="false">AIzaSyDKnRXcoeORzLdIeQ1c-uy2HSFSyI7rJvg</string>-->
     <string name="type">Type</string>
     <string name="title_activity_view_image">View Image</string>
     <!--
@@ -309,9 +309,19 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="payment_confirmed">PAYMENT CONFIRMED</string>
-    <string name="thank_you_for_purchasing_n_please_check_the_details_below_of_your_delivery">Thank you for purchasing! \n Please check the details below of your delivery.</string>
     <string name="emirate">Emirate</string>
     <string name="payment_options">Payment Options</string>
     <string name="tap_payments">TAP Payments</string>
     <string name="discount">Discount</string>
+    <string name="jumeirah_lakes_towers_hds_business" translatable="false">Jumeirah Lakes Towers, HDS Business</string>
+    <string name="already_a_user">Already a user?</string>
+    <string name="thank_you_for_purchasing_n_please_check_the_details_below_of_your_delivery">Thank you for purchasing!   Please check the details below of your delivery.</string>
+    <string name="create_account">CREATE ACCOUNT</string>
+    <string name="no_recent_products">No recent prodcts found</string>
+    <string name="qatar">Qatar</string>
+    <string name="card">Card</string>
+    <string name="card_ending_in">Card ending in</string>
+    <string name="item">item</string>
+    <string name="items">items</string>
+    <string name="read_more">Read more ...</string>
 </resources>
