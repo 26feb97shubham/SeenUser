@@ -30,8 +30,6 @@ import java.io.IOException
 
 class CategoriesDetailsFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
     var mView: View?=null
     var categoryList=ArrayList<Categories>()
     lateinit var categoryListAdapter: CategoryListAdapter
@@ -40,6 +38,7 @@ class CategoriesDetailsFragment : Fragment() {
     var supplier_user_id:Int=0
     var category_id = ""
     var category_name = ""
+    var category_name_ar = ""
     lateinit var categoriesgridFilteredProductsListAdapter: CategoriesGridFilteredProductsAdapter
     private var productsList = ArrayList<ProductsItemX>()
     private var queryMap = HashMap<String, String>()
@@ -56,6 +55,7 @@ class CategoriesDetailsFragment : Fragment() {
                 supplier_user_id = it.getInt("supplier_user_id", 0)*/
             category_id = it.getString("category_id").toString()
             category_name = it.getString("category_name").toString()
+            category_name_ar = it.getString("category_name_ar").toString()
         }
     }
     override fun onCreateView(
@@ -64,6 +64,10 @@ class CategoriesDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_categories_details, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         return mView
     }
@@ -80,14 +84,14 @@ class CategoriesDetailsFragment : Fragment() {
             findNavController().navigate(R.id.homeFragment)
         }
 
-        mView!!.tv_category.text = category_name
+        if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+            mView!!.tv_category.text = category_name_ar
+        }else{
+            mView!!.tv_category.text = category_name
+        }
+
 
         Log.e("category_id",""+category_id)
-
-        queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
-        queryMap.put("category_id", category_id)
-        queryMap.put("account_type", "")
-        defaultProductList(queryMap)
 
         getAccType()
 
@@ -124,9 +128,12 @@ class CategoriesDetailsFragment : Fragment() {
                         if (response.body()!!.products==null){
                             mView!!.tv_no_of_results.text = "0"
                             mView!!.rv_filtered_products_categories_home.visibility = View.GONE
+                            mView!!.txtNoDataFound.visibility = View.VISIBLE
                             LogUtils.shortToast(requireContext(), getString(R.string.no_results_found))
                         }else{
                             mView!!.rv_filtered_products_categories_home.visibility = View.VISIBLE
+                            mView!!.txtNoDataFound.visibility = View.GONE
+                            productsList.clear()
                             productsList = response.body()!!.products as ArrayList<ProductsItemX>
                             mView!!.tv_no_of_results.text = productsList.size.toString()
                             Log.e("Products_list", productsList.toString())
@@ -170,12 +177,21 @@ class CategoriesDetailsFragment : Fragment() {
                         if (accTypeList.size!=0){
                             mView!!.rv_categories_acc_type.visibility = View.VISIBLE
                             mView!!.divider.visibility = View.VISIBLE
+                            if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                mView!!.tv_dropdown_items_names.text = accTypeList[0].name_ar
+                            }else{
+                                mView!!.tv_dropdown_items_names.text = accTypeList[0].name
+                            }
                             mView!!.rv_categories_acc_type.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                             accountTypeAdapter= AccountTypeAdapter(requireContext(), accTypeList,  object : ClickInterface.ClickPositionInterface{
                                 override fun clickPostion(pos: Int) {
                                     acc_type_id = accTypeList[pos].id.toString()
                                     mView!!.cl_dropdown_layout.visibility = View.GONE
-                                    mView!!.tv_dropdown_items_names.text = accTypeList[pos].name
+                                    if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                        mView!!.tv_dropdown_items_names.text = accTypeList[pos].name_ar
+                                    }else{
+                                        mView!!.tv_dropdown_items_names.text = accTypeList[pos].name
+                                    }
                                     queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
                                     queryMap.put("category_id", category_id)
                                     queryMap.put("account_type", acc_type_id)
@@ -183,6 +199,11 @@ class CategoriesDetailsFragment : Fragment() {
                                 }
 
                             })
+
+                            queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
+                            queryMap.put("category_id", category_id)
+                            queryMap.put("account_type",accTypeList[0].id.toString())
+                            defaultProductList(queryMap)
                             mView!!.rv_categories_acc_type.adapter=accountTypeAdapter
                             accountTypeAdapter.notifyDataSetChanged()
                         }else{
@@ -210,6 +231,10 @@ class CategoriesDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /* requireActivity().backImg.visibility=View.GONE*/
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().toolbar.visibility=View.GONE

@@ -1,6 +1,7 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seen.user.R
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.Categories
+import com.seen.user.utils.SharedPreferenceUtility
 import kotlinx.android.synthetic.main.categories_name_list_layout.view.*
 
 class CategoryNameListAdapter(private val context: Context,
@@ -30,7 +32,12 @@ private val clickPositionInterface : ClickInterface.ClickPositionInterface) : Re
     }
 
     override fun onBindViewHolder(holder: CategoryNameListAdapterVH, position: Int) {
-        val category = categoriesList[position].name
+        var category = ""
+        if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+            category = categoriesList[position].name_ar
+        }else{
+            category = categoriesList[position].name
+        }
         holder.bind(category, position)
     }
 

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "146058985667-pid8ic8trai5j3h6dbjeb6f75m1n4guk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seen.user",
+            "certificate_hash": "0183f873b4568efc02ec2c5ce3da63908cefdce6"
+          }
+        },
+        {
           "client_id": "146058985667-3m39t6nvnu9okk301lml079uj6siagtl.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -37,6 +45,13 @@
             {
               "client_id": "146058985667-3m39t6nvnu9okk301lml079uj6siagtl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "146058985667-abj624vb8juhik124bui6k908otnmi0j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seenUser"
+              }
             }
           ]
         }

@@ -16,6 +16,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_faq.view.*
 import okhttp3.ResponseBody
@@ -26,36 +27,22 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FaqFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FaqFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     lateinit var mView: View
     lateinit var faqAdapter: FaqAdapter
     var list=ArrayList<Faq>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_faq, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         getFaq()
         return mView
@@ -139,6 +126,10 @@ class FaqFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

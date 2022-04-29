@@ -15,7 +15,7 @@
         android:background="@color/black">
 
         <ImageView
-            android:id="@+id/frag_other_backImg"
+            android:id="@+id/frag_other_backImg1"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
             android:src="@drawable/arrow_left_icons"
@@ -219,19 +219,20 @@
                     app:layout_constraintStart_toStartOf="@+id/viewCnfrmPass"
                     android:layout_marginTop="@dimen/_30sdp"
                     android:src="@drawable/un_check" />
+
                 <TextView
-                    android:id="@+id/txtPlsAccept"
+                    android:id="@+id/txtPlsAccept2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/expressway_rg"
                     android:text="@string/i_accept"
                     android:textColor="@color/txt_dark_gray"
                     android:textSize="@dimen/_12ssp"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:fontFamily="@font/expressway_rg"
-                    android:layout_marginEnd="@dimen/_15sdp"
-                    app:layout_constraintTop_toTopOf="@+id/imgChk"
                     app:layout_constraintBottom_toBottomOf="@+id/imgChk"
-                    app:layout_constraintStart_toEndOf="@+id/imgChk"/>
+                    app:layout_constraintEnd_toEndOf="@+id/viewCnfrmPass"
+                    app:layout_constraintStart_toEndOf="@+id/imgChk"
+                    app:layout_constraintTop_toTopOf="@+id/imgChk" />
                 <TextView
                     android:id="@+id/txtTermsConditions"
                     android:layout_width="0dp"
@@ -244,9 +245,10 @@
                     android:fontFamily="@font/expressway_rg"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_5sdp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toTopOf="@+id/imgChk"
                     app:layout_constraintBottom_toBottomOf="@+id/imgChk"
-                    app:layout_constraintStart_toEndOf="@+id/txtPlsAccept"
+                    app:layout_constraintStart_toEndOf="@+id/txtPlsAccept2"
                     tools:ignore="AllCaps" />
 
                 <TextView

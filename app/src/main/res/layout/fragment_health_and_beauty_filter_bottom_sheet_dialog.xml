@@ -28,7 +28,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_12sdp"
-                android:text="Filter Search"
+                android:text="@string/filter_search_health_n_beauty"
                 android:textAllCaps="true"
                 android:textColor="#515151"
                 android:fontFamily="@font/expressway_rg"
@@ -97,14 +97,16 @@
                 android:layout_marginTop="@dimen/_8sdp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="@string/emirate"
                     android:textSize="@dimen/_13ssp"
                     android:fontFamily="@font/expressway_rg"
                     android:textStyle="bold"
                     android:textColor="#515151"
-                    android:layout_gravity="center_vertical"
+                    android:paddingHorizontal="8dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:textAlignment="viewStart"
                     android:textAllCaps="true"/>
 
                 <LinearLayout
@@ -119,15 +121,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:text="Dubai"
+                        android:text="@string/select_emirate_one"
                         android:fontFamily="@font/expressway_rg"
                         android:textColor="#515151"
                         android:textSize="@dimen/_12ssp"
-                        android:gravity="center_vertical"
+                        android:gravity="center_vertical|start"
+                        android:textAlignment="viewStart"
                         android:drawablePadding="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        app:drawableEndCompat="@drawable/down_arrow_icon" />
+                        android:paddingHorizontal="8dp"
+                        app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -171,7 +173,7 @@
                 android:layout_marginEnd="@dimen/_30sdp"
                 android:background="@drawable/gold_filled_small_radius_box_curved"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:text="APPLY FILTER"
+                android:text="@string/apply_filter_health_n_beauty"
                 android:textSize="@dimen/_14ssp"
                 android:gravity="center"
                 android:textColor="@color/white"

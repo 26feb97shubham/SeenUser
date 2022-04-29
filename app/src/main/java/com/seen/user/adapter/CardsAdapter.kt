@@ -39,7 +39,7 @@ class CardsAdapter(private val context: Context, private val data:ArrayList<Card
 
         holder.itemView.radSelect.isEnabled=false
         val position_1  = position+1
-        holder.itemView.cardCount.text= "Card "+position_1
+        holder.itemView.cardCount.text= context.getString(R.string.card)+" "+position_1
 
 
     }

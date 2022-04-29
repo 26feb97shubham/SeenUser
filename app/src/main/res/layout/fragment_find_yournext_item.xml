@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.FindYournextItemFragment">
 
-   <TextView
-       android:id="@+id/tv_find_your_next_item_text"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       android:text="@string/find_your_next_item"
-       android:textStyle="bold"
-       android:textAllCaps="true"
-       android:fontFamily="@font/expressway_rg"
-       android:textColor="@color/txt_dark_gray"
-       android:layout_marginStart="@dimen/_8sdp"
-       android:layout_marginVertical="@dimen/_8sdp"
-       android:textSize="@dimen/_14ssp"/>
+    <TextView
+        android:id="@+id/tv_find_your_next_item_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_8sdp"
+        android:fontFamily="@font/expressway_rg"
+        android:text="@string/find_your_next_item"
+        android:textAllCaps="true"
+        android:textColor="@color/txt_dark_gray"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        android:gravity="center_vertical|start"
+        android:textAlignment="viewStart"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/rl_search_in_seen"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:maxHeight="?attr/actionBarSize"
+        android:layout_height="@dimen/_35sdp"
         app:layout_constraintTop_toBottomOf="@id/tv_find_your_next_item_text"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/_8sdp"
@@ -57,38 +62,45 @@
             android:textSize="@dimen/_9ssp" />
     </RelativeLayout>
 
-   <com.google.android.material.card.MaterialCardView
-       android:id="@+id/mcv_search"
-       android:layout_width="match_parent"
-       android:layout_height="0dp"
-       app:layout_constraintTop_toBottomOf="@id/rl_search_in_seen"
-       android:layout_marginTop="@dimen/_8sdp"
-       android:layout_marginHorizontal="@dimen/_8sdp"
-       app:cardBackgroundColor="@color/primary_gray"
-       app:cardCornerRadius="@dimen/_6sdp"
-       android:visibility="gone">
-       <ScrollView
-           android:layout_width="match_parent"
-           android:layout_height="match_parent">
-           <androidx.constraintlayout.widget.ConstraintLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:padding="@dimen/_8sdp">
-               <androidx.recyclerview.widget.RecyclerView
-                   android:id="@+id/rv_all_searches"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent" />
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcv_search"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/primary_gray"
+        app:cardCornerRadius="@dimen/_6sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rl_search_in_seen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="10dp">
 
-               <androidx.recyclerview.widget.RecyclerView
-                   android:id="@+id/rv_category_wise_searches"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   app:layout_constraintTop_toBottomOf="@id/rv_all_searches"
-                   android:layout_marginTop="@dimen/_8sdp"/>
-           </androidx.constraintlayout.widget.ConstraintLayout>
-       </ScrollView>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-   </com.google.android.material.card.MaterialCardView>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_8sdp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_all_searches"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_category_wise_searches"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintTop_toBottomOf="@id/rv_all_searches" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 

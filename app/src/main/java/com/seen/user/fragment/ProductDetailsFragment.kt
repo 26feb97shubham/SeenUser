@@ -1,6 +1,8 @@
 package com.seen.user.fragment
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -10,6 +12,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -17,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.AttributesAdapter
 import com.seen.user.adapter.ProductImageAdapter
 import com.seen.user.adapter.SimilarItemsAdapter
@@ -46,16 +51,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProductDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProductDetailsFragment : Fragment() {
     lateinit var mView: View
     var attributeObj=JSONObject()
@@ -63,6 +59,7 @@ class ProductDetailsFragment : Fragment() {
     lateinit var attributesAdapter: AttributesAdapter
     var product_id:Int=0
     var product_item_id:String=""
+    var my_product_item_id:String=""
     var productFiles=ArrayList<String>()
     var pagerAdapter: ScreenSlidePagerAdapter?= null
     lateinit var productImageAdapter: ProductImageAdapter
@@ -72,10 +69,20 @@ class ProductDetailsFragment : Fragment() {
     var type:String="1"
     var qty:Int=1
     var already_added:Boolean=false
-    var add_cart_type:String=""
+    var add_cart_type:String="1"
     var supplier_id:Int=0
     var category_id:Int=0
+    private var myAttributeDataJSONObject:JSONObject?=null
+
+    var productPrice:String=""
+    lateinit var attrArrayData: JSONArray
+    var attrData: JSONArray = JSONArray()
+
+    private var isDataLoaded = false
+
+    lateinit var mContext: Context
     private var queryMap = HashMap<String, String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -85,17 +92,25 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_product_details, container, false)
+        mContext = requireContext()
+        Utility.changeLanguage(
+            mContext,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
+        return mView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpViews()
         productDetailPage()
-        return mView
     }
 
     private fun getSimilaritems(category_id: Int) {
         queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
-        queryMap.put("category_id", category_id.toString())
+        queryMap.put("category_id", "")
         queryMap.put("account_type", "")
         defaultProductList(queryMap)
     }
@@ -106,67 +121,113 @@ class ProductDetailsFragment : Fragment() {
                 queryMap.get("category_id").toString(),
                 queryMap.get("account_type").toString()))
         val call = Utility.apiInterface.getProductsCategories(builder.build())
+        var navController : NavController?=null
+        var abc = lifecycleScope.launchWhenResumed {
+            navController = findNavController()
+        }
         call?.enqueue(object : Callback<GetProductsResponse?> {
             override fun onResponse(call: Call<GetProductsResponse?>, response: Response<GetProductsResponse?>) {
                 if (response.isSuccessful){
                     if (response.body()!=null){
                         if (response.body()!!.products==null){
-                            LogUtils.shortToast(requireContext(), getString(R.string.no_results_found))
+                            LogUtils.shortToast(mContext, getString(R.string.no_results_found))
                         }else{
                             similarItemsList = response.body()!!.products as ArrayList<ProductsItemX>
                             Log.e("Products_list", similarItemsList.toString())
-                            mView.rv_similarItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                            similarItemsAdapter = SimilarItemsAdapter(requireContext(),
-                                similarItemsList,findNavController(), object : ClickInterface.ClickPosInterface{
-                                    override fun clickPostion(pos: Int,type: String) {
+                            mView.rv_similarItems.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+                            similarItemsAdapter = SimilarItemsAdapter(mContext,
+                                similarItemsList,
+                                navController!!,
+                                object : ClickInterface.ClickPosInterface{
+                                    override fun clickPostion(pos: Int, type: String) {
                                         Log.e("Position_1", pos.toString())
+                                        if (type == "Cart") {
+                                            val jsonArray =
+                                                JSONArray(similarItemsList[pos].attributes)
+                                            val price = similarItemsList[pos].price
+                                            for (i in 0 until jsonArray.length()) {
+                                                productPrice =
+                                                    JSONObject(jsonArray[i].toString()).getString(
+                                                        "price"
+                                                    )
+                                                attrArrayData =
+                                                    JSONObject(jsonArray[i].toString()).getJSONArray(
+                                                        "data"
+                                                    )
+                                                if (productPrice.equals(price)) {
+                                                    for (i in 0 until attrArrayData.length()) {
+                                                        val attribute_Obj =
+                                                            attrArrayData.getJSONObject(i)
+                                                        val obj1 = JSONObject()
+                                                        obj1.put(
+                                                            "id",
+                                                            attribute_Obj.getInt("id")
+                                                        )
+                                                        obj1.put(
+                                                            "name",
+                                                            attribute_Obj.getString("name")
+                                                        )
+                                                        obj1.put(
+                                                            "name_ar",
+                                                            attribute_Obj.getString("name_ar")
+                                                        )
+                                                        obj1.put(
+                                                            "type",
+                                                            attribute_Obj.getString("type")
+                                                        )
+                                                        obj1.put("primary", 1)
+                                                        attrData.put(0, obj1)
+                                                        attributeObj.put("data", attrData)
+                                                        attributeObj.put("itemAdd", true)
+                                                    }
+                                                    break
+                                                } else {
+                                                    Log.e("err", "err")
+                                                }
+                                            }
+                                            //checkProductPrice()
+                                        } else if (type == "Supplier") {
+                                            val bundle = Bundle()
+                                            bundle.putInt(
+                                                "supplier_user_id",
+                                                similarItemsList[pos].user_id!!
+                                            )
+                                            findNavController().navigate(
+                                                R.id.supplierDetailsFragment,
+                                                bundle
+                                            )
+                                        }
                                     }
 
                                 })
                             mView.rv_similarItems.adapter = similarItemsAdapter
                             similarItemsAdapter.notifyDataSetChanged()
                         }
-//                        setProducts(productsList)
                     }
                 }else {
-                    LogUtils.shortCenterToast(requireContext(), getString(R.string.no_results_found))
+                    LogUtils.shortCenterToast(mContext, getString(R.string.no_results_found))
                 }
             }
 
             override fun onFailure(call: Call<GetProductsResponse?>, t: Throwable) {
-                LogUtils.shortToast(requireContext(), t.message)
+                LogUtils.shortToast(mContext, t.message)
             }
 
         })
     }
 
+
     private fun setUpViews() {
-
-        similarItemsAdapter = SimilarItemsAdapter(
-            requireContext(),
-            similarItemsList,
-            findNavController(),
-            object : ClickInterface.ClickPosInterface{
-                override fun clickPostion(pos: Int,type: String) {
-                    Log.e("Position_1", pos.toString())
-                }
-
-            })
         requireActivity().frag_other_backImg.visibility=View.VISIBLE
 
         requireActivity().frag_other_backImg.setOnClickListener {
             requireActivity().frag_other_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
-            SharedPreferenceUtility.getInstance().hideSoftKeyBoard(requireContext(), requireActivity().frag_other_backImg)
+            SharedPreferenceUtility.getInstance().hideSoftKeyBoard(mContext, requireActivity().frag_other_backImg)
             findNavController().popBackStack()
         }
 
-     /*   pagerAdapter = ScreenSlidePagerAdapter(this)
-        mView.viewPager2.adapter = pagerAdapter
-        TabLayoutMediator(mView.tabLayout,   mView.viewPager2){ tab, position ->
 
-        }.attach()*/
-
-        productImageAdapter = ProductImageAdapter(requireContext(),productFiles)
+        productImageAdapter = ProductImageAdapter(mContext,productFiles)
         mView.rvProductImageList.adapter = productImageAdapter
         mView.pageIndicator.attachTo(mView.rvProductImageList)
         productImageAdapter.notifyDataSetChanged()
@@ -174,68 +235,34 @@ class ProductDetailsFragment : Fragment() {
 
         mView.btnAddToCart.setOnClickListener {
             mView.btnAddToCart.startAnimation(AlphaAnimation(1f, .5f))
+            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                LogUtils.shortToast(
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
+                )
+                val args=Bundle()
+                args.putString("reference", "Home")
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
+            }else{
             if(already_added){
                 goToCart()
             }
             else{
-                validateAndCartAdd()
+                cartAdd()
             }
-
+            }
         }
-
-        /*SharedPreferenceUtility.getInstance().delete(SharedPreferenceUtility.PrimaryAdapterPos)
-        SharedPreferenceUtility.getInstance().delete(SharedPreferenceUtility.SecondaryAdapterPos)
-        SharedPreferenceUtility.getInstance().delete(SharedPreferenceUtility.TertiaryAdapterPos)*/
-
-        mView.rvList_attributes.layoutManager=LinearLayoutManager(requireContext())
-        attributesAdapter= AttributesAdapter(requireContext(), attrList, object : ClickInterface.ClickJSonObjInterface{
-            override fun clickJSonObj(obj: JSONObject) {
-                attributeObj=obj
-                Log.e("attributeObj", attributeObj.toString())
-                if(attributeObj.getJSONArray("data").length()==2){
-                    checkProductPrice()
-                }
-
-                /*if(attributeObj.getBoolean("itemAdd")){
-                    checkProductPrice()
-                }*/
-               /* else{
-                    checkProductPrice()
-                }*/
-
-            }
-
-
-        })
-        mView.rvList_attributes.adapter=attributesAdapter
-
-        AttributesAdapter.attrData= JSONArray()
-
-        mView.rv_similarItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        mView.rv_similarItems.adapter =similarItemsAdapter
-        similarItemsAdapter.notifyDataSetChanged()
-
         setProductDetails()
     }
 
     private fun setProductDetails() {
         val linearLayoutManager = LinearLayoutManager(
-            requireContext(),
+            mContext,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         mView!!.rvProductImageList.layoutManager= linearLayoutManager
-       productImageAdapter = ProductImageAdapter(requireContext(), productFiles)
-
-       /* mView!!.rvProductImageList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) mView!!.swipeRefresh.isEnabled =
-                    true
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) mView!!.swipeRefresh.isEnabled =
-                    false
-            }
-        })*/
+       productImageAdapter = ProductImageAdapter(mContext, productFiles)
 
         val linearSnapHelper = LinearSnapHelper()
         linearSnapHelper.attachToRecyclerView(mView!!.rvProductImageList)
@@ -256,23 +283,16 @@ class ProductDetailsFragment : Fragment() {
 
     private fun goToCart() {
         setBottomView()
-        //requireActivity().itemCart.setImageResource(R.drawable.shopping_cart_active)
         findNavController().navigate(R.id.action_productDetailsFragment_to_cartFragment)
     }
     private fun setBottomView() {
         requireActivity().itemDiscount.setImageResource(R.drawable.offers_and_discounts_icon)
-        //requireActivity().itemCart.setImageResource(R.drawable.add_to_basket_icon)
         requireActivity().itemHome.setImageResource(R.drawable.home_icon)
-//        requireActivity().itemSearch.setImageResource(R.drawable.search)
-       /* requireActivity().itemProfile.setImageResource(R.drawable.profile)
-        requireActivity().itemHotDeals.setImageResource(R.drawable.hot_deals)*/
-
-//        setHostFragment()
 
     }
     private fun validateAndCartAdd() {
         if(TextUtils.isEmpty(product_item_id)){
-            LogUtils.shortToast(requireContext(), getString(R.string.this_item_is_currently_out_of_stock))
+            LogUtils.shortToast(mContext, getString(R.string.this_item_is_currently_out_of_stock))
         }
         else{
             cartAdd()
@@ -280,8 +300,6 @@ class ProductDetailsFragment : Fragment() {
     }
 
     private fun productDetailPage() {
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-//        mView.progressBar.visibility= View.VISIBLE
         mView.mainView.visibility=View.GONE
         mView.shimmerLayout.visibility=View.VISIBLE
         mView.shimmerLayout.startShimmer()
@@ -295,13 +313,12 @@ class ProductDetailsFragment : Fragment() {
         val call = apiInterface.productDetailPage(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
-//                mView.progressBar.visibility= View.GONE
                 mView.mainView.visibility=View.VISIBLE
                 mView.shimmerLayout.visibility=View.GONE
                 mView.shimmerLayout.stopShimmer()
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 try {
                     if (response.body() != null) {
+                        isDataLoaded = true
                         val jsonObject = JSONObject(response.body()!!.string())
                         if (jsonObject.getInt("response") == 1){
                             val product=jsonObject.getJSONObject("product")
@@ -320,10 +337,25 @@ class ProductDetailsFragment : Fragment() {
                             mView.productCategory.text=product.getString("category_name")
                             //mView.supplierName.text=product.getString("supplier_name")
                             mView.supplierName2.text=product.getString("supplier_name")
-                            mView.category.text=product.getString("categories")
+                            if(SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "").equals("ar")){
+                                mView.category.text=product.getString("categories_ar")
+                            }else{
+                                mView.category.text=product.getString("categories")
+                            }
+
+
                             mView.txtSupplierRating.text=product.getDouble("supplier_rating").toString()
                             mView.supplierRatingBar.rating=product.getDouble("supplier_rating").toFloat()
-                            Glide.with(requireContext()).load(product.getString("supplier_profile_picture")).placeholder(R.drawable.default_icon).into(mView.supplierImg)
+                            Glide.with(mContext).load(product.getString("supplier_profile_picture")).placeholder(R.drawable.default_icon).into(mView.supplierImg)
+
+                            mView.view.setOnClickListener(object : View.OnClickListener{
+                                override fun onClick(p0: View?) {
+                                    val bundle = Bundle()
+                                    bundle.putInt("supplier_user_id", product.getInt("supplier_id"))
+                                    findNavController().navigate(R.id.supplierDetailsFragment, bundle)
+                                }
+
+                            })
                             mView.productDesc.text=product.getString("description")
                             val all_files=product.getJSONArray("all_files")
                             productFiles.clear()
@@ -340,40 +372,28 @@ class ProductDetailsFragment : Fragment() {
                                 val a = Attributes()
                                 a.id=obj.getInt("id")
                                 a.name = obj.getString("name")
+                                a.name_ar = obj.getString("name_ar")
                                 a.type =obj.getString("type")
                                 a.value = obj.getJSONArray("value")
                                 attrList.add(a)
                             }
 
                             Log.e("Size : ", ""+attrList.size)
-
-                            mView.rvList_attributes.layoutManager=LinearLayoutManager(requireContext())
-                            attributesAdapter= AttributesAdapter(requireContext(), attrList, object : ClickInterface.ClickJSonObjInterface{
+                            mView.rvList_attributes.layoutManager=LinearLayoutManager(mContext)
+                            attributesAdapter= AttributesAdapter(mContext, attrList, object : ClickInterface.ClickJSonObjInterface{
                                 override fun clickJSonObj(obj: JSONObject) {
                                     attributeObj=obj
-                                    Log.e("attributeObj", attributeObj.toString())
-                                    if(attributeObj.getJSONArray("data").length()==2){
-                                        checkProductPrice()
-                                    }
-
-                            /*        if(attributeObj.getBoolean("itemAdd")){
-                                        checkProductPrice()
-                                    }
-                                     else{
-                                         checkProductPrice()
-                                     }*/
-
+                                    checkProductAvailable(attributeObj.getJSONArray("data"), attributeObj)
                                 }
-
-
                             })
-                            getSimilaritems(category_id)
                             mView.rvList_attributes.adapter=attributesAdapter
                             attributesAdapter.notifyDataSetChanged()
+
+                            getSimilaritems(category_id)
                         }
 
                         else {
-                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                            LogUtils.shortToast(mContext, jsonObject.getString("message"))
                         }
                     }
                 } catch (e: IOException) {
@@ -386,25 +406,26 @@ class ProductDetailsFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
+                isDataLoaded = true
                 LogUtils.e("msg", throwable.message)
-                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
-//                mView.progressBar.visibility= View.GONE
+                LogUtils.shortToast(mContext, getString(R.string.check_internet))
                 mView.mainView.visibility=View.VISIBLE
                 mView.shimmerLayout.visibility=View.GONE
                 mView.shimmerLayout.stopShimmer()
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         })
 
 
     }
-    private fun checkProductAvailable() {
+    private fun checkProductAvailable(dataJsonArray: JSONArray, attributeObj: JSONObject) {
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         mView.progressBar.visibility= View.VISIBLE
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "data", "lang"),
-                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), product_id.toString(), attributeObj.getJSONArray("data").toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                    product_id.toString(), dataJsonArray.toString(),
+                    SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
 
         val call = apiInterface.checkProductAvailable(builder.build())
@@ -417,26 +438,22 @@ class ProductDetailsFragment : Fragment() {
                         val jsonObject = JSONObject(response.body()!!.string())
                         if (jsonObject.getInt("response") == 1){
                             mView.productPrice.text="AED "+jsonObject.getString("price")
-                            product_item_id= jsonObject.getInt("product_item_id").toString()
-                            val result=jsonObject.getJSONArray("result")
-                            attrList.clear()
-                            AttributesAdapter.attrData= JSONArray()
-                            for (m in 0 until result.length()) {
-                                val obj = result.getJSONObject(m)
-                                val a = Attributes()
-                                a.id=obj.getInt("id")
-                                a.name = obj.getString("name")
-                                a.type =obj.getString("type")
-                                a.value = obj.getJSONArray("value")
-                                attrList.add(a)
+                            product_item_id= jsonObject.getString("product_item_id").toString()
+                            if (product_item_id.isEmpty()){
+                               // LogUtils.shortToast(mContext, getString(R.string.this_item_is_currently_out_of_stock))
+                                mView.yes.isSelected=false
+                                mView.no.isSelected=true
+                                mView.btnAddToCart.isEnabled = false
+                            }else{
+                                mView.yes.isSelected=true
+                                mView.no.isSelected=false
+                                mView.btnAddToCart.isEnabled = true
+                                checkProductPrice(attributeObj, product_item_id)
                             }
-                            attributesAdapter.notifyDataSetChanged()
-
-
                         }
 
                         else {
-                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                            LogUtils.shortToast(mContext, jsonObject.getString("message"))
                         }
                     }
                 } catch (e: IOException) {
@@ -450,7 +467,7 @@ class ProductDetailsFragment : Fragment() {
 
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
                 LogUtils.e("msg", throwable.message)
-                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                LogUtils.shortToast(mContext, getString(R.string.check_internet))
                 mView.progressBar.visibility= View.GONE
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
@@ -459,27 +476,24 @@ class ProductDetailsFragment : Fragment() {
 
     }
 
-    private fun checkProductPrice() {
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    private fun checkProductPrice(attributeDataJsonObject: JSONObject, product_item_id: String) {
         mView.progressBar.visibility= View.VISIBLE
-       /* mView.mainView.visibility=View.GONE
-        mView.shimmerLayout.visibility=View.VISIBLE
-        mView.shimmerLayout.startShimmerAnimation()*/
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
-        val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "data", "device_id", "lang"),
-            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), product_id.toString(), attributeObj.getJSONArray("data").toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+        val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "data", "device_id", "lang", "product_item_id"),
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                product_id.toString(),
+                attributeDataJsonObject.getJSONArray("data1").toString(),
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""],
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString(),
+                product_item_id
+            ))
 
 
         val call = apiInterface.checkProductPrice(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
                 mView.progressBar.visibility= View.GONE
-               /* mView.mainView.visibility=View.VISIBLE
-                mView.shimmerLayout.visibility=View.GONE
-                mView.shimmerLayout.stopShimmerAnimation()*/
-
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 try {
                     if (response.body() != null) {
                         val jsonObject = JSONObject(response.body()!!.string())
@@ -490,28 +504,18 @@ class ProductDetailsFragment : Fragment() {
                                 mView.productPrice.text="AED "+jsonObject.getString("price")
                             }
 
-                            product_item_id=jsonObject.getString("product_item_id")
-                            if(TextUtils.isEmpty(product_item_id)){
-                                LogUtils.shortToast(requireContext(), getString(R.string.this_item_is_currently_out_of_stock))
-                                mView.yes.isSelected=false
-                                mView.no.isSelected=true
-                            }
-                            else{
-                                mView.yes.isSelected=true
-                                mView.no.isSelected=false
-                            }
                             already_added=jsonObject.getBoolean("already_added")
+                            myAttributeDataJSONObject = attributeDataJsonObject
+                            my_product_item_id = jsonObject.getString("product_item_id")
                             if(already_added){
                                 mView.btnAddToCart.text=getString(R.string.go_to_cart)
                             }
                             else{
                                 mView.btnAddToCart.text=getString(R.string.add_to_cart)
                             }
-
                         }
-
                         else {
-                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                            LogUtils.shortToast(mContext, jsonObject.getString("message"))
                         }
                     }
                 } catch (e: IOException) {
@@ -525,12 +529,8 @@ class ProductDetailsFragment : Fragment() {
 
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
                 LogUtils.e("msg", throwable.message)
-                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                LogUtils.shortToast(mContext, getString(R.string.check_internet))
                 mView.progressBar.visibility= View.GONE
-//                mView.mainView.visibility=View.VISIBLE
-//                mView.shimmerLayout.visibility=View.GONE
-//                mView.shimmerLayout.stopShimmerAnimation()
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         })
 
@@ -549,12 +549,10 @@ class ProductDetailsFragment : Fragment() {
         }
     }
     private fun cartAdd() {
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         mView.progressBar.visibility= View.VISIBLE
-
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("product_id", "product_item_id", "type", "quantity", "product_type", "cart_id", "device_id", "user_id", "add_cart_type", "supplier_id", "lang"),
-            arrayOf(product_id.toString(), product_item_id, type, qty.toString(), "" , ""
+            arrayOf(product_id.toString(), my_product_item_id, "1", "1", "1" , ""
                 , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString()
                    ,add_cart_type, supplier_id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
@@ -562,7 +560,6 @@ class ProductDetailsFragment : Fragment() {
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
                 mView.progressBar.visibility = View.GONE
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 try {
                     if (response.body() != null) {
                         val jsonObject = JSONObject(response.body()!!.string())
@@ -578,12 +575,12 @@ class ProductDetailsFragment : Fragment() {
                                 requireActivity().cartWedgeCount.visibility=View.GONE
                                 requireActivity().frag_other_cartWedgeCount.visibility=View.GONE
                             }
-                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                            LogUtils.shortToast(mContext, jsonObject.getString("message"))
                             already_added=true
                             mView.btnAddToCart.text=getString(R.string.go_to_cart)
                         }
                         else if (jsonObject.getInt("response") == 2) {
-                            val builder = AlertDialog.Builder(requireContext())
+                            val builder = AlertDialog.Builder(mContext)
                             builder.setTitle(getString(R.string.alert_i))
                             builder.setMessage(jsonObject.getString("message"))
                             builder.setPositiveButton(R.string.yes) { dialog, which ->
@@ -598,7 +595,7 @@ class ProductDetailsFragment : Fragment() {
                         }
 
                         else {
-                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                            LogUtils.shortToast(mContext, jsonObject.getString("message"))
                         }
                     }
                 } catch (e: IOException) {
@@ -612,9 +609,8 @@ class ProductDetailsFragment : Fragment() {
 
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
                 LogUtils.e("msg", throwable.message)
-                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                LogUtils.shortToast(mContext, getString(R.string.check_internet))
                 mView.progressBar.visibility = View.GONE
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         })
 
@@ -622,6 +618,10 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            mContext,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
@@ -648,24 +648,5 @@ class ProductDetailsFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
-    }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProductDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                ProductDetailsFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
     }
 }

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="@dimen/_8sdp"
-    android:layout_margin="@dimen/_5sdp">
+    android:layout_margin="@dimen/_5sdp"
+    app:cardElevation="@dimen/_2sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,38 +25,27 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/recent_products"/>
 
-            <!--  <ImageView
-                  android:id="@+id/iv_add_to_favourites"
-                  android:layout_width="@dimen/_15sdp"
-                  android:layout_height="@dimen/_15sdp"
-                  app:layout_constraintTop_toTopOf="parent"
-                  app:layout_constraintEnd_toEndOf="parent"
-                  android:layout_margin="@dimen/_8sdp"
-                  android:src="@drawable/gray_heart"
-                  android:contentDescription="@string/favourites"
-                  />-->
 
-       <!--     <ImageView
-                android:id="@+id/iv_add_to_favourites"
+            <ProgressBar
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/recentProductProgressBar"
+                android:visibility="visible"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_supplier_image_filtered_product"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginVertical="@dimen/_6sdp"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/add_to_favourites"
-                android:contentDescription="@string/favourites"/>
-            <ImageView
-                android:id="@+id/iv_added_to_favourites"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginVertical="@dimen/_6sdp"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/added_to_favourites"
-                android:contentDescription="@string/favourites"
-                android:visibility="visible"/>-->
+                android:src="@drawable/default_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_like"
+                android:layout_marginHorizontal="@dimen/_4sdp"
+                app:layout_constraintTop_toTopOf="@+id/iv_like"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <ImageView
                 android:id="@+id/iv_like"
                 android:layout_width="@dimen/_15sdp"
@@ -75,6 +66,7 @@
                 android:layout_marginVertical="@dimen/_6sdp"
                 android:layout_marginHorizontal="@dimen/_8sdp"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone"
                 android:src="@drawable/add_to_baskets_cart"
                 android:contentDescription="@string/favourites"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -239,6 +239,8 @@ class SharedPreferenceUtility {
         const val isFirstTime = "isFirstTime"
         const val isLangSelected = "isLangSelected"
         const val searchItem = "searchItem"
+        const val supplierId1 = "supplierId1"
+        const val supplierId2 = "supplierId2"
 
         @Synchronized
         fun getInstance(): SharedPreferenceUtility {

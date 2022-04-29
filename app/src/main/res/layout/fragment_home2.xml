@@ -25,7 +25,7 @@
                     android:layout_height="match_parent">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_banners"
@@ -90,7 +90,7 @@
                                     android:fontFamily="@font/expressway_rg"
                                     android:gravity="center_vertical"
                                     android:maxLines="1"
-                                    android:text="@string/search_in_seen"
+                                    android:hint="@string/search_in_seen"
                                     android:textColor="@color/dark_gray"
                                     android:textSize="@dimen/_9ssp" />
 
@@ -129,60 +129,65 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_recent_products_layout"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/_8sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/loc_filter_view">
+
                             <TextView
                                 android:id="@+id/tv_recent_products"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginStart="@dimen/_10sdp"
+                                android:elevation="@dimen/_5sdp"
                                 android:fontFamily="@font/expressway_rg"
-                                android:includeFontPadding="false"
-                                android:textColor="#515151"
                                 android:gravity="start"
+                                android:includeFontPadding="false"
+                                android:text="@string/recent_products"
+                                android:textAllCaps="false"
+                                android:textColor="#515151"
                                 android:textSize="@dimen/_12ssp"
                                 android:textStyle="normal"
-                                android:textAllCaps="false"
-                                android:elevation="@dimen/_5sdp"
-                                android:text="@string/recent_products"/>
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/cl_recent_products"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_4sdp"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_recent_products"
-                                app:layout_constraintStart_toStartOf="parent">
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:background="@android:color/transparent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_recent_products">
+
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:id="@+id/rv_products"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    android:layoutAnimation="@anim/layout_animation" />
+                                    android:layoutAnimation="@anim/layout_animation"
+                                    app:layout_constraintTop_toTopOf="parent" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <TextView
                                 android:id="@+id/tv_no_recent_products"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:layout_constraintTop_toTopOf="@id/cl_recent_products"
-                                app:layout_constraintStart_toStartOf="@id/cl_recent_products"
-                                app:layout_constraintEnd_toEndOf="@id/cl_recent_products"
-                                app:layout_constraintBottom_toBottomOf="@id/cl_recent_products"
                                 android:layout_marginStart="@dimen/_10sdp"
+                                android:elevation="@dimen/_5sdp"
                                 android:fontFamily="@font/expressway_rg"
-                                android:includeFontPadding="false"
-                                android:textColor="#515151"
                                 android:gravity="start"
+                                android:includeFontPadding="false"
+                                android:text="@string/no_recent_products"
+                                android:textAllCaps="false"
+                                android:textColor="#515151"
                                 android:textSize="@dimen/_12ssp"
                                 android:textStyle="normal"
-                                android:textAllCaps="false"
                                 android:visibility="gone"
-                                android:elevation="@dimen/_5sdp"
-                                android:text="@string/no_recent_products"/>
+                                app:layout_constraintBottom_toBottomOf="@id/cl_recent_products"
+                                app:layout_constraintEnd_toEndOf="@id/cl_recent_products"
+                                app:layout_constraintStart_toStartOf="@id/cl_recent_products"
+                                app:layout_constraintTop_toTopOf="@id/cl_recent_products" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -203,7 +208,7 @@
             <LinearLayout
                 android:id="@+id/sponsors_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_90sdp"
+                android:layout_height="@dimen/_80sdp"
                 android:background="@drawable/filter_bg_shadow"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -215,8 +220,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/expressway_rg"
                     android:text="@string/sponsors"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/gray_color"/>
+                    android:textSize="12sp"
+                    android:textColor="#515151"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sponsors_rv"
@@ -227,15 +232,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_60sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:weightSum="1"
-                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:background="@color/transparent"
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="0.5"
                         app:cardElevation="0dp"
                         app:cardBackgroundColor="@color/transparent"
@@ -249,7 +254,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="0.5"
                         app:cardBackgroundColor="@color/transparent"
                         app:cardElevation="0dp"
@@ -280,7 +285,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/home_progress_bar"
             android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
     </RelativeLayout>
 
 

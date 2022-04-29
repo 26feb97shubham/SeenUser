@@ -1,12 +1,18 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.seen.user.R
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.Cart
@@ -22,6 +28,9 @@ class CartAdapter(private val context: Context, private val data:ArrayList<Cart>
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val requestOptions: RequestOptions =
+            RequestOptions().error(R.drawable.default_icon).centerCrop()
+
         holder.itemView.productName.text = data[position].product_name
         holder.itemView.supplierName.text = data[position].supplier_name
         holder.itemView.gadgets.text = data[position].category_name
@@ -29,8 +38,40 @@ class CartAdapter(private val context: Context, private val data:ArrayList<Cart>
         holder.itemView.price.text = "AED "+ data[position].price
         holder.itemView.discountPer.text = data[position].discount+"% OFF"
 
-        Glide.with(context).load(data[position].files).placeholder(R.drawable.default_icon).into(holder.itemView.img)
-        Glide.with(context).load(data[position].files).placeholder(R.drawable.default_icon).into(holder.itemView.supplierImg)
+        val productImage = if (data[position].files.isEmpty()){
+            context.getDrawable(R.drawable.default_icon).toString()
+        }else{
+            data[position].files
+        }
+
+
+
+        Glide.with(context).load(productImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.cartProductImageProgressBar.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.cartProductImageProgressBar.visibility = View.GONE
+                    return false
+                }
+
+            })
+            .apply(requestOptions).into(holder.itemView.img)
+        Glide.with(context).load(data[position].supplier_image).placeholder(R.drawable.default_icon).into(holder.itemView.supplierImg)
 
         if(data[position].like){
             Glide.with(context).load(R.drawable.heart_red).into(holder.itemView.imgLike)

@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="@dimen/_8sdp"
-    android:layout_margin="@dimen/_5sdp">
+    android:layout_margin="@dimen/_5sdp"
+    app:cardElevation="@dimen/_2sdp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +23,17 @@
                 android:src="@drawable/dummy_recent_product_mage"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/recent_products"/>
+
+            <ProgressBar
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/supplierProductsProgressBar"
+                android:visibility="visible"/>
+
 
             <!--  <ImageView
                   android:id="@+id/iv_add_to_favourites"
@@ -52,6 +64,7 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_like"
                 android:layout_marginVertical="@dimen/_6sdp"
                 android:layout_marginHorizontal="@dimen/_8sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:src="@drawable/add_to_baskets_cart"
                 android:contentDescription="@string/favourites"/>

@@ -43,6 +43,7 @@
                             android:id="@+id/frag_profile_toolbarView"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_50sdp"
+                            android:layoutDirection="ltr"
                             android:layout_gravity="center_vertical"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -51,6 +52,7 @@
                                 android:layout_width="@dimen/_20sdp"
                                 android:layout_height="@dimen/_20sdp"
                                 android:src="@drawable/ic_baseline_arrow_back_24"
+                                app:tint="#515151"
                                 android:layout_marginStart="@dimen/_15sdp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"

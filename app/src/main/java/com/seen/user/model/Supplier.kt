@@ -7,6 +7,7 @@ class Supplier {
     var country_name:String=""
     var profile_picture:String=""
     var categories:String=""
+    var categories_ar:String=""
     var rating:Double=0.0
     var like:Boolean=false
 }

@@ -1,6 +1,7 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seen.user.R
 import com.seen.user.model.*
+import com.seen.user.utils.SharedPreferenceUtility
 import kotlinx.android.synthetic.main.item_category_wise_searches_layout.view.*
 
 class CategoryWiseListAdapter(
@@ -33,7 +35,41 @@ class CategoryWiseListAdapter(
 
     override fun onBindViewHolder(holder: CategoryWiseListAdapterVH, position: Int) {
         val categoryWiseItem = categoryWiseList?.get(position)
-        holder.itemView.tv_category_searches.text = categoryWiseItem?.name
+
+
+        val lang = SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+
+        if (categoryWiseItem?.name.equals("BRANDS", false)){
+            val name = if (lang.equals("ar")){
+                "العلامات التجارية"
+            }else{
+                "BRANDS"
+            }
+            holder.itemView.tv_category_searches.text = name
+        }else if (categoryWiseItem?.name.equals("HOMEMADE SUPPLIERS", false)){
+            val name = if (lang.equals("ar")){
+                "الموردين المحليين"
+            }else{
+                "HOMEMADE SUPPLIERS"
+            }
+            holder.itemView.tv_category_searches.text = name
+        }else if (categoryWiseItem?.name.equals("BLOGGERS", false)){
+            val name = if (lang.equals("ar")){
+                "المدونون"
+            }else{
+                "BLOGGERS"
+            }
+            holder.itemView.tv_category_searches.text = name
+        }else if (categoryWiseItem?.name.equals("HEALTH AND BEAUTY", false)){
+            val name = if (lang.equals("ar")){
+                "الصحة والجمال"
+            }else{
+                "HEALTH AND BEAUTY"
+            }
+            holder.itemView.tv_category_searches.text = name
+        }
+
+
         if (categoryWiseItem?.data?.size==0){
             holder.itemView.tv_no_items_found.visibility = View.VISIBLE
             holder.itemView.rv_category_wise_product.visibility = View.GONE
@@ -49,17 +85,17 @@ class CategoryWiseListAdapter(
         holder.itemView.rv_category_wise_product.adapter = brandsListAdapter
         brandsListAdapter?.notifyDataSetChanged()
 
-        /*homemadesuppliersListAdapter = HmeMadeSuppAdapter(context, homemadesuppList, findNavController)
+       /* homemadesuppliersListAdapter = HmeMadeSuppAdapter(context, homemadesuppList, findNavController)
         holder.itemView.rv_category_wise_product.adapter = brandsListAdapter
-        brandsListAdapter?.notifyDataSetChanged()
+        homemadesuppliersListAdapter?.notifyDataSetChanged()
 
         healthandbeautyListAdapter = HlthBeautyAdapter(context, healthandbeautyList, findNavController)
         holder.itemView.rv_category_wise_product.adapter = brandsListAdapter
-        brandsListAdapter?.notifyDataSetChanged()
+        healthandbeautyListAdapter?.notifyDataSetChanged()
 
         bloggersListAdapter = BlgrsAdapter(context, bloggersList, findNavController)
         holder.itemView.rv_category_wise_product.adapter = brandsListAdapter
-        brandsListAdapter?.notifyDataSetChanged()*/
+        bloggersListAdapter?.notifyDataSetChanged()*/
 
 
     }

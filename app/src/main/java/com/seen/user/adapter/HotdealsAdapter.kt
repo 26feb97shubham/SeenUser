@@ -2,6 +2,7 @@ package com.seen.user.adapter
 
 import android.content.Context
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,11 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.seen.user.R
 import com.seen.user.model.ProductList
 import com.seen.user.rest.ApiClient
@@ -36,6 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
+
 class HotdealsAdapter(
     private val context: Context,
     private val productList: ArrayList<ProductList>,
@@ -43,8 +50,11 @@ class HotdealsAdapter(
     private val findNavController: NavController
 ):
     RecyclerView.Adapter<HotdealsAdapter.HotdealsAdapterVH>() {
-    inner class HotdealsAdapterVH(private val itemView:View):RecyclerView.ViewHolder(itemView) {
+    inner class HotdealsAdapterVH(val itemView:View):RecyclerView.ViewHolder(itemView) {
         fun bind(product: ProductList, position: Int) {
+            val requestOptions: RequestOptions =
+                RequestOptions().error(R.drawable.def_product).centerCrop()
+
             val pro_id = product.id.toString()
             Log.e("product_list", product.toString())
             itemView.productName.text = product.name
@@ -56,8 +66,38 @@ class HotdealsAdapter(
             itemView.supplierName.text = product.supplier_name
             itemView.txtRating.text = product.rating.toString()
             itemView.ratingBar.rating = product.rating.toFloat()
-            Glide.with(context).load(product.all_files[0]).into(itemView.img)
-            Glide.with(context).load(product.supplier_profile_picture).into(itemView.supplierImg)
+            val productImage = if (product.all_files.length()==0){
+                context.getDrawable(R.drawable.def_product).toString()
+            }else{
+                product.all_files[0]
+            }
+            Glide.with(context).load(productImage).into(itemView.img)
+            /*Glide.with(context).load(productImage)
+                .listener(object : RequestListener<Drawable>{
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        itemView.hotDealsProductProgressBar.visibility = View.GONE
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        itemView.hotDealsProductProgressBar.visibility = View.GONE
+                        return false
+                    }
+
+                })
+                .apply(requestOptions)
+                .into(itemView.img)*/
 
             Log.e("pro_id", pro_id)
 
@@ -125,11 +165,11 @@ class HotdealsAdapter(
                 })
             }
 
-            itemView.imgcatgory.setOnClickListener {
+         /*   itemView.imgcatgory.setOnClickListener {
                 val bundle = Bundle()
                 bundle.putInt("product_id", product.id)
                 findNavController.navigate(R.id.productDetailsFragment, bundle)
-            }
+            }*/
 
             itemView.setOnClickListener {
                 val bundle = Bundle()

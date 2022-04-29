@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,7 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_no_of_results"
-        android:hint="@string/all"
         android:fontFamily="@font/expressway_rg"
         android:textSize="@dimen/_12ssp"
         android:textColor="@color/txt_dark_gray"
@@ -69,8 +69,9 @@
             android:id="@+id/tv_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:hint="@string/all"
+            android:visibility="gone"
             android:fontFamily="@font/expressway_rg"
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/txt_dark_gray"
@@ -83,6 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/gray"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/tv_all"
             android:layout_marginTop="@dimen/_4sdp"
             android:id="@+id/divider"/>
@@ -95,34 +97,32 @@
             android:padding="@dimen/_8sdp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_filtered_products_categories_home"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:padding="@dimen/_8sdp"
-        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:scrollbars="vertical"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/cl_dropdown_layout">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_filtered_products_categories_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:scrollbars="vertical"/>
-    </ScrollView>
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_dropdown_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/txtNoDataFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_30sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:text="@string/no_data_found"
         android:textColor="@color/black"
         android:textSize="@dimen/_13ssp"
         android:fontFamily="@font/expressway_rg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/rv_filtered_products_categories_home"
+        app:layout_constraintBottom_toBottomOf="@id/rv_filtered_products_categories_home"
+        app:layout_constraintStart_toStartOf="@id/rv_filtered_products_categories_home"
+        app:layout_constraintEnd_toEndOf="@id/rv_filtered_products_categories_home"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

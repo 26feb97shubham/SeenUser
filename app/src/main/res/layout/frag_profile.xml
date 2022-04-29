@@ -41,7 +41,6 @@
                     android:fontFamily="@font/expressway_rg"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_14ssp"
-                    android:textStyle="bold"
                     android:gravity="center"
                     android:maxLines="2"
                     android:layout_marginTop="@dimen/_8sdp"

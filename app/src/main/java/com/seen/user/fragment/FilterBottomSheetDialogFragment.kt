@@ -18,6 +18,7 @@ import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
 import com.seen.user.utils.Utility.Companion.apiInterface
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.seen.user.utils.Utility
 import com.seen.user.utils.Utility.Companion.price_category
 import kotlinx.android.synthetic.main.filter_bottom_sheet_dialog.view.*
 import okhttp3.ResponseBody
@@ -72,6 +73,10 @@ class FilterBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.filter_bottom_sheet_dialog, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         apply_filter_tv = mView!!.findViewById(R.id.apply_filter_tv)
         return mView
     }
@@ -188,7 +193,12 @@ class FilterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                 override fun clickPostion(pos: Int) {
                                     acc_type_id = accTypeList[pos].id.toString()
                                     mView!!.ll_type_list.visibility = View.GONE
-                                    mView!!.brand_tv.text = accTypeList[pos].name
+                                    if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                        mView!!.brand_tv.text = accTypeList[pos].name_ar
+                                    }else{
+                                        mView!!.brand_tv.text = accTypeList[pos].name
+                                    }
+
                                 }
 
                             })
@@ -223,16 +233,27 @@ class FilterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 try {
                     if (response.body() != null) {
                         countryList = response.body()!!.countries as ArrayList<CountriesItem>
+                        val servedCountryList = ArrayList<CountriesItem>()
+                        for (i in 0 until countryList.size){
+                            if (countryList[i].countries_to_be_served==1){
+                                servedCountryList.add(countryList[i])
+                            }
+                        }
 //                        txtCountryCode.text=country_code[0]
                         if (countryList.size!=0){
                             mView!!.txtNoDataFound_countries.visibility = View.GONE
                             mView!!.rv_countries_list.visibility = View.VISIBLE
                             mView!!.rv_countries_list.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                            countriesListDataAdapter= CountriesListDataAdapter(requireContext(), countryList,  object : ClickInterface.ClickPositionInterface{
+                            countriesListDataAdapter= CountriesListDataAdapter(requireContext(), servedCountryList,  object : ClickInterface.ClickPositionInterface{
                                 override fun clickPostion(pos: Int) {
                                     country_id = countryList[pos].id.toString()
                                     mView!!.ll_countries_list.visibility = View.GONE
-                                    mView!!.emi_filter_tv.text = countryList[pos].country_name
+                                    if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                        mView!!.emi_filter_tv.text = countryList[pos].country_name_ar
+                                    }else{
+                                        mView!!.emi_filter_tv.text = countryList[pos].country_name
+                                    }
+
                                 }
 
                             })
@@ -280,6 +301,7 @@ class FilterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                 val jsonObj = categories.getJSONObject(i)
                                 val c = Categories()
                                 c.name = jsonObj.getString("name")
+                                c.name_ar = jsonObj.getString("name_ar")
                                 c.id = jsonObj.getInt("id")
                                /* c.image = jsonObj.getString("image")
                                 c.desc = jsonObj.getString("desc")
@@ -296,7 +318,11 @@ class FilterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                                 override fun clickPostion(pos: Int) {
                                     category_id = categoryList[pos].id.toString()
                                     mView!!.ll_categories_list.visibility = View.GONE
-                                    mView!!.category_tv.text = categoryList[pos].name
+                                    if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                        mView!!.category_tv.text = categoryList[pos].name_ar
+                                    }else{
+                                        mView!!.category_tv.text = categoryList[pos].name
+                                    }
                                 }
                             })
                             mView!!.rv_categories_list.adapter=categoryListAdapter

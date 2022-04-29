@@ -25,6 +25,7 @@ class BrandListAdapter(
 
     override fun onBindViewHolder(holder: BrandListAdapterVH, position: Int) {
         val brandsItem = brandsList?.get(position)
+        val lang = SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
         if (brandsItem!=null){
             holder.itemView.product_name_mtv.text = brandsItem.name
         }

@@ -11,19 +11,21 @@
 
     <TextView
         android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="@dimen/_40sdp"
-        android:fontFamily="@font/farsi_simple_bold"
+        android:fontFamily="@font/expressway_rg"
+        android:gravity="center_vertical|start"
+        android:textAlignment="viewStart"
+        android:paddingHorizontal="10dp"
+        android:includeFontPadding="false"
         android:src="@drawable/ic_launcher_foreground"
         android:text="@string/order_status"
-        android:includeFontPadding="false"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="@color/gray_color"
-        android:textSize="@dimen/_18ssp"
         android:textAllCaps="true"
+        android:textColor="@color/gray_color"
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="@dimen/_10ssp"
         app:layout_constraintTop_toTopOf="parent" />
     <ScrollView
         android:layout_width="match_parent"
@@ -88,7 +90,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
-                android:text="Items to be delivered:"
+                android:text="@string/items_to_be_delivered_order_status"
                 android:textStyle="normal"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_20sdp"
@@ -113,7 +115,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
-                android:text="Delivery Status:"
+                android:text="@string/delivery_status_order_status"
                 android:textStyle="normal"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_20sdp"
@@ -310,7 +312,7 @@
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 android:textAllCaps="true"
-                android:text="Submit Rating"/>
+                android:text="@string/submit_rating_order_status"/>
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

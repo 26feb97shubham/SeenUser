@@ -17,6 +17,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.fragment_find_yournext_item.view.*
@@ -33,11 +34,16 @@ class FindYournextItemFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_find_yournext_item, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         return mView
     }
 
     private fun setUpViews() {
+        requireActivity().frag_other_toolbar.frag_other_backImg.visibility = View.VISIBLE
         requireActivity().frag_other_toolbar.frag_other_backImg.setOnClickListener {
             requireActivity().frag_other_toolbar.frag_other_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
             SharedPreferenceUtility.getInstance().hideSoftKeyBoard(requireContext(), requireActivity().frag_other_toolbar.frag_other_backImg)
@@ -46,8 +52,10 @@ class FindYournextItemFragment : Fragment() {
 
         requireActivity().home_frag_categories.visibility = View.GONE
 
+//        getGlobalSearchList("")
+
         mView!!.textSearch.doOnTextChanged { text, start, before, count ->
-            if (count == 0){
+            if (count == 0 && text!!.isEmpty()){
                 mView!!.mcv_search.visibility = View.GONE
             }else{
                 mView!!.mcv_search.visibility = View.VISIBLE
@@ -71,7 +79,8 @@ class FindYournextItemFragment : Fragment() {
                 response: Response<GlobalSrchResponse?>
             ) {
                 if (response.body()==null){
-                    LogUtils.shortToast(requireContext(), "No Data Found")
+//                    LogUtils.shortToast(requireContext(), "No Data Found")
+                    LogUtils.shortToast(requireContext(), requireContext().getString(R.string.no_results_found))
                     mView!!.mcv_search.visibility = View.GONE
                 }else{
                     mView!!.mcv_search.visibility = View.VISIBLE
@@ -93,7 +102,7 @@ class FindYournextItemFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<GlobalSrchResponse?>, t: Throwable) {
-                LogUtils.shortToast(requireContext(), "No Items Found")
+                LogUtils.shortToast(requireContext(), requireContext().getString(R.string.no_results_found))
             }
 
         })
@@ -101,6 +110,10 @@ class FindYournextItemFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

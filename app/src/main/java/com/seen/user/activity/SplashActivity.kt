@@ -18,6 +18,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_splash)
         getFCMToken()
         deviceId()

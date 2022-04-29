@@ -1,6 +1,8 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +11,13 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.Products
 import com.seen.user.rest.ApiClient
@@ -27,13 +35,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
+
 class RecentProductsAdapter(private val context: Context, private val productsList : ArrayList<Products>,
                             private val navController: NavController,
                             private val clickPosInterface: ClickInterface.ClickPosInterface)
     : RecyclerView.Adapter<RecentProductsAdapter.RecentProductsAdapterVH>() {
     inner class RecentProductsAdapterVH(itemView : View) : RecyclerView.ViewHolder(itemView){
         var isLike:Boolean=false
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentProductsAdapterVH {
@@ -43,13 +51,78 @@ class RecentProductsAdapter(private val context: Context, private val productsLi
 
     override fun onBindViewHolder(holder: RecentProductsAdapterVH, position: Int) {
         //Glide.with(context).load(productsList[position].files).into(holder.itemView.iv_recent_product)
+
+        val requestOptions: RequestOptions =
+            RequestOptions().error(R.drawable.def_product).centerCrop()
+
         Log.e("pos_1", position.toString())
-        Glide.with(context).load(productsList[position].files)
-                .placeholder(R.drawable.user).into(holder.itemView.iv_recent_product)
+
+        val productImage = if (productsList[position].files!!.isEmpty()){
+            context.getDrawable(R.drawable.def_product).toString()
+        }else{
+            productsList[position].files
+        }
+
+        val productSupplierImage = if (productsList[position].supplierProfilePicture!!.isEmpty()){
+            context.getDrawable(R.drawable.user).toString()
+        }else{
+            productsList[position].supplierProfilePicture
+        }
+
+        Glide.with(context).load(productImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.itemRecentProductListProgressBar.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.itemRecentProductListProgressBar.visibility = View.GONE
+                    return false
+                }
+
+            })
+                .apply(requestOptions).into(holder.itemView.iv_recent_product)
+
+        Glide.with(context).load(productSupplierImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+
+            })
+            .apply(requestOptions).into(holder.itemView.civ_supplier_image_recent_product)
+
         holder.itemView.tv_recent_product_item_name.text = productsList[position].name
         holder.itemView.tv_recent_product_item_price.text = "AED "+productsList[position].price
 
-        if(productsList[position].like){
+        if(productsList[position].like!!){
             holder.itemView.iv_like.setImageResource(R.drawable.heart_red)
         }
         else{
@@ -63,7 +136,8 @@ class RecentProductsAdapter(private val context: Context, private val productsLi
                 LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
                 val args= Bundle()
                 args.putString("reference", "OffersDiscount")
-                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+//                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
                 return@setOnClickListener
             }
 
@@ -83,7 +157,7 @@ class RecentProductsAdapter(private val context: Context, private val productsLi
                             val jsonObject = JSONObject(response.body()!!.string())
 
                             if(jsonObject.getInt("response")==1){
-                                products.like = !products.like
+                                products.like = !products.like!!
                                 LogUtils.shortToast(context, jsonObject.getString("message"))
                                 notifyDataSetChanged()
 
@@ -111,17 +185,27 @@ class RecentProductsAdapter(private val context: Context, private val productsLi
         }
 
         holder.itemView.iv_add_to_cart.setOnClickListener {
-            /*clickPosInterface.clickPostion(position, "Cart")*/
-            val bundle = Bundle()
-            bundle.putInt("product_id", productsList[position].id)
-            navController.navigate(R.id.productDetailsFragment, bundle)
+            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
+                val args= Bundle()
+                args.putString("reference", "OffersDiscount")
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
+                return@setOnClickListener
+            }else{
+               clickPosInterface.clickPostion(position, "Cart")
+            }
         }
 
+        holder.itemView.civ_supplier_image_recent_product.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                clickPosInterface.clickPostion(position, "Supplier")
+            }
 
+        })
 
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
-            bundle.putInt("product_id", productsList[position].id)
+            bundle.putInt("product_id", productsList[position].id!!)
             navController.navigate(R.id.productDetailsFragment, bundle)
         }
     }

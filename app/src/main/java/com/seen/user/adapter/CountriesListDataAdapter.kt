@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seen.user.R
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.CountriesItem
+import com.seen.user.utils.SharedPreferenceUtility
 import kotlinx.android.synthetic.main.categories_name_list_layout.view.*
 
 class CountriesListDataAdapter(private val context : Context,
@@ -29,7 +30,11 @@ class CountriesListDataAdapter(private val context : Context,
     }
 
     override fun onBindViewHolder(holder: CountriesListDataAdapterVH, position: Int) {
-        val country = countryList[position].country_name
+        val country = if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang,""].equals("ar")){
+            countryList[position].country_name_ar
+        }else{
+            countryList[position].country_name
+        }
         if (country != null) {
             holder.bind(country, position)
         }

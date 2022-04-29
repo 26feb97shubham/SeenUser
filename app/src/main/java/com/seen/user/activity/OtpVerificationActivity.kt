@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
@@ -17,6 +18,7 @@ import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_otp_verification.*
 import okhttp3.ResponseBody
 import org.json.JSONException
@@ -34,6 +36,10 @@ class OtpVerificationActivity : AppCompatActivity() {
     var isLoggedIn : Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_otp_verification)
         setUpViews()
     }
@@ -42,7 +48,15 @@ class OtpVerificationActivity : AppCompatActivity() {
             user_id = intent.extras!!.getString("user_id").toString()
             ref = intent.extras!!.getString("ref").toString()
         }
-        
+
+        if (ref=="1"){
+            txt1.text = getString(R.string.sign_up)
+            frag_other_backImg.visibility = View.GONE
+        }else{
+            txt1.text = getString(R.string.forgotPassword)
+            frag_other_backImg.visibility = View.VISIBLE
+        }
+
         btnVerify.isEnabled=false
         btnVerify.alpha=0.5f
 
@@ -79,28 +93,28 @@ class OtpVerificationActivity : AppCompatActivity() {
             firstPinView.setText("")
             SharedPreferenceUtility.getInstance().hideSoftKeyBoard(this@OtpVerificationActivity, it)
             resendOtp()
-
-
         }
+
+        frag_other_backImg.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                onBackPressed()
+            }
+        })
 
 
     }
     private fun validateAndVerification() {
         pin = firstPinView.text.toString()
-        verifyAccount()
-        /*  if (TextUtils.isEmpty(pin)) {
+          if (TextUtils.isEmpty(pin)) {
               firstPinView.error=getString(R.string.please_enter_your_otp)
-  //            LogUtils.shortToast(this@OtpVerificationActivity, getString(R.string.please_enter_your_otp))
   
           }
           else if ((pin.length < 4)) {
               firstPinView.error=getString(R.string.otp_length_valid)
-  //            LogUtils.shortToast(this@OtpVerificationActivity, getString(R.string.otp_length_valid))
           }
-  
           else {
               verifyAccount()
-          }*/
+          }
 
     }
 
@@ -126,8 +140,8 @@ class OtpVerificationActivity : AppCompatActivity() {
 //                            LogUtils.shortToast(this@OtpVerificationActivity, jsonObject.getString("message"))
                             if(ref=="1"){
                                 SharedPreferenceUtility.getInstance().save(SharedPreferenceUtility.UserId, user_id.toInt())
-                                SharedPreferenceUtility.getInstance().save(SharedPreferenceUtility.IsLogin, true)
-                                startActivity(Intent(this@OtpVerificationActivity, HomeActivity::class.java))
+//                                SharedPreferenceUtility.getInstance().save(SharedPreferenceUtility.IsLogin, true)
+                                    startActivity(Intent(this@OtpVerificationActivity, LoginActivity::class.java))
 
                             }
                             else{
@@ -208,7 +222,12 @@ class OtpVerificationActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        exitApp()
+        if (ref=="1"){
+            exitApp()
+        }else{
+            finish()
+        }
+
     }
     private fun exitApp() {
         val toast = Toast.makeText(

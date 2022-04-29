@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.CartAdapter
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.Cart
@@ -17,6 +19,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_cart.view.*
 import okhttp3.ResponseBody
@@ -27,16 +30,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CartFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CartFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -47,20 +40,16 @@ class CartFragment : Fragment() {
     var userId:Int=0
     var responseBody:String=""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_cart, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         myCart()
         return mView
@@ -92,12 +81,12 @@ class CartFragment : Fragment() {
                     "Minus" -> {
                         type="2"
                         product_type="2"
-                        cartAdd(cartList[pos].product_id, cartList[pos].product_item_id,  cartList[pos].id, cartList[pos].quantity,  type, product_type)
+                        cartAdd(cartList[pos].product_id, cartList[pos].product_item_id,  cartList[pos].id, 1,  type, product_type)
                     }
                     "Plus" -> {
                         type="2"
                         product_type="1"
-                        cartAdd(cartList[pos].product_id, cartList[pos].product_item_id,  cartList[pos].id, cartList[pos].quantity,  type, product_type)
+                        cartAdd(cartList[pos].product_id, cartList[pos].product_item_id,  cartList[pos].id, 1,  type, product_type)
                     }
                     "Supplier" -> {
                         val bundle=Bundle()
@@ -111,7 +100,6 @@ class CartFragment : Fragment() {
                         cartAdd(cartList[pos].product_id, cartList[pos].product_item_id,  cartList[pos].id, cartList[pos].quantity,  type, product_type)
                     }
                 }
-
             }
 
         })
@@ -125,7 +113,8 @@ class CartFragment : Fragment() {
 //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
                 val args=Bundle()
                 args.putString("reference", "CheckOut")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else{
                 findNavController().navigate(R.id.action_cartFragment_to_checkOutFragment)
@@ -192,6 +181,7 @@ class CartFragment : Fragment() {
                                 c.category_name = obj.getString("category_name")
                                 c.product_name = obj.getString("product_name")
                                 c.supplier_name = obj.getString("supplier_name")
+                                c.supplier_image = obj.getString("supplier_image")
                                 c.from_date = obj.getString("from_date")
                                 c.files = obj.getString("files")
                                 c.to_date = obj.getString("to_date")
@@ -253,8 +243,8 @@ class CartFragment : Fragment() {
                             if(jsonObject.getInt("carts_count")!=0){
                                 requireActivity().cartWedgeCount.visibility=View.VISIBLE
                                 requireActivity().frag_other_cartWedgeCount.visibility=View.VISIBLE
-                                requireActivity().cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
-                                requireActivity().frag_other_cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
+                               /* requireActivity().cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
+                                requireActivity().frag_other_cartWedgeCount.text=jsonObject.getInt("carts_count").toString()*/
                             }
                             else{
                                 requireActivity().cartWedgeCount.visibility=View.GONE
@@ -288,6 +278,10 @@ class CartFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /* requireActivity().backImg.visibility=View.GONE*/
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().toolbar.visibility=View.GONE
@@ -316,25 +310,4 @@ class CartFragment : Fragment() {
 
     }
 
-
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CartFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CartFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

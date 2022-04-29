@@ -8,12 +8,18 @@ import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.seen.user.R
+import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_choose_login_sign_up.*
 
 class ChooseLoginSignUpActivity : AppCompatActivity() {
     var doubleClick:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_choose_login_sign_up)
         setUpViews()
     }

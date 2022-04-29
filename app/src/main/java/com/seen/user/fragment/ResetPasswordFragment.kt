@@ -17,6 +17,7 @@ import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_reset_password.view.*
 import okhttp3.ResponseBody
@@ -27,16 +28,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ResetPasswordFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ResetPasswordFragment : Fragment() {
     // TODO: Rename and change types of parameters
     var mView: View?=null
@@ -61,6 +52,10 @@ class ResetPasswordFragment : Fragment() {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         if(mView==null) {
             mView = inflater.inflate(R.layout.fragment_reset_password, container, false)
+            Utility.changeLanguage(
+                requireContext(),
+                SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+            )
             setUpViews()
         }
         return mView
@@ -195,6 +190,10 @@ class ResetPasswordFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
@@ -222,25 +221,5 @@ class ResetPasswordFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ResetPasswordFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ResetPasswordFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

@@ -15,22 +15,10 @@ import com.seen.user.activity.ChooseLangActivity
 import com.seen.user.activity.LoginActivity
 import com.seen.user.activity.SignUpActivity
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.fragment_intro.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [IntroFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class IntroFragment(val position: Int) : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var mainView : LinearLayout? = null
     private var mainView2 : RelativeLayout? = null
     private var btnLogin: TextView?= null
@@ -40,18 +28,15 @@ class IntroFragment(val position: Int) : Fragment() {
     private var isLangSelected : Boolean = false
     lateinit var mView: View
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_intro, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         mainView = mView.findViewById(R.id.mainView)
         mainView2 = mView.findViewById(R.id.third_screen_layout)
         btnLogin = mView.findViewById(R.id.btnLogin)
@@ -175,6 +160,4 @@ class IntroFragment(val position: Int) : Fragment() {
     companion object{
         var isSelected = ""
     }
-
-
 }

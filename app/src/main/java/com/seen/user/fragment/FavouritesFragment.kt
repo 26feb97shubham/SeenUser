@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.NameListAdapter
 import com.seen.user.adapter.ProductListAdapter
 import com.seen.user.interfaces.ClickInterface
@@ -19,6 +21,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
 import okhttp3.ResponseBody
@@ -29,32 +32,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavouritesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FavouritesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     var mView: View?=null
     lateinit var nameAdapter: NameListAdapter
     var catNameList=ArrayList<CategoryName>()
     var productList=ArrayList<ProductList>()
     lateinit var productListAdapter: ProductListAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +48,10 @@ class FavouritesFragment : Fragment() {
         // Inflate the layout for this fragment
 //        if(mView==null) {
             mView = inflater.inflate(R.layout.fragment_favourites, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
             setUpViews()
             setSupplierTab()
 
@@ -164,7 +153,7 @@ class FavouritesFragment : Fragment() {
                                     d.price = jsonObj.getString("price")
                                     d.discount = jsonObj.getString("discount")
                                     d.quantity = jsonObj.getInt("quantity")
-                                    d.rating = jsonObj.getDouble("rating")
+//                                    d.rating = jsonObj.getDouble("rating")
                                     d.like = jsonObj.getBoolean("like")
                                     productList.add(d)
 
@@ -251,7 +240,8 @@ class FavouritesFragment : Fragment() {
             LogUtils.shortToast(requireContext(), getString(R.string.please_login_signup_to_access_this_functionality))
             val args=Bundle()
             args.putString("reference", "HomeMadeSuppliers")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             return
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -274,6 +264,7 @@ class FavouritesFragment : Fragment() {
 
                         if(jsonObject.getInt("response")==1){
                             catNameList[pos].like = !catNameList[pos].like
+                            catNameList.removeAt(pos)
                             nameAdapter.notifyDataSetChanged()
 //                            getFavouritesSuppliersAndProducts(false)
 
@@ -306,7 +297,8 @@ class FavouritesFragment : Fragment() {
             LogUtils.shortToast(requireContext(), getString(R.string.please_login_signup_to_access_this_functionality))
             val args=Bundle()
             args.putString("reference", "OffersDiscount")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             return
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -329,6 +321,7 @@ class FavouritesFragment : Fragment() {
 
                         if(jsonObject.getInt("response")==1){
                             productList[pos].like = !productList[pos].like
+                            productList.removeAt(pos)
                             productListAdapter.notifyDataSetChanged()
 //                            getFavouritesSuppliersAndProducts(false)
 
@@ -356,28 +349,13 @@ class FavouritesFragment : Fragment() {
             }
         })
     }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeMadeSuppliersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeMadeSuppliersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

@@ -31,11 +31,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/farsi_simple_bold"
-                    android:text="You recently received your item:"
+                    android:fontFamily="@font/expressway_rg"
+                    android:text="@string/you_recently_received_your_item"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_15ssp"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:layout_marginVertical="@dimen/_10sdp"/>
                 <com.google.android.material.card.MaterialCardView
@@ -99,7 +98,7 @@
                             app:layout_constraintStart_toEndOf="@+id/view"
                             app:layout_constraintTop_toTopOf="parent"
                             android:textAllCaps="false"
-                            android:fontFamily="@font/farsi_simple_bold"/>
+                            android:fontFamily="@font/expressway_rg"/>
 
                         <TextView
                             android:id="@+id/suppliername"
@@ -198,11 +197,10 @@
                 android:id="@+id/add_your_ratings_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/farsi_simple_bold"
-                android:text="Add your ratings"
+                android:fontFamily="@font/expressway_rg"
+                android:text="@string/add_your_ratings"
                 android:layout_gravity="center"
                 android:textSize="@dimen/_17ssp"
-                android:textStyle="bold"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/recently_received_layout"
                 app:layout_constraintStart_toStartOf="parent"
@@ -214,7 +212,7 @@
                 android:layout_width="@dimen/_250sdp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/expressway_rg"
-                android:text="By adding your honest product rating, you are helping our community to have a standard of quality products for all our customers.\n\n Thank you for your cooperation!"
+                android:text="@string/by_adding_your_honest_product_rating_you_are_helping_our_community_to_have_a_standard_of_quality_products_for_all_our_customers_n_n_thank_you_for_your_cooperation"
                 android:layout_gravity="center"
                 android:textSize="@dimen/_9ssp"
                 android:textStyle="bold"
@@ -285,7 +283,7 @@
                         android:layout_width="@dimen/_100sdp"
                         android:layout_height="@dimen/_30sdp"
                         android:fontFamily="@font/expressway_rg"
-                        android:text="Add Rating"
+                        android:text="@string/add_rating"
                         android:layout_gravity="center"
                         android:textSize="@dimen/_10ssp"
                         android:textStyle="bold"
@@ -301,18 +299,20 @@
 
             <TextView
                 android:id="@+id/tv_add_supplier_rating"
-                android:layout_width="@dimen/_100sdp"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/_30sdp"
-                android:fontFamily="@font/expressway_rg"
-                android:text="Add Supplier Rating"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/expressway_rg"
+                android:gravity="center_vertical|start"
+                android:paddingHorizontal="10dp"
+                android:text="@string/add_supplier_rating"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_10ssp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="@+id/product_rating_layout"
                 app:layout_constraintStart_toStartOf="@id/product_rating_layout"
-                app:layout_constraintTop_toBottomOf="@id/product_rating_layout"/>
+                app:layout_constraintTop_toBottomOf="@id/product_rating_layout" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/supplier_rating_layout"
@@ -361,7 +361,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/expressway_rg"
-                            android:text="Supplier Name"
+                            android:text="@string/supplier_name"
                             android:layout_gravity="center"
                             android:textSize="@dimen/_9ssp"
                             android:textStyle="bold"

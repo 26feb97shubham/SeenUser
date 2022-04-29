@@ -11,19 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.seen.user.R
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_web_view.view.*
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [WebViewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class WebViewFragment : Fragment() {
     // TODO: Rename and change types of parameters
     var webUrl:String="https://www.privacypolicyonline.com/live.php?token=eVmpQy9Mb6H4HRFi7mderDrhJKaa6Bz6"
@@ -34,7 +24,6 @@ class WebViewFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             title = it.getString("title", "")
-
         }
     }
 
@@ -43,6 +32,10 @@ class WebViewFragment : Fragment() {
         // Inflate the layout for this fragment
         if(mView==null) {
             mView = inflater.inflate(R.layout.fragment_web_view, container, false)
+            Utility.changeLanguage(
+                requireContext(),
+                SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+            )
             setUpViews()
         }
         return mView
@@ -63,10 +56,9 @@ class WebViewFragment : Fragment() {
         mView!!.webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, progress: Int) { //Make the bar disappear after URL is loaded, and changes string to Loading...
                 mView!!.progressBar.visibility= View.VISIBLE
-                if(progress>=80){
+                if(progress == 100){
                     mView!!.progressBar.visibility= View.GONE
                 }
-
             }
         }
         mView!!.webView.settings.javaScriptEnabled=true
@@ -76,27 +68,5 @@ class WebViewFragment : Fragment() {
         mView!!.webView.settings.useWideViewPort=true
         mView!!.webView.settings.loadsImagesAutomatically=true
         mView!!.webView.loadUrl(webUrl)
-
-
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WebViewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WebViewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

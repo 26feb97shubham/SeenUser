@@ -1,6 +1,7 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,6 @@ import com.seen.user.model.MyOrders
 import com.seen.user.model.ProductList
 import kotlinx.android.synthetic.main.fragment_favourites.view.rvList
 import kotlinx.android.synthetic.main.item_upcoming.view.*
-import kotlinx.android.synthetic.main.item_upcoming.view.deliveryDate
-import kotlinx.android.synthetic.main.item_upcoming.view.orderNum
 
 
 class UpComingAdapter(private val context: Context, private val data:ArrayList<MyOrders>, private val clickInst: ClickInterface.ClickPosInterface): RecyclerView.Adapter<UpComingAdapter.MyViewHolder>() {
@@ -26,7 +25,10 @@ class UpComingAdapter(private val context: Context, private val data:ArrayList<M
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
+        holder.itemView.btnChkStatus.paintFlags =  holder.itemView.btnChkStatus.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG
+
         holder.itemView.orderNum.text = context.getString(R.string.order_hess)+data[position].order_id
+        holder.itemView.pricetv.text = "AED "+data[position].total_price
         holder.itemView.deliveryDate.text = context.getString(R.string.delivery_date)+"  "+data[position].delivery_date
         order_status = data[position].status
 
@@ -48,6 +50,7 @@ class UpComingAdapter(private val context: Context, private val data:ArrayList<M
              p.category_name = obj1.getString("category_name")
              p.name = obj1.getString("product_name")
              p.supplier_name = obj1.getString("supplier_name")
+             p.supplier_profile_picture = obj1.getString("supplier_profile_picture")
              p.files = obj1.getString("files")
              holder.productList.add(p)
          }

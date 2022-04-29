@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.seen.user.R
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.SharedPreferenceUtility.Companion.SelectedLang
 import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_choose_lang.*
 
@@ -21,6 +22,10 @@ class ChooseLangActivity : AppCompatActivity() {
     private var selectLang:String=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SelectedLang, "")
+        )
         setContentView(R.layout.activity_choose_lang)
         setUpViews()
     }

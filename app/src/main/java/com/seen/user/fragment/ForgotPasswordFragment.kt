@@ -19,6 +19,7 @@ import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.activity_forgot_password.view.*
 import kotlinx.android.synthetic.main.activity_home.*
@@ -38,16 +39,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ForgotPasswordFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ForgotPasswordFragment : Fragment() {
      var mView: View?=null
     lateinit var phone: String
@@ -67,10 +58,17 @@ class ForgotPasswordFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         if(mView==null) {
             mView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
             setUpViews()
-            getCountires()
+//            getCountires()
+        }else{
+            return mView
+            setUpViews()
         }
         return mView
     }
@@ -109,12 +107,12 @@ class ForgotPasswordFragment : Fragment() {
             validateAndForgot()
         }
 
-        mView!!.txtCountryCode_forgot_frag.setOnClickListener {
+/*        mView!!.txtCountryCode_forgot_frag.setOnClickListener {
             if(cCodeList.size != 0){
                 showCountryCodeList()
             }
 
-        }
+        }*/
     }
     private fun getCountires() {
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -136,7 +134,11 @@ class ForgotPasswordFragment : Fragment() {
                         for (i in 0 until countries.length()) {
                             val jsonObj = countries.getJSONObject(i)
                             countryCodes.add(jsonObj.getString("country_code"))
-                            cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                cCodeList.add(jsonObj.getString("country_name_ar") + " ("+jsonObj.getString("country_code")+")")
+                            }else{
+                                cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            }
                         }
                         mView!!.txtCountryCode_forgot_frag.text=countryCodes[0]
 
@@ -187,12 +189,12 @@ class ForgotPasswordFragment : Fragment() {
     private fun validateAndForgot() {
         phone = mView!!.edtPhone.text.toString()
         country_Code = mView!!.txtCountryCode_forgot_frag.text.toString()
-        if (TextUtils.isEmpty(country_Code)) {
+    /*    if (TextUtils.isEmpty(country_Code)) {
             mView!!.txtCountryCode_forgot.requestFocus()
             mView!!.txtCountryCode_forgot.error = getString(R.string.please_select_your_country_code)
 
-        }
-        else if (TextUtils.isEmpty(phone)) {
+        }*/
+       if (TextUtils.isEmpty(phone)) {
             mView!!.edtPhone.requestFocus()
             mView!!.edtPhone.error=getString(R.string.please_enter_your_phone_number)
 
@@ -213,7 +215,7 @@ class ForgotPasswordFragment : Fragment() {
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("mobile", "country_code", "fcm_token", "device_type", "lang"),
-                arrayOf(phone.trim({ it <= ' ' }),  country_Code, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.FCMTOKEN, ""]
+                arrayOf(phone.trim({ it <= ' ' }),  "+971", SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.FCMTOKEN, ""]
                         , ApiUtils.DeviceType, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
 
@@ -266,6 +268,10 @@ class ForgotPasswordFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
@@ -295,23 +301,4 @@ class ForgotPasswordFragment : Fragment() {
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ForgotPasswordFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                ForgotPasswordFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
 }

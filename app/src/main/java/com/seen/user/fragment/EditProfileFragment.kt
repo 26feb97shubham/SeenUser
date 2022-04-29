@@ -32,6 +32,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.frag_profile.view.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -50,20 +51,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     var mView:View?=null
     private val PERMISSION_CAMERA_EXTERNAL_STORAGE_CODE = 301
     private val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -82,18 +70,15 @@ class EditProfileFragment : Fragment() {
     var profile_picture:String=""
     var registered_number=""
     var registered_country_code=""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_profile, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         getCountires()
         return mView
@@ -139,12 +124,12 @@ class EditProfileFragment : Fragment() {
             validateAndEdit()
         }
 
-        mView!!.txtCountryCode.setOnClickListener {
-            if(cCodeList.size != 0){
-                showCountryCodeList()
-            }
-
-        }
+//        mView!!.txtCountryCode.setOnClickListener {
+//            if(cCodeList.size != 0){
+//                showCountryCodeList()
+//            }
+//
+//        }
 
       /*  mView!!.txtAddLocationLayout.setOnClickListener {
             mView!!.txtAddLocationLayout.startAnimation(AlphaAnimation(1f, .5f))
@@ -196,7 +181,11 @@ class EditProfileFragment : Fragment() {
                         for (i in 0 until countries.length()) {
                             val jsonObj = countries.getJSONObject(i)
                             country_code.add(jsonObj.getString("country_code"))
-                            cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                cCodeList.add(jsonObj.getString("country_name_ar") + " ("+jsonObj.getString("country_code")+")")
+                            }else{
+                                cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            }
                         }
 //                        txtCountryCode.text=country_code[0]
 
@@ -310,11 +299,11 @@ class EditProfileFragment : Fragment() {
             mView!!.edtEmail.error=getString(R.string.please_enter_valid_email)
 //            LogUtils.shortToast(this, getString(R.string.please_enter_valid_email))
         }
-        else if (TextUtils.isEmpty(selectCountryCode)) {
+      /*  else if (TextUtils.isEmpty(selectCountryCode)) {
 //            edtPhone.error=getString(R.string.please_select_your_country_code)
             LogUtils.shortToast(requireContext(), getString(R.string.please_select_your_country_code))
 
-        }
+        }*/
         else if (TextUtils.isEmpty(mobile)) {
             mView!!.edtPhone.requestFocus()
             mView!!.edtPhone.error=getString(R.string.please_enter_your_phone_number)
@@ -331,8 +320,8 @@ class EditProfileFragment : Fragment() {
         else {
             if(registered_number!=mobile){
                 val builder = android.app.AlertDialog.Builder(requireContext())
-                builder.setTitle("Alert!")
-                builder.setMessage("Are you sure you want to updated your phone number")
+                builder.setTitle(requireContext().getString(R.string.alert_i))
+                builder.setMessage(requireContext().getString(R.string.are_you_sure_you_want_to_update_your_phone_number))
                 builder.setPositiveButton(R.string.ok) { dialog, which ->
                     dialog.cancel()
                     editProfile()
@@ -357,7 +346,7 @@ class EditProfileFragment : Fragment() {
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createMultipartBodyBuilder(arrayOf("email", "name", "mobile", "country_code", "user_id",  "lang"),
-                arrayOf(email.trim({ it <= ' ' }), name.trim({ it <= ' ' }), mobile.trim({ it <= ' ' }), selectCountryCode
+                arrayOf(email.trim({ it <= ' ' }), name.trim({ it <= ' ' }), mobile.trim({ it <= ' ' }), "+971"
                         , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
         if (imagePath != "") {
@@ -377,7 +366,8 @@ class EditProfileFragment : Fragment() {
                         val jsonObject = JSONObject(response.body()!!.string())
                         if (jsonObject.getInt("response") == 1) {
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
-                            getProfile()
+                            findNavController().popBackStack()
+                            //getProfile()
                         }
                         else if (jsonObject.getInt("response") == 2) {
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
@@ -555,11 +545,11 @@ class EditProfileFragment : Fragment() {
                 if (hasAllPermissionsGranted(grantResults)) {
                     openCameraDialog()
                 } else {
-                    LogUtils.shortToast(requireContext(), "Please grant both Camera and Storage permissions")
+                    LogUtils.shortToast(requireContext(), requireContext().getString(R.string.please_grant_both_camera_and_storage_permissions))
 
                 }
             } else if (!hasAllPermissionsGranted(grantResults)) {
-                LogUtils.shortToast(requireContext(), "Please grant both Camera and Storage permissions")
+                LogUtils.shortToast(requireContext(),  requireContext().getString(R.string.please_grant_both_camera_and_storage_permissions))
             }
         }
     }
@@ -574,7 +564,7 @@ class EditProfileFragment : Fragment() {
                     imagePath = ""
                     Log.e("uri", uri.toString())
                     imagePath = uri!!.path!!
-                    Glide.with(requireContext()).load("file:///$imagePath").placeholder(R.drawable.user).into(mView!!.img)
+                    Glide.with(requireContext()).load("file:///$imagePath").placeholder(R.drawable.user).into(mView!!.editprofileimg)
                 } else {
                     LogUtils.shortToast(requireContext(), "something went wrong! please try again")
                 }
@@ -588,34 +578,20 @@ class EditProfileFragment : Fragment() {
                 } else {
                     uri!!.path!!
                 }
-                Glide.with(requireContext()).applyDefaultRequestOptions(RequestOptions().placeholder(R.drawable.user)).load("file:///$imagePath").into(mView!!.img)
+                Glide.with(requireContext()).applyDefaultRequestOptions(RequestOptions().placeholder(R.drawable.user)).load("file:///$imagePath").into(mView!!.editprofileimg)
             }
         }
 
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                EditProfileFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
+
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

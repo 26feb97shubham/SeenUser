@@ -125,6 +125,79 @@
                         android:background="@android:color/transparent"
                         />
                 </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/viewPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/llName">
+
+                    <TextView
+                        android:id="@+id/txtPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/expressway_rg"
+                        android:text="@string/phone"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11ssp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtPhone">
+
+                        <TextView
+                            android:id="@+id/txtCountryCode"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/gray_gold_rect_box"
+                            android:fontFamily="@font/expressway_rg"
+                            android:gravity="center"
+                            android:text="+971"
+                            android:hint="+971"
+                            android:includeFontPadding="false"
+                            android:padding="@dimen/_3sdp"
+                            android:textColor="@color/txt_gray"
+                            android:textSize="@dimen/_12ssp"
+
+                            />
+
+                        <EditText
+                            android:id="@+id/edtPhone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_toEndOf="@+id/txtCountryCode"
+                            android:background="@drawable/gray_gold_rect_box"
+                            android:fontFamily="@font/expressway_rg"
+                            android:hint="@string/enter_phone_number"
+                            android:imeOptions="actionDone"
+                            android:includeFontPadding="false"
+                            android:inputType="number"
+                            android:maxLength="15"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:textColor="@color/txt_gray"
+                            android:textColorHint="@color/gray"
+                            android:textDirection="locale"
+                            android:textSize="@dimen/_12ssp"
+
+                            />
+
+                    </RelativeLayout>
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <TextView
                     android:id="@+id/txtEmail"
                     android:layout_width="0dp"
@@ -139,7 +212,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/email_address"
-                    app:layout_constraintTop_toBottomOf="@id/llName"/>
+                    app:layout_constraintTop_toBottomOf="@id/viewPhone"/>
                 <LinearLayout
                     android:id="@+id/llEmail"
                     android:layout_width="0dp"
@@ -168,77 +241,7 @@
                         android:background="@android:color/transparent"
                         />
                 </LinearLayout>
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/viewPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_15sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/llEmail">
 
-                    <TextView
-                        android:id="@+id/txtPhone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/expressway_rg"
-                        android:text="@string/phone"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11ssp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtPhone">
-
-                        <TextView
-                            android:id="@+id/txtCountryCode"
-                            android:layout_width="@dimen/_60sdp"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/expressway_rg"
-                            android:includeFontPadding="false"
-                            android:gravity="center"
-                            android:background="@drawable/gray_gold_rect_box"
-                            android:padding="@dimen/_3sdp"
-                            android:textColor="@color/txt_gray"
-                            android:textSize="@dimen/_12ssp"
-
-                            />
-
-                        <EditText
-                            android:id="@+id/edtPhone"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/expressway_rg"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:includeFontPadding="false"
-                            android:inputType="number"
-                            android:textDirection="locale"
-                            android:textAlignment="viewStart"
-                            android:hint="@string/enter_phone_number"
-                            android:imeOptions="actionDone"
-                            android:background="@drawable/gray_gold_rect_box"
-                            android:paddingStart="@dimen/_10sdp"
-                            android:paddingEnd="@dimen/_10sdp"
-                            android:textAllCaps="false"
-                            android:maxLength="15"
-                            android:layout_toEndOf="@+id/txtCountryCode"
-                            android:textColor="@color/txt_gray"
-                            android:textColorHint="@color/gray"
-                            android:textSize="@dimen/_12ssp"
-
-                            />
-
-                    </RelativeLayout>
-
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
            <!--     <LinearLayout
                     android:id="@+id/txtAddLocationLayout"
@@ -380,7 +383,6 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:textSize="@dimen/_15ssp"
-                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"

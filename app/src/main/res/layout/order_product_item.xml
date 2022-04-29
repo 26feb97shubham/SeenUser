@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -32,20 +33,37 @@
                     android:background="@color/gold"/>
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/view"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     app:cardCornerRadius="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toEndOf="@id/vertical_view">
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
                             android:id="@+id/img"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/default_icon"/>
+                            android:src="@drawable/default_icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ProgressBar
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:id="@+id/orderProductProgressBar"
+                            android:visibility="visible"/>
+
                         <TextView
                             android:id="@+id/discountPer"
                             android:layout_width="wrap_content"
@@ -109,112 +127,121 @@
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/productName"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/product_name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_10ssp"
-                android:textStyle="bold"
-                android:maxLines="3"
-                android:ellipsize="end"
-                android:textAlignment="viewStart"
-                android:textDirection="locale"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@+id/product_image_layout"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textAllCaps="false"
-                android:fontFamily="@font/farsi_simple_bold"/>
-            <ImageView
-                android:id="@+id/supplierImg"
-                android:layout_width="@dimen/_10sdp"
-                android:layout_height="@dimen/_10sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:src="@color/black"
-                android:layout_marginStart="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@id/product_image_layout"/>
-            <TextView
-                android:id="@+id/supplierName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textAlignment="viewStart"
-                android:textDirection="locale"
-                android:text="@string/supplier_name"
-                android:textColor="@color/gold"
-                android:textSize="@dimen/_10ssp"
-                android:textStyle="normal"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@+id/supplierImg"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:textAllCaps="false"
-                android:fontFamily="@font/expressway_rg"/>
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/product_image_layout">
 
-            <TextView
-                android:id="@+id/category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/gadgets"
-                android:textAlignment="viewStart"
-                android:textDirection="locale"
-                android:textColor="@color/gold"
-                android:textSize="@dimen/_10ssp"
-                android:textStyle="normal"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@+id/product_image_layout"
-                app:layout_constraintTop_toBottomOf="@+id/productName"
-                android:textAllCaps="false"
-                android:fontFamily="@font/expressway_rg"/>
+                <TextView
+                    android:id="@+id/productName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/expressway_rg"
+                    android:gravity="start"
+                    android:maxLines="3"
+                    android:text="@string/product_name"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textDirection="locale"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/aed_1_500_00"
-                android:textColor="#9F9F9F"
-                android:textSize="@dimen/_8ssp"
-                android:textAlignment="viewStart"
-                android:textDirection="locale"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@id/product_image_layout"
-                app:layout_constraintTop_toBottomOf="@id/category"
-                android:textAllCaps="true"
-                android:fontFamily="@font/expressway_rg"/>
+                <ImageView
+                    android:id="@+id/supplierImg"
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:src="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/supplierName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/expressway_rg"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:text="@string/supplier_name"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/gold"
+                    android:textDirection="locale"
+                    android:textSize="@dimen/_10ssp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/supplierImg" />
+
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/expressway_rg"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:text="@string/gadgets"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/gold"
+                    android:textDirection="locale"
+                    android:textSize="@dimen/_10ssp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/productName" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:fontFamily="@font/expressway_rg"
+                    android:gravity="start"
+                    android:text="@string/aed_1_500_00"
+                    android:visibility="gone"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    android:textColor="#9F9F9F"
+                    android:textDirection="locale"
+                    android:textSize="@dimen/_8ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/category" />
 
 
+                <TextView
+                    android:id="@+id/discountedprice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:fontFamily="@font/expressway_rg"
+                    android:gravity="start"
+                    android:text="@string/aed_1_500_00"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textDirection="locale"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/price" />
 
-            <TextView
-                android:id="@+id/discountedprice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/aed_1_500_00"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp"
-                android:textAlignment="viewStart"
-                android:textDirection="locale"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@id/product_image_layout"
-                app:layout_constraintTop_toBottomOf="@id/price"
-                android:textAllCaps="true"
-                android:fontFamily="@font/expressway_rg"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

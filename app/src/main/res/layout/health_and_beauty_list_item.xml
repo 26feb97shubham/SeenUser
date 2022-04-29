@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,6 +28,7 @@
                 android:layout_height="@dimen/_60sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:cardElevation="@dimen/_2sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -38,27 +40,39 @@
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
                         android:src="@drawable/default_icon"/>
+
+                    <ProgressBar
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/healthandBeautyProductImageProgressBar"
+                        android:visibility="visible"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/_25sdp"
-                android:gravity="start"
-                android:text="@string/brand_name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:textDirection="locale"
-                android:textAlignment="viewStart"
-                android:ellipsize="end"
-                android:layout_marginStart="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginHorizontal="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:ellipsize="end"
+                android:fontFamily="@font/expressway_rg"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="8dp"
+                android:maxLines="1"
+                android:text="@string/brand_name"
+                android:textAlignment="viewStart"
                 android:textAllCaps="false"
-                android:fontFamily="@font/farsi_simple_bold"/>
+                android:textColor="@color/black"
+                android:textDirection="locale"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintEnd_toStartOf="@+id/imgLike"
+                app:layout_constraintStart_toEndOf="@+id/view"
+                app:layout_constraintTop_toTopOf="parent" />
             <ImageView
                 android:id="@+id/imgLike"
                 android:layout_width="@dimen/_18sdp"
@@ -67,29 +81,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_margin="@dimen/_8sdp"
-                android:src="@drawable/gray_heart"/>
+                android:src="@drawable/add_to_favourites"/>
+
             <TextView
                 android:id="@+id/address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textDirection="locale"
-                android:textAlignment="viewStart"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:drawablePadding="@dimen/_4sdp"
+                android:ellipsize="end"
+                android:fontFamily="@font/expressway_rg"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="8dp"
+                android:maxLines="1"
                 android:text="@string/dubai_uae"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
                 android:textColor="@color/gold"
+                android:textDirection="locale"
                 android:textSize="@dimen/_9ssp"
                 android:textStyle="normal"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:drawablePadding="@dimen/_4sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                app:layout_constraintStart_toStartOf="@id/name"
+                app:drawableStartCompat="@drawable/location_1"
+                app:layout_constraintEnd_toEndOf="@+id/name"
                 app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/name"
-                android:textAllCaps="false"
-                android:fontFamily="@font/expressway_rg"
-                app:drawableStartCompat="@drawable/location_1" />
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

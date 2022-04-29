@@ -1,6 +1,8 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +11,26 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.ProductsItemX
 import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import kotlinx.android.synthetic.main.grid_item_recent_products.view.*
 import kotlinx.android.synthetic.main.item_recent_products.view.*
+import kotlinx.android.synthetic.main.item_recent_products.view.iv_add_to_cart
+import kotlinx.android.synthetic.main.item_recent_products.view.iv_like
+import kotlinx.android.synthetic.main.item_recent_products.view.iv_recent_product
+import kotlinx.android.synthetic.main.item_recent_products.view.tv_recent_product_item_name
+import kotlinx.android.synthetic.main.item_recent_products.view.tv_recent_product_item_price
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
@@ -24,6 +38,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+
 
 class CategoriesGridFilteredProductsAdapter(
         private val context: Context,
@@ -40,10 +55,44 @@ class CategoriesGridFilteredProductsAdapter(
 
     override fun onBindViewHolder(holder: CategoriesGridFilteredProductsListAdapterVH, position: Int) {
         Log.e("pos_1", position.toString())
-        Glide.with(context).load(productsList[position].files)
-                .placeholder(R.drawable.user).into(holder.itemView.iv_recent_product)
+
+        val requestOptions: RequestOptions =
+            RequestOptions().error(R.drawable.def_product).centerCrop()
+
+
+        val recentProductImage = if (productsList[position].files!!.isEmpty()){
+            context.getDrawable(R.drawable.def_product).toString()
+        }else{
+            productsList[position].files
+        }
+
+        Glide.with(context).load(recentProductImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.recentProductProgressBar.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.recentProductProgressBar.visibility = View.GONE
+                    return false
+                }
+
+            })
+                .apply(requestOptions).into(holder.itemView.iv_recent_product)
         holder.itemView.tv_recent_product_item_name.text = productsList[position].name
-        holder.itemView.tv_recent_product_item_price.text = productsList[position].price
+        holder.itemView.tv_recent_product_item_price.text = "AED "+productsList[position].price
 
         if(productsList[position].like == true){
             holder.itemView.iv_like.setImageResource(R.drawable.heart_red)
@@ -59,7 +108,8 @@ class CategoriesGridFilteredProductsAdapter(
                 LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
                 val args= Bundle()
                 args.putString("reference", "OffersDiscount")
-                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+//                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
                 return@setOnClickListener
             }
 

@@ -16,14 +16,13 @@
             android:id="@+id/tv_rate_your_service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/farsi_simple_bold"
+            android:fontFamily="@font/expressway_rg"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="Rate your service:"
             android:layout_gravity="center"
             android:textSize="@dimen/_15ssp"
-            android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginVertical="@dimen/_10sdp"/>
 

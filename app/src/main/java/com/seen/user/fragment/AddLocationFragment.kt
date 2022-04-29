@@ -33,7 +33,9 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -51,20 +53,7 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddLocationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddLocationFragment : Fragment(), OnMapReadyCallback{
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var mView: View?=null
     private val TAG = "AddLocationFragment"
     private lateinit var mMap:GoogleMap
@@ -86,6 +75,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
     var building_num:String=""
     var apartment_num:String=""
     var responseBody:String=""
+    var myType:String=""
     var position:Int=-1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -95,6 +85,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
     private var current_longitude = 0.0
     private var strAddress = ""
     private var strCity = ""
+    private var str_City = ""
     private var flat_villa: String ?=null
     private var building_name : String?=null
     private var street_area : String?=null
@@ -106,6 +97,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
         super.onCreate(savedInstanceState)
         arguments?.let {
             responseBody = it.getString("responseBody", "")
+            myType = it.getString("type", "")
             position = it.getInt("position", -1)
 
         }
@@ -117,6 +109,10 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
     ): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_add_location, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews(savedInstanceState)
         return mView
     }
@@ -140,7 +136,13 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
         mView!!.mapView.onCreate(mapViewBundle)
         mView!!.mapView.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        fetchCurrentLocation()
+        if(myType=="Edit"){
+            editLocation()
+        }else{
+            fetchCurrentLocation()
+        }
+
+
      /*   val mapFragment = childFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
         mapFragment.getMapAsync(this)*/
 
@@ -215,9 +217,6 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
                     else{
                         mView!!.imgSetDef.setImageResource(R.drawable.un_check)
                     }
-                    mMap.clear()
-//                    mMap.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).icon(BitmapDescriptorFactory.defaultMarker()).title(address))
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 12f))
                 }
 
             }
@@ -234,32 +233,32 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
         building_num=mView!!.edtBuilding.text.toString()
         if(TextUtils.isEmpty(title)){
             mView!!.edtTitle.requestFocus()
-            mView!!.edtTitle.error="Please enter title for your location"
+            mView!!.edtTitle.error=requireContext().getString(R.string.please_enter_title_for_your_location)
 //            LogUtils.shortToast(requireContext(), "Please enter title for your location")
         }
         else if(TextUtils.isEmpty(country)){
             mView!!.edtCountry.requestFocus()
-            mView!!.edtCountry.error="Please enter country name for your location"
+            mView!!.edtCountry.error=requireContext().getString(R.string.please_enter_country_name_for_your_location)
 //            LogUtils.shortToast(requireContext(), "Please enter country name for your location")
         }
         else if(TextUtils.isEmpty(city)){
             mView!!.edtCity.requestFocus()
-            mView!!.edtCity.error="Please enter city name for your location"
+            mView!!.edtCity.error=requireContext().getString(R.string.please_enter_city_name_for_your_location)
 //            LogUtils.shortToast(requireContext(), "Please enter city name for your location")
         }
         else if(TextUtils.isEmpty(street)){
             mView!!.edtStreet.requestFocus()
-            mView!!.edtStreet.error="Please enter street name for your location"
+            mView!!.edtStreet.error=requireContext().getString(R.string.please_enter_street_name_for_your_location)
 //            LogUtils.shortToast(requireContext(), "Please enter street name for your location")
         }
         else if(TextUtils.isEmpty(apartment_num)){
             mView!!.edtApartment.requestFocus()
-            mView!!.edtApartment.error="Please enter apartment number for your location"
+            mView!!.edtApartment.error=requireContext().getString(R.string.please_enter_apartment_number_for_your_location)
 //            LogUtils.shortToast(requireContext(), "Please enter apartment number for your location")
         }
         else if(TextUtils.isEmpty(building_num)){
             mView!!.edtBuilding.requestFocus()
-            mView!!.edtBuilding.error="Please enter building number for your location"
+            mView!!.edtBuilding.error=requireContext().getString(R.string.please_enter_building_number_for_your_location)
 //            LogUtils.shortToast(requireContext(), "Please enter building number for your location")
         }
         else{
@@ -280,26 +279,22 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
 
         if(!TextUtils.isEmpty(responseBody)){
             editLocation()
+            mMap.clear()
+            val LatLng = LatLng(latitude, longitude)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng))
         }
         else{
             fetchCurrentLocation()
         }
-
-        val coordinates = LatLng(-34.toDouble(), 151.toDouble())
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15f))
         mView!!.mapView.onResume()
 
         mMap.setOnCameraIdleListener {
             val mapLatLng = mMap.cameraPosition.target
             mapLtLng = mapLatLng
-            if (responseBody.isEmpty()){
-                setAddress(mapLatLng)
-            }else{
-                setAddress(LatLng(latitude, longitude))
-            }
+            setAddress(mapLtLng)
         }
 
-        /*val coordinates = LatLng(-34.toDouble(), 151.toDouble())
+/*        val coordinates = LatLng(-34.toDouble(), 151.toDouble())
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15f))
         mView!!.mapView.onResume()
 
@@ -314,7 +309,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
         }
         else{
             fetchCurrentLocation()
-        }*/
+        }
 
 //       mMap.setOnCameraMoveStartedListener {
 //            mView.google_map.parent.requestDisallowInterceptTouchEvent(true)
@@ -326,7 +321,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
 //
 //        }
 
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -372,16 +367,67 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
                     var abc = addressList[0].adminArea + addressList[0].subAdminArea
                     var def = addressList[0].premises
                     var ghi = addressList[0].thoroughfare + addressList[0].subThoroughfare
-                    street_area = addressList[0].subLocality +  " " + addressList[0].locality
+
+
+
+                    if (addressList[0].subLocality!=null){
+                        street_area = addressList[0].subLocality +  " " + addressList[0].locality
+                    }else{
+                        street_area = addressList[0].locality
+                    }
+
                     countryName = addressList[0].countryName
                     countryId = returnCountryId(countryName!!, countryList)
+
+                    if(addressList[0].adminArea!=null){
+                        Log.e("adminArea: ", addressList[0].adminArea.toString())
+                    }else{
+                        Log.e("adminArea: ", "null")
+                    }
+
+                    if(addressList[0].subAdminArea!=null){
+                        Log.e("subAdminArea: ", addressList[0].subAdminArea.toString())
+                    }else{
+                        Log.e("subAdminArea: ", "null")
+                    }
+
+                    if(addressList[0].premises!=null){
+                        Log.e("premises: ", addressList[0].premises.toString())
+                    }else{
+                        Log.e("premises: ", "null")
+                    }
+
+                    if(addressList[0].featureName!=null){
+                        Log.e("featureName: ", addressList[0].featureName.toString())
+                    }else{
+                        Log.e("featureName: ", "null")
+                    }
+
+                    if(addressList[0].locality!=null){
+                        Log.e("locality: ", addressList[0].locality.toString())
+                    }else{
+                        Log.e("locality: ", "null")
+                    }
+
+                    if(addressList[0].subLocality!=null){
+                        Log.e("subLocality: ", addressList[0].subLocality.toString())
+                    }else{
+                        Log.e("subLocality: ", "null")
+                    }
+
+/*
+
+
                     Log.e("flat_villa", "" + flat_villa)
                     Log.e("country", "" + addressList[0].countryName)
                     Log.e("street_area", "" + street_area)
                     Log.e("countryId", "" + countryId)
                     Log.e("abc", "" + abc)
                     Log.e("def", "" + def)
-                    Log.e("ghi", "" + ghi)
+                    Log.e("ghi", "" + ghi)*/
+
+                    str_City = addressList[0].locality
+                    street_area = addressList[0].subLocality
                     strCity = addressList[0].locality + addressList[0].countryCode + addressList[0].countryName
                     val addList = strAddress.split(",".toRegex()).toTypedArray()
 //                    val addList = strAddress.split(",".toRegex(), 5)
@@ -409,7 +455,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
 //                    }
 
                     edtCountry.setText(countryName)
-                    edtCity.setText(street_area)
+                    edtCity.setText(str_City)
                     edtStreet.setText(street_area)
                     edtApartment.setText(flat_villa)
                     edtBuilding.setText(flat_villa)
@@ -503,7 +549,12 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
                     val task = client.checkLocationSettings(builder.build())
                     task.addOnSuccessListener(requireActivity()) {it->
                         it.locationSettingsStates
-                        fetchCurrentLocation()
+//                        fetchCurrentLocation()
+                        if(myType=="Edit"){
+                            editLocation()
+                        }else{
+                            fetchCurrentLocation()
+                        }
                     }
 
                     task.addOnFailureListener(requireActivity()) { e ->
@@ -574,8 +625,8 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
                     }
                 } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("Location Permission Required")
-                    builder.setMessage("Please enable  location permissions in settings")
+                    builder.setTitle(requireContext().getString(R.string.location_permission_required))
+                    builder.setMessage(requireContext().getString(R.string.please_enable_location_permissions_from_settings))
                     builder.setPositiveButton(R.string.settings) { dialog, which ->
                         dialog.cancel()
                         goToSettings()
@@ -620,7 +671,7 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
                         val jsonObject = JSONObject(response.body()!!.string())
                         if (jsonObject.getInt("response") == 1) {
 //                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
-                            findNavController().popBackStack()
+                            findNavController().navigate(R.id.myLocationFragment)
                         }
 
                         else {
@@ -648,6 +699,10 @@ class AddLocationFragment : Fragment(), OnMapReadyCallback{
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         /* requireActivity().backImg.visibility=View.GONE*/
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().home_frag_categories.visibility = View.GONE

@@ -40,12 +40,22 @@ class LoginActivity : AppCompatActivity() {
     var password: String = ""
     var spannableString : SpannableString?= null
     var doubleClick:Boolean=false
+    private var reference = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_login)
         spannableString = SpannableString(getString(R.string.sign_up))
         spannableString!!.setSpan(UnderlineSpan(), 0, spannableString!!.length, 0)
         tv_signup.setText(spannableString)
+
+        if (intent.extras!=null){
+            reference = intent.extras!!.getString("reference", "").toString()
+        }
+
         setUpViews()
     }
     private fun setUpViews() {
@@ -58,7 +68,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.IsRemembered, false]){
-//            chkRememberMe.isChecked=true
             remembered=true
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""]=="en") {
                 chkRememberMe.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0)
@@ -82,19 +91,7 @@ class LoginActivity : AppCompatActivity() {
             edtPass.setText("")
         }
 
-      /*  iv_pass_show_hide_login_screen.setOnClickListener {
-            Utility.showPassword(iv_pass_show_hide_login_screen, edtPass)
-        }*/
-
         chkRememberMe.setOnClickListener {
-            /*if(remembered){
-                remembered=false
-                chkRememberMe.setCompoundDrawablesWithIntrinsicBounds(R.drawable.un_check, 0, 0, 0)
-            }
-            else{
-                remembered=true
-                chkRememberMe.setCompoundDrawablesWithIntrinsicBounds(R.drawable.check, 0, 0, 0)
-            }*/
 
             if(remembered){
                 remembered=false
@@ -117,10 +114,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-/*       backImg.setOnClickListener {
-           backImg.startAnimation(AlphaAnimation(1f, 0.5f))
-            onBackPressed()
-        }*/
 
        txtForgotPass.setOnClickListener {
             txtForgotPass.startAnimation(AlphaAnimation(1f, 0.5f))
@@ -131,17 +124,14 @@ class LoginActivity : AppCompatActivity() {
        btnLogin.setOnClickListener {
             btnLogin.startAnimation(AlphaAnimation(1f, 0.5f))
            SharedPreferenceUtility.getInstance().hideSoftKeyBoard(this, btnLogin)
-//            startActivity(Intent(this, HomeActivity::class.java))
             validateAndLogin()
+        }
 
-            /* val navOptions = NavOptions.Builder().setPopUpTo(R.id.my_nav_graph, true).build()
-             findNavController().navigate(R.id.action_loginFragment_to_homeFragment, null, navOptions)
-             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                 window.setDecorFitsSystemWindows(true)
-             } else {
- //                    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                 window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-             }*/
+        btnGuestUser.setOnClickListener {
+            btnGuestUser.startAnimation(AlphaAnimation(1f, 0.5f))
+            SharedPreferenceUtility.getInstance().hideSoftKeyBoard(this, btnGuestUser)
+            SharedPreferenceUtility.getInstance().save(SharedPreferenceUtility.isLoggedIn, false)
+            startActivity(Intent(this, HomeActivity::class.java))
         }
 
         tv_signup.setOnClickListener {
@@ -160,24 +150,20 @@ class LoginActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(phone)) {
             edtPhone.requestFocus()
             edtPhone.error=getString(R.string.please_enter_your_phone_number)
-//            LogUtils.shortToast(requireContext(), getString(R.string.please_enter_your_mob_number))
 
         }
         else if ((phone.length < 7 || phone.length > 15)) {
             edtPhone.requestFocus()
             edtPhone.error=getString(R.string.mob_num_length_valid)
-//            LogUtils.shortToast(requireContext(), getString(R.string.mob_num_length_valid))
         }
 
         else if (TextUtils.isEmpty(password)) {
             edtPass.requestFocus()
             edtPass.error=getString(R.string.please_enter_your_password)
-//            LogUtils.shortToast(requireContext(), getString(R.string.please_enter_your_password))
         }
         else if (!SharedPreferenceUtility.getInstance().isPasswordValid(password)) {
             edtPass.requestFocus()
             edtPass.error=getString(R.string.invalid_password)
-//            LogUtils.shortToast(requireContext(), getString(R.string.password_length_valid))
         }
 
         else {
@@ -202,7 +188,7 @@ class LoginActivity : AppCompatActivity() {
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("password", "fcm_token", "device_type","device_id", "mobile", "lang"),
-            arrayOf(password.trim({ it <= ' ' }),
+            arrayOf(password.trim { it <= ' ' },
                 SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.FCMTOKEN, ""]
                 , ApiUtils.DeviceType, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], phone.trim({ it <= ' ' }), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 

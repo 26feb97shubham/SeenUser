@@ -11,27 +11,13 @@ import android.webkit.WebViewClient
 import androidx.navigation.fragment.findNavController
 import com.seen.user.R
 import com.seen.user.dialog.PaymentConfirmedDialogFragment
+import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import com.seen.user.utils.Utility.Companion.payment_flag
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_tap_payment_gateway.view.*
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TapPaymentGatewayFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TapPaymentGatewayFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     private var mView : View?=null
-
     private var paymentURL : String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +31,10 @@ class TapPaymentGatewayFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_tap_payment_gateway, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         return mView
     }
 
@@ -65,7 +55,7 @@ class TapPaymentGatewayFragment : Fragment() {
             ): Boolean {
                 val baseUrl = "https://seen-uae.com/"
                 if(url!!.equals(baseUrl+"buyer-api/success")){
-                    var paymentConfirmedDialogFragment = PaymentConfirmedDialogFragment()
+                    val paymentConfirmedDialogFragment = PaymentConfirmedDialogFragment()
                     paymentConfirmedDialogFragment.isCancelable = false
                     paymentConfirmedDialogFragment.setDataCompletionCallback(object : PaymentConfirmedDialogFragment.CheckStatusInterface{
                         override fun checkStatus() {
@@ -73,7 +63,10 @@ class TapPaymentGatewayFragment : Fragment() {
                     })
 //                    requireActivity().finishAffinity()
                     payment_flag = true
-                    findNavController().navigate(R.id.myOrdersFragment)
+                    val bundle = Bundle()
+                    bundle.putInt("direction",1)
+                    bundle.putString("type","")
+                    findNavController().navigate(R.id.myOrdersFragment, bundle)
                     return true
                 }else{
                     return false
@@ -94,6 +87,10 @@ class TapPaymentGatewayFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         /* requireActivity().backImg.visibility=View.GONE*/
         if (payment_flag){
             payment_flag = false
@@ -132,23 +129,4 @@ class TapPaymentGatewayFragment : Fragment() {
     }
 
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TapPaymentGatewayFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                TapPaymentGatewayFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
 }

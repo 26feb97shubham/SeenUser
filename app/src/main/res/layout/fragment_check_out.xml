@@ -6,31 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-   <!-- <androidx.cardview.widget.CardView
-        android:id="@+id/headerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardBackgroundColor="@color/white"
-        app:cardElevation="@dimen/_10sdp">
-        <TextView
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:fontFamily="@font/farsi_simple_bold"
-            android:text="@string/checkout"
-            android:includeFontPadding="false"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="@color/gold"
-            android:textSize="@dimen/_20ssp"
-            android:textAllCaps="true"
-            />
-    </androidx.cardview.widget.CardView>-->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -78,14 +53,6 @@
                 android:textAllCaps="false"
                 />
 
-            <!--<View
-                android:layout_width="@dimen/_75sdp"
-                android:layout_height="0.7dp"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                app:layout_constraintTop_toBottomOf="@+id/txtChangeAddress"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/gold"/>-->
 
             <View
                 android:id="@+id/view1"

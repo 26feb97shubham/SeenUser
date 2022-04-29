@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.ProductListAdapter
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.ProductList
@@ -20,6 +22,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_products.view.*
 import okhttp3.ResponseBody
@@ -30,16 +33,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProductsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProductsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     lateinit var mView:View
@@ -61,6 +54,10 @@ class ProductsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_products, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         getProducts(false)
         return mView
@@ -137,7 +134,10 @@ class ProductsFragment : Fragment() {
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
 
         val builder = ApiClient.createBuilder(arrayOf("user_id", "supplier_user_id", "category_id", "lang"),
-            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), supplier_user_id.toString(), category_id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                supplier_user_id.toString(),
+                category_id.toString(),
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
         val call = apiInterface.getProducts(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
@@ -216,7 +216,8 @@ class ProductsFragment : Fragment() {
             LogUtils.shortToast(requireContext(), getString(R.string.please_login_signup_to_access_this_functionality))
             val args=Bundle()
             args.putString("reference", "OffersDiscount")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             return
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -269,6 +270,10 @@ class ProductsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
@@ -295,25 +300,5 @@ class ProductsFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProductsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                ProductsFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
     }
 }

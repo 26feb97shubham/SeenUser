@@ -15,7 +15,8 @@
         android:textSize="@dimen/_12ssp"
         android:paddingHorizontal="@dimen/_6sdp"
         android:layout_marginHorizontal="@dimen/_8sdp"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical|start"
+        android:textAlignment="viewStart"/>
 
     <View
         android:layout_width="match_parent"
@@ -24,6 +25,5 @@
         android:layout_marginTop="@dimen/_6sdp"
         android:background="@color/txt_dark_gray"
         android:layout_marginHorizontal="@dimen/_8sdp"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -11,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.CategoryListAdapter
 import com.seen.user.adapter.HealthAndBeautyListAdapter
 import com.seen.user.interfaces.ClickInterface
@@ -20,6 +22,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_bloggers.view.*
 import kotlinx.android.synthetic.main.fragment_bloggers.view.imgSearch
@@ -55,6 +58,10 @@ class HealthAndBeautyFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_health_and_beauty, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         return mView
     }
@@ -139,6 +146,7 @@ class HealthAndBeautyFragment : Fragment() {
     }
 
     private fun getNamesAndCategories(queryMap: HashMap<String, String>) {
+        mView!!.progressBar.visibility= View.VISIBLE
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
 
         val builder = ApiClient.createBuilder(arrayOf("user_id", "account_types_id", "search", "country_id"),
@@ -150,6 +158,7 @@ class HealthAndBeautyFragment : Fragment() {
         val call = apiInterface.getNamesAndCategories(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                mView!!.progressBar.visibility= View.GONE
                 try {
                     if (response.body() != null) {
                         val jsonObject = JSONObject(response.body()!!.string())
@@ -164,33 +173,32 @@ class HealthAndBeautyFragment : Fragment() {
                                 cate.user_id = jsonObj.getInt("user_id")
                                 cate.name = jsonObj.getString("name")
                                 cate.categories = jsonObj.getString("categories")
+                                cate.categories_ar = jsonObj.getString("categories_ar")
                                 cate.rating = jsonObj.getDouble("rating")
                                 cate.profile_picture = jsonObj.getString("profile_picture")
                                 cate.country_name = jsonObj.getString("country_name")
                                 cate.country_served_name = jsonObj.getString("country_served_name")
+                                cate.country_served_name_ar = jsonObj.getString("country_served_name_ar")
                                 cate.country_id = jsonObj.getInt("country_id")
                                 cate.like= jsonObj.getBoolean("like")
                                 catNameList.add(cate)
-
-                                healthAndBeautyListAdapter= HealthAndBeautyListAdapter(requireContext(), catNameList, object : ClickInterface.ClickPosTypeInterface{
-                                    override fun clickPostionType(pos: Int, type: String) {
-                                        if(type=="Like"){
-                                            likeUnlike(pos)
-                                        }
-                                        else{
-                                            val bundle=Bundle()
-                                            bundle.putInt("supplier_user_id", catNameList[pos].user_id)
-                                            findNavController().navigate(R.id.action_healthandBeautyFragment_to_supplierDetailsFragment, bundle)
-                                        }
-                                    }
-
-                                })
-
-                                mView!!.rvList.layoutManager= LinearLayoutManager(requireContext())
-                                mView!!.rvList.adapter=healthAndBeautyListAdapter
-
-
                             }
+                            healthAndBeautyListAdapter= HealthAndBeautyListAdapter(requireContext(), catNameList, object : ClickInterface.ClickPosTypeInterface{
+                                override fun clickPostionType(pos: Int, type: String) {
+                                    if(type=="Like"){
+                                        likeUnlike(pos)
+                                    }
+                                    else{
+                                        val bundle=Bundle()
+                                        bundle.putInt("supplier_user_id", catNameList[pos].user_id)
+                                        findNavController().navigate(R.id.action_healthandBeautyFragment_to_supplierDetailsFragment, bundle)
+                                    }
+                                }
+
+                            })
+
+                            mView!!.rvList.layoutManager= LinearLayoutManager(requireContext())
+                            mView!!.rvList.adapter=healthAndBeautyListAdapter
                         }
                         else{
                             mView!!.txtNoDataFound.visibility=View.VISIBLE
@@ -211,6 +219,7 @@ class HealthAndBeautyFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
+                mView!!.progressBar.visibility= View.GONE
                 LogUtils.e("msg", throwable.message)
                 LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
             }
@@ -223,7 +232,8 @@ class HealthAndBeautyFragment : Fragment() {
 //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
             val args=Bundle()
             args.putString("reference", "HomeMadeSuppliers")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             return
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -247,7 +257,6 @@ class HealthAndBeautyFragment : Fragment() {
                         if(jsonObject.getInt("response")==1){
                             catNameList[pos].like = !catNameList[pos].like
                             healthAndBeautyListAdapter!!.notifyDataSetChanged()
-
                         }
                         else{
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
@@ -275,6 +284,10 @@ class HealthAndBeautyFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.VISIBLE
         requireActivity().frag_other_toolbar.visibility=View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

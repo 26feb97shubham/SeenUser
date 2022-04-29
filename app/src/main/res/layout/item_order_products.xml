@@ -37,7 +37,6 @@
         android:text="@string/product_name"
         android:textColor="@color/black"
         android:textSize="@dimen/_12ssp"
-        android:textStyle="bold"
         android:maxLines="3"
         android:ellipsize="end"
         android:textDirection="locale"
@@ -48,7 +47,7 @@
         app:layout_constraintStart_toEndOf="@+id/view"
         app:layout_constraintTop_toTopOf="parent"
         android:textAllCaps="false"
-        android:fontFamily="@font/farsi_simple_bold"/>
+        android:fontFamily="@font/expressway_rg"/>
     <TextView
         android:id="@+id/supplierName"
         android:layout_width="0dp"

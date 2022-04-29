@@ -24,6 +24,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_check_out.view.*
 import kotlinx.android.synthetic.main.fragment_check_out.view.progressBar
@@ -36,20 +37,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CheckOutFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CheckOutFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     var mView:View?=null
     lateinit var itemListAdapter: ItemListAdapter
     lateinit var cardsAdapter: PaymentCardsAdapter
@@ -68,18 +58,15 @@ class CheckOutFragment : Fragment() {
     var supplier_id:Int=0
     var amount:Float=0f
     var allowCoupans = 0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
             mView = inflater.inflate(R.layout.fragment_check_out, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
             myCart()
             setUpViews()
            return mView
@@ -112,38 +99,18 @@ class CheckOutFragment : Fragment() {
 
         mView!!.btnPlaceOrder.setOnClickListener {
             mView!!.btnPlaceOrder.startAnimation(AlphaAnimation(1f, .5f))
-            order_data= JSONArray()
-            cart_ids= JSONArray()
-            for(i in 0 until cartList.size){
-                val obj=JSONObject()
-                obj.put("product_id", cartList[i].product_id)
-                obj.put("product_item_id", cartList[i].product_item_id)
-                obj.put("quantity", cartList[i].quantity)
-                obj.put("price", cartList[i].price)
-                order_data.put(obj)
+            myValidations()
 
-                val obj2=JSONObject()
-                obj2.put("id", cartList[i].id)
-                cart_ids.put(obj2)
-            }
 
-            for(j in 0 until cardList.size){
+           /* for(j in 0 until cardList.size){
                 if(cardList[j].set_as_default==1){
                     card_id=cardList[j].id
                 }
-            }
+            }*/
 
-            Log.e("allowCoupans", ""+allowCoupans)
+          /*  Log.e("allowCoupans", ""+allowCoupans)*/
 
-            if(location_id==0){
-                LogUtils.shortToast(requireContext(), getString(R.string.please_select_def_delivery_location))
-            }
-            else  if(card_id==0){
-                LogUtils.shortToast(requireContext(), getString(R.string.please_select_card_through_which_payment_would_be_processed))
-            }
-            else {
-                placeOrder()
-            }
+
         }
         requireActivity().frag_other_backImg.setOnClickListener {
             requireActivity().frag_other_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
@@ -155,17 +122,17 @@ class CheckOutFragment : Fragment() {
         mView!!.rvCard.layoutManager= LinearLayoutManager(requireContext())
         cardsAdapter= PaymentCardsAdapter(requireContext(), cardList, object : ClickInterface.ClickPosInterface{
             override fun clickPostion(pos: Int, type : String) {
-                for(i in 0 until cardList.size){
+                /*for(i in 0 until cardList.size){
                     if(i==pos){
                         cardList[i].set_as_default=1
+                        card_id = cardList[i].id
                     }
                     else{
                         cardList[i].set_as_default=0
                     }
-                }
-
-                cardsAdapter.notifyDataSetChanged()
-
+                }*/
+                cardList[pos].set_as_default=1
+                card_id = cardList[pos].id
             }
 
         })
@@ -180,6 +147,35 @@ class CheckOutFragment : Fragment() {
         val underline = SpannableString(requireContext().getString(R.string.change_address))
         underline.setSpan(UnderlineSpan(), 0, underline.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         mView!!.txtChangeAddress.text=underline
+    }
+
+
+    private fun myValidations(){
+        when {
+            location_id==0 -> {
+                LogUtils.shortToast(requireContext(), getString(R.string.please_select_def_delivery_location))
+            }
+            card_id==0 -> {
+                LogUtils.shortToast(requireContext(), getString(R.string.please_select_card_through_which_payment_would_be_processed))
+            }
+            else -> {
+                order_data= JSONArray()
+                cart_ids= JSONArray()
+                for(i in 0 until cartList.size){
+                    val obj=JSONObject()
+                    obj.put("product_id", cartList[i].product_id)
+                    obj.put("product_item_id", cartList[i].product_item_id)
+                    obj.put("quantity", cartList[i].quantity)
+                    obj.put("price", cartList[i].price)
+                    order_data.put(obj)
+
+                    val obj2=JSONObject()
+                    obj2.put("id", cartList[i].id)
+                    cart_ids.put(obj2)
+                }
+                placeOrder()
+            }
+        }
     }
 
     private fun myCart() {
@@ -396,29 +392,15 @@ class CheckOutFragment : Fragment() {
 
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CheckOutFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                CheckOutFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
+
 
     override fun onResume() {
         super.onResume()
         /* requireActivity().backImg.visibility=View.GONE*/
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().frag_other_signup_tv.setText(R.string.checkout)
         requireActivity().frag_other_signup_tv.letterSpacing = 0.06F
         requireActivity().frag_other_signup_tv.isAllCaps = true

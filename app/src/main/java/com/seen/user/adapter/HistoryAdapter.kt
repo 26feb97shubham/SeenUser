@@ -1,6 +1,7 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,9 @@ import com.seen.user.model.MyOrders
 import com.seen.user.model.ProductList
 import kotlinx.android.synthetic.main.fragment_favourites.view.rvList
 import kotlinx.android.synthetic.main.item_history_orders.view.*
+import kotlinx.android.synthetic.main.item_history_orders.view.deliveryDate
+import kotlinx.android.synthetic.main.item_history_orders.view.orderNum
+import kotlinx.android.synthetic.main.item_upcoming.view.*
 
 class HistoryAdapter(private val context: Context, private val data:ArrayList<MyOrders>, private val clickInst: ClickInterface.ClickPosInterface): RecyclerView.Adapter<HistoryAdapter.MyViewHolder>() {
     var order_status: Int = 0
@@ -26,10 +30,13 @@ class HistoryAdapter(private val context: Context, private val data:ArrayList<My
         holder.itemView.orderNum.text = context.getString(R.string.order_hess)+data[position].order_id
         holder.itemView.orderNumCard.text = context.getString(R.string.order_hess)+data[position].order_id
         holder.itemView.deliveryDate.text = context.getString(R.string.date_delivered_colon)+"  "+data[position].delivery_date
+        holder.itemView.pricetvCard.text = "AED "+data[position].total_price
         order_status = data[position].status
 
         /*Glide.with(context).load(data[position].file).placeholder(R.drawable.default_icon)
                 .into(holder.itemView.img)*/
+
+        holder.itemView.btnViewOrder.paintFlags =  holder.itemView.btnViewOrder.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG
 
          holder.itemView.btnViewOrder.setOnClickListener {
              holder.itemView.btnViewOrder.startAnimation(AlphaAnimation(1f, .5f))
@@ -68,6 +75,7 @@ class HistoryAdapter(private val context: Context, private val data:ArrayList<My
             p.category_name = obj1.getString("category_name")
             p.name = obj1.getString("product_name")
             p.supplier_name = obj1.getString("supplier_name")
+            p.supplier_profile_picture = obj1.getString("supplier_profile_picture")
             p.files = obj1.getString("files")
             holder.productList.add(p)
         }

@@ -1,18 +1,30 @@
 package com.seen.user.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.ProductsItem
+import com.seen.user.model.ProductsItemZ
 import com.seen.user.model.Profile
+import com.seen.user.model.ProfileItemX
 import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
@@ -32,10 +44,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
+
 class SupplierDetailsProductsAdapter(
     private val context: Context,
-    private val productsList : ArrayList<ProductsItem>,
-    private val profile: Profile,
+    private val productsList : ArrayList<ProductsItemZ>,
+    private val profile: ProfileItemX,
     private val navController: NavController,
     private val clickPosInterface: ClickInterface.ClickPosInterface
 ) :RecyclerView.Adapter<SupplierDetailsProductsAdapter.SupplierDetailsProductsAdapterVH>()  {
@@ -52,12 +65,44 @@ class SupplierDetailsProductsAdapter(
         return SupplierDetailsProductsAdapterVH(view)
     }
 
-    override fun onBindViewHolder(holder: SupplierDetailsProductsAdapterVH, position: Int) {
+    override fun onBindViewHolder(holder: SupplierDetailsProductsAdapterVH, @SuppressLint("RecyclerView") position: Int) {
         Log.e("pos_1", position.toString())
-        Glide.with(context).load(profile.profile_picture)
+        val requestOptions: RequestOptions =
+            RequestOptions().error(R.drawable.def_product).centerCrop()
+        Glide.with(context).load(profile.profilePicture)
             .placeholder(R.drawable.user).into(holder.itemView.civ_supplier_image)
-        Glide.with(context).load(productsList[position].files)
-            .placeholder(R.drawable.user).into(holder.itemView.iv_recent_product)
+
+        val supplierProductImage = if (productsList[position].files!!.isEmpty()){
+            context.getDrawable(R.drawable.def_product).toString()
+        }else{
+            productsList[position].files
+        }
+
+        Glide.with(context).load(supplierProductImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.supplierProductsProgressBar.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.supplierProductsProgressBar.visibility = View.GONE
+                    return false
+                }
+
+            })
+            .apply(requestOptions).into(holder.itemView.iv_recent_product)
         holder.itemView.tv_recent_product_item_name.text = productsList[position].name
         holder.itemView.tv_recent_product_item_price.text = "AED "+productsList[position].price
 
@@ -70,22 +115,23 @@ class SupplierDetailsProductsAdapter(
         holder.itemView.iv_like.setOnClickListener {
             Log.e("position_3", ""+position)
             val products = productsList[position]
-            Log.e("position_3_id", ""+productsList[position].id+ "   "+position)
+            Log.e("position_3_id", ""+productsList[position].productId+ "   "+position)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
                 val args= Bundle()
                 args.putString("reference", "OffersDiscount")
-                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+//                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
                 return@setOnClickListener
             }
 
-            Log.e("product_id", productsList[position].id.toString())
+            Log.e("product_id", productsList[position].productId.toString())
             Log.e("pos", position.toString())
 
             val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
 
             val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "lang"),
-                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), products.id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), products.productId.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
             val call = apiInterface.likeUnlikeProduct(builder.build())
             call!!.enqueue(object : Callback<ResponseBody?> {
@@ -123,14 +169,37 @@ class SupplierDetailsProductsAdapter(
         }
 
         holder.itemView.iv_add_to_cart.setOnClickListener {
-            clickPosInterface.clickPostion(position, "Cart")
+            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
+                val args= Bundle()
+                args.putString("reference", "OffersDiscount")
+//                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
+                return@setOnClickListener
+            }else{
+            }
         }
+
+        holder.itemView.civ_supplier_image.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                    LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
+                    val args= Bundle()
+                    args.putString("reference", "OffersDiscount")
+                    context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
+                    return
+                }else{
+                    clickPosInterface.clickPostion(position, "Supplier")
+                }
+            }
+
+        })
 
 
 
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
-            productsList[position].id?.let { it1 -> bundle.putInt("product_id", it1) }
+            productsList[position].productId?.let { it1 -> bundle.putInt("product_id", it1) }
             navController.navigate(R.id.productDetailsFragment, bundle)
         }
     }

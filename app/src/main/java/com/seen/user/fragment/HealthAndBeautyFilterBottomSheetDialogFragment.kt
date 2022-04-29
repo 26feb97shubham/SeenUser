@@ -26,8 +26,6 @@ import java.io.IOException
 
 
 class HealthAndBeautyFilterBottomSheetDialogFragment : BottomSheetDialogFragment() {
-    private var apply_filter_tv: TextView? = null
-    private val mainView: FrameLayout? = null
     lateinit var countriesListDataAdapter: CountriesListDataAdapter
     var countryList = ArrayList<CountriesItem>()
     private var mView : View?=null
@@ -53,6 +51,10 @@ class HealthAndBeautyFilterBottomSheetDialogFragment : BottomSheetDialogFragment
     ): View? {
         // Inflate the layout for this fragment
         mView= inflater.inflate(R.layout.fragment_health_and_beauty_filter_bottom_sheet_dialog, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         return mView
     }
 
@@ -97,12 +99,25 @@ class HealthAndBeautyFilterBottomSheetDialogFragment : BottomSheetDialogFragment
                         if (countryList.size!=0){
                             mView!!.txtNoDataFound_countries1.visibility = View.GONE
                             mView!!.rv_countries_list1.visibility = View.VISIBLE
+
+                            val servedCountryList = ArrayList<CountriesItem>()
+                            for (i in 0 until countryList.size){
+                                if (countryList[i].countries_to_be_served==1){
+                                    servedCountryList.add(countryList[i])
+                                }
+                            }
+
                             mView!!.rv_countries_list1.layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                            countriesListDataAdapter= CountriesListDataAdapter(requireContext(), countryList,  object : ClickInterface.ClickPositionInterface{
+                            countriesListDataAdapter= CountriesListDataAdapter(requireContext(), servedCountryList,  object : ClickInterface.ClickPositionInterface{
                                 override fun clickPostion(pos: Int) {
                                     country_id = countryList[pos].id.toString()
                                     mView!!.ll_countries_list1.visibility = View.GONE
-                                    mView!!.emi_filter_tv1.text = countryList[pos].country_name
+                                    if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                        mView!!.emi_filter_tv1.text = countryList[pos].country_name_ar
+                                    }else{
+                                        mView!!.emi_filter_tv1.text = countryList[pos].country_name
+                                    }
+
                                 }
 
                             })

@@ -18,6 +18,7 @@ import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_forgot_password.progressBar
 import kotlinx.android.synthetic.main.activity_reset_password.*
 import okhttp3.ResponseBody
@@ -35,6 +36,10 @@ class ResetPasswordActivity : AppCompatActivity() {
     var doubleClick:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_reset_password)
         setUpViews()
     }

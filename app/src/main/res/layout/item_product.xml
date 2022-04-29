@@ -36,5 +36,5 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent"
         android:textAllCaps="false"
-        android:fontFamily="@font/farsi_simple_bold"/>
+        android:fontFamily="@font/expressway_rg"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

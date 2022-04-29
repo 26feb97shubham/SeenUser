@@ -1,6 +1,7 @@
 package com.seen.user.fragment
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,9 +15,13 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.SharedPreferenceUtility.Companion.SelectedLang
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.about_us_more_info_frag_toolbar.*
 import kotlinx.android.synthetic.main.about_us_more_info_frag_toolbar.view.*
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_home.view.*
+import kotlinx.android.synthetic.main.fragment_about_us.view.*
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
@@ -24,35 +29,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AboutUsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AboutUsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     private var mView : View?=null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_about_us, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SelectedLang, "")
+        )
         setUpViews()
         getCmsContent()
         return mView
@@ -74,7 +66,14 @@ class AboutUsFragment : Fragment() {
                         val jsonObject = JSONObject(response.body()!!.string())
                         if (jsonObject.getInt("response") == 1) {
                             val data = jsonObject.getJSONObject("data")
-                            requireActivity().about_us_content_home.text = HtmlCompat.fromHtml(data.getString("content"), 0)
+                            if (SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "").equals("ar")){
+//                                mView!!.aboutUsContentHome.text = HtmlCompat.fromHtml(data.getString("content_ar"), 0)
+                                requireActivity().about_us_content_home.text = HtmlCompat.fromHtml(data.getString("content_ar"), 0)
+                            }else{
+//                                mView!!.aboutUsContentHome.text = HtmlCompat.fromHtml(data.getString("content"), 0)
+                                requireActivity().about_us_content_home.text = HtmlCompat.fromHtml(data.getString("content"), 0)
+                            }
+
                         } else {
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
                         }
@@ -96,6 +95,8 @@ class AboutUsFragment : Fragment() {
     }
 
     private fun setUpViews() {
+        requireActivity().about_us_fragment_toolbar.visibility=View.VISIBLE
+
         requireActivity().about_us_fragment_toolbar.frag_about_us_backImg.setOnClickListener {
             requireActivity().about_us_fragment_toolbar.frag_about_us_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
             SharedPreferenceUtility.getInstance().hideSoftKeyBoard(
@@ -105,11 +106,15 @@ class AboutUsFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        requireActivity().about_us_fragment_toolbar.visibility=View.VISIBLE
+
     }
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().mainView.setBackgroundColor(Color.TRANSPARENT)
         requireActivity().frag_other_toolbar.visibility=View.GONE
         requireActivity().toolbar.visibility=View.GONE
@@ -139,26 +144,5 @@ class AboutUsFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
-    }
-
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AboutUsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                AboutUsFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
     }
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seen.user.R
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.AccountTypesItem
+import com.seen.user.utils.SharedPreferenceUtility
 import kotlinx.android.synthetic.main.categories_name_list_layout.view.*
 
 class AccountTypeAdapter(
@@ -17,7 +18,12 @@ class AccountTypeAdapter(
 ) : RecyclerView.Adapter<AccountTypeAdapter.AccountTypeAdapterVH>() {
     inner class AccountTypeAdapterVH(private val itemView : View) : RecyclerView.ViewHolder(itemView) {
         fun bind(accountTypesItem: AccountTypesItem, position: Int) {
-            itemView.tv_category_name.text = accountTypesItem.name
+            if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                itemView.tv_category_name.text = accountTypesItem.name_ar
+            }else{
+                itemView.tv_category_name.text = accountTypesItem.name
+            }
+
 
             itemView.setOnClickListener {
                 clickPositionInterface.clickPostion(position)

@@ -14,17 +14,19 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/header"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:fontFamily="@font/expressway_rg"
             android:src="@drawable/ic_launcher_foreground"
             android:layout_marginStart="@dimen/_10sdp"
             android:text="@string/my_cart"
             android:includeFontPadding="false"
-            android:textStyle="bold"
-            android:gravity="center"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="8dp"
+            android:textAlignment="viewStart"
             android:textColor="@color/gray_color"
-            android:textSize="@dimen/title_text_size"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
             android:textAllCaps="true" />
         <ScrollView
             android:layout_width="match_parent"
@@ -226,12 +228,11 @@
                                 android:layout_marginEnd="@dimen/_15sdp"
                                 android:layout_marginTop="@dimen/_15sdp"
                                 android:background="@drawable/black_filled_rect_box"
-                                android:fontFamily="@font/farsi_simple_bold"
+                                android:fontFamily="@font/expressway_rg"
                                 android:includeFontPadding="false"
                                 android:textColor="@color/white"
                                 android:gravity="center"
                                 android:textSize="@dimen/_14ssp"
-                                android:textStyle="bold"
                                 android:layout_marginBottom="@dimen/_10sdp"
                                 android:textAllCaps="true"
                                 android:letterSpacing="0.1"
@@ -243,6 +244,15 @@
                     </androidx.cardview.widget.CardView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="@dimen/_10sdp"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:layout_gravity="center" />
             </LinearLayout>
         </ScrollView>
 
@@ -261,15 +271,7 @@
         android:gravity="center"
         android:layout_centerInParent="true"
         android:fontFamily="@font/expressway_rg" />
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="@dimen/_5sdp"
-        android:visibility="gone"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center" />
+
 </RelativeLayout>
 
 

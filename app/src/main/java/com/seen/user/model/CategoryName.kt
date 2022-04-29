@@ -4,8 +4,11 @@ class CategoryName {
     var user_id:Int=0
     var name:String =""
     var categories:String =""
+    var categories_ar:String =""
     var country_name:String =""
+    var country_name_ar:String =""
     var country_served_name:String =""
+    var country_served_name_ar:String =""
     var rating:Double =0.0
     var country_id:Int=0
     var profile_picture:String=""

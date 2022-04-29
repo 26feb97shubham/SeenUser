@@ -12,12 +12,17 @@ import com.seen.user.R
 import com.seen.user.fragment.IntroFragment
 import com.seen.user.utils.SharedPreferenceUtility
 import com.google.android.material.tabs.TabLayoutMediator
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_introduction.*
 
 class IntroductionActivity : AppCompatActivity() {
     var doubleClick:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_introduction)
         setUpViews()
     }

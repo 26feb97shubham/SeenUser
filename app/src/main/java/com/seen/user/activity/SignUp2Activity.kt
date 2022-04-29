@@ -1,21 +1,27 @@
 package com.seen.user.activity
 
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
+import androidx.annotation.RequiresApi
 import com.seen.user.R
 import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import com.seen.user.utils.Utility.Companion.showPassword
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -44,6 +50,10 @@ class SignUp2Activity : AppCompatActivity() {
     var imagePath = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_sign_up2)
         if (intent!=null){
             var bundle = Bundle()
@@ -58,9 +68,8 @@ class SignUp2Activity : AppCompatActivity() {
     }
 
     private fun setUpViews(){
-        frag_other_backImg.setOnClickListener {
-            frag_other_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
-//            onBackPressed()
+        frag_other_backImg1.setOnClickListener {
+            frag_other_backImg1.startAnimation(AlphaAnimation(1f, 0.5f))
             finish()
         }
 
@@ -118,10 +127,34 @@ class SignUp2Activity : AppCompatActivity() {
             validateAndProceed()
         }
 
-        txtTermsConditions.setOnClickListener {
-            txtTermsConditions.startAnimation(AlphaAnimation(1f, 0.5f))
-            startActivity(Intent(this, TermsAndConditionsActivity::class.java).putExtra("title", getString(R.string.terms_amp_conditions)))
+
+
+        val word = SpannableString(resources.getString(R.string.i_accept) + " ")
+        word.setSpan(ForegroundColorSpan(Color.GRAY), 0, word.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        txtPlsAccept2!!.text = word
+
+        val termsCondSpan = object : ClickableSpan() {
+            override fun onClick(textView: View) {
+                startActivity(Intent(this@SignUp2Activity, TermsAndConditionsActivity::class.java).putExtra("title", getString(R.string.terms_amp_conditions)))
+            }
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun updateDrawState(drawState: TextPaint) {
+                super.updateDrawState(drawState)
+                drawState.isUnderlineText = true
+                drawState.color = getColor(R.color.txt_dark_gray)
+            }
         }
+
+        val wordTwo = SpannableString(resources.getString(R.string.terms_amp_conditions))
+        wordTwo.setSpan(termsCondSpan, 0, wordTwo.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        txtPlsAccept2!!.append(wordTwo)
+        txtPlsAccept2!!.movementMethod = LinkMovementMethod.getInstance()
+
+        txtPlsAccept2!!.setOnLongClickListener {
+            Log.e("tag", "To stop crash on Long press")
+            true
+        }
+
     }
 
 
@@ -185,7 +218,10 @@ class SignUp2Activity : AppCompatActivity() {
                              bundle.putString("ref", "1")
                              bundle.putString("user_id", data.getInt("user_id").toString())
                              findNavController().navigate(R.id.action_signUpFragment_to_otpVerificationFragment, bundle)*/
-                            startActivity(Intent(this@SignUp2Activity, LoginActivity::class.java))
+                            val bundle = Bundle()
+                            bundle.putString("ref", "1")
+                            bundle.putString("user_id", data.getInt("user_id").toString())
+                            startActivity(Intent(this@SignUp2Activity, OtpVerificationActivity::class.java).putExtras(bundle))
                             finish()
 
                         }

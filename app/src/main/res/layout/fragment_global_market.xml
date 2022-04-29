@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,32 +7,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/light_gray">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginBottom="@dimen/_12sdp">
+        android:id="@+id/flagsScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/_10sdp">
 
-        <LinearLayout
-            android:id="@+id/swipeRefresh"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/flagsConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <!--<androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
-                android:layoutAnimation="@anim/layout_animation"
-                android:clipToPadding="false" />-->
-
+            android:visibility="gone">
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_uae"
+                android:id="@+id/firstFlagCard"
                 android:layout_width="@dimen/_155sdp"
                 android:layout_height="@dimen/_160sdp"
                 android:layout_gravity="center"
@@ -52,7 +43,7 @@
                     android:orientation="vertical">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/flag"
+                        android:id="@+id/firstFlagImage"
                         android:layout_width="@dimen/_103sdp"
                         android:layout_height="@dimen/_103sdp"
                         android:layout_gravity="center_horizontal"
@@ -62,7 +53,7 @@
                         app:civ_border_width="@dimen/_5sdp" />
 
                     <TextView
-                        android:id="@+id/name"
+                        android:id="@+id/firstFlagName"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
@@ -76,211 +67,27 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/flagsRecyclerView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_saudi_arabia"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_160sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_weight="1"
-                    android:outlineAmbientShadowColor="@color/light_gray"
-                    android:outlineSpotShadowColor="@color/white"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_15sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/flag2"
-                            android:layout_width="@dimen/_103sdp"
-                            android:layout_height="@dimen/_103sdp"
-                            android:layout_gravity="center_horizontal"
-                            android:padding="@dimen/_4sdp"
-                            android:src="@drawable/saudi_arabia"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp" />
-
-                        <TextView
-                            android:id="@+id/name2"
-                            android:layout_width="@dimen/_80sdp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:fontFamily="@font/expressway_rg"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:text="@string/saudi_arabia"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14ssp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_onam"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_160sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="@dimen/_15sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/flag3"
-                            android:layout_width="@dimen/_103sdp"
-                            android:layout_height="@dimen/_103sdp"
-                            android:layout_gravity="center_horizontal"
-                            android:padding="@dimen/_4sdp"
-                            android:src="@drawable/oman"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp" />
-
-                        <TextView
-                            android:id="@+id/name3"
-                            android:layout_width="@dimen/_80sdp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:fontFamily="@font/expressway_rg"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:text="@string/oman"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14ssp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_kuwait"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_160sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="@dimen/_15sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/flag4"
-                            android:layout_width="@dimen/_103sdp"
-                            android:layout_height="@dimen/_103sdp"
-                            android:layout_gravity="center_horizontal"
-                            android:padding="@dimen/_4sdp"
-                            android:src="@drawable/kuwait"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp" />
-
-                        <TextView
-                            android:id="@+id/name4"
-                            android:layout_width="@dimen/_80sdp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:fontFamily="@font/expressway_rg"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:text="@string/kuwait"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14ssp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_bahrain"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_160sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="@dimen/_8sdp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="@dimen/_15sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/flag5"
-                            android:layout_width="@dimen/_103sdp"
-                            android:layout_height="@dimen/_103sdp"
-                            android:layout_gravity="center_horizontal"
-                            android:padding="@dimen/_4sdp"
-                            android:src="@drawable/bahrain"
-                            app:civ_border_color="@color/gold"
-                            app:civ_border_width="@dimen/_5sdp" />
-
-                        <TextView
-                            android:id="@+id/name5"
-                            android:layout_width="@dimen/_80sdp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:fontFamily="@font/expressway_rg"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:text="@string/bahrain"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14ssp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
+                app:layout_constraintTop_toBottomOf="@id/firstFlagCard"
+                android:layout_marginHorizontal="@dimen/_8sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_qatar"
+                android:id="@+id/lastFlagCard"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_160sdp"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="@dimen/_8sdp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:layout_marginTop="@dimen/_8sdp"
                 app:cardCornerRadius="@dimen/_15sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/flagsRecyclerView">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -290,7 +97,7 @@
                     android:orientation="vertical">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/flag6"
+                        android:id="@+id/lastFlagImage"
                         android:layout_width="@dimen/_103sdp"
                         android:layout_height="@dimen/_103sdp"
                         android:layout_gravity="center_horizontal"
@@ -300,7 +107,7 @@
                         app:civ_border_width="@dimen/_5sdp" />
 
                     <TextView
-                        android:id="@+id/name6"
+                        android:id="@+id/lastFlagName"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
@@ -313,181 +120,9 @@
                         android:textSize="@dimen/_14ssp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <!--<ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/ll1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        app:layout_constraintTop_toTopOf="parent">
-        <LinearLayout
-            android:id="@+id/llUAE"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-        <ImageView
-            android:id="@+id/imgUAE"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_80sdp"
-            android:padding="@dimen/_4sdp"
-            android:background="@drawable/gold_rounded_view"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/uae" />
-        <TextView
-            android:id="@+id/txtUAE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:fontFamily="@font/expressway_rg"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/_12ssp"
-            android:text="@string/united_arab_emirates"
-            android:src="@drawable/ic_launcher_foreground"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/llSA"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/imgSA"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:padding="@dimen/_4sdp"
-                android:background="@drawable/gold_rounded_view"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/saudi_arabia" />
-            <TextView
-                android:id="@+id/txtSA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="@font/expressway_rg"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:textSize="@dimen/_12ssp"
-                android:text="@string/saudi_arabia"
-                android:src="@drawable/ic_launcher_foreground"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        app:layout_constraintTop_toBottomOf="@+id/ll1">
-        <LinearLayout
-            android:id="@+id/llOman"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/imgOman"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:padding="@dimen/_4sdp"
-                android:background="@drawable/gold_rounded_view"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/oman" />
-            <TextView
-                android:id="@+id/txtOman"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="@font/expressway_rg"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:textSize="@dimen/_12ssp"
-                android:text="@string/oman"
-                android:src="@drawable/ic_launcher_foreground"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/llKuwait"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/imgKuwait"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:padding="@dimen/_4sdp"
-                android:background="@drawable/gold_rounded_view"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/kuwait" />
-            <TextView
-                android:id="@+id/txtKuwait"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="@font/expressway_rg"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:textSize="@dimen/_12ssp"
-                android:text="@string/kuwait"
-                android:src="@drawable/ic_launcher_foreground"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        app:layout_constraintTop_toBottomOf="@+id/ll2">
-        <LinearLayout
-            android:id="@+id/llBahrain"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/imgBahrain"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:padding="@dimen/_4sdp"
-                android:background="@drawable/gold_rounded_view"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/bahrain" />
-            <TextView
-                android:id="@+id/txtBahrain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:fontFamily="@font/expressway_rg"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:textSize="@dimen/_12ssp"
-                android:text="@string/bahrain"
-                android:src="@drawable/ic_launcher_foreground"/>
-        </LinearLayout>
-    </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>-->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -499,4 +134,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-</RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtNoDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/no_data_found"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13ssp"
+        android:fontFamily="@font/expressway_rg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

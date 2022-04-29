@@ -29,6 +29,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import okhttp3.ResponseBody
 import org.json.JSONException
@@ -60,6 +61,10 @@ class SignUpActivity : AppCompatActivity() {
     var doubleClick:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_sign_up)
         setUpViews()
         getCountires()
@@ -91,11 +96,11 @@ class SignUpActivity : AppCompatActivity() {
             }
 
         })
-        txtCountryCode.setOnClickListener {
+        /*txtCountryCode.setOnClickListener {
             if(cCodeList.size != 0){
                 showCountryCodeList()
             }
-        }
+        }*/
 
         mtv_log_in.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -123,10 +128,12 @@ class SignUpActivity : AppCompatActivity() {
                         for (i in 0 until countries.length()) {
                             val jsonObj = countries.getJSONObject(i)
                             countryCodes.add(jsonObj.getString("country_code"))
-                            cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                cCodeList.add(jsonObj.getString("country_name_ar") + " ("+jsonObj.getString("country_code")+")")
+                            }else{
+                                cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            }
                         }
-                        txtCountryCode.text=countryCodes[0]
-
                         Log.d("countries", countryCodes.toString())
 
                     }
@@ -148,10 +155,10 @@ class SignUpActivity : AppCompatActivity() {
         })
     }
     private fun validateAndSignUp() {
-        name = edtName.text.toString()
-        phone = edtPhone.text.toString()
-        email = edtEmail.text.toString()
-        selectCountryCode= txtCountryCode.text.toString()
+        name = edtName.text.toString().trim()
+        phone = edtPhone.text.toString().trim()
+        email = edtEmail.text.toString().trim()
+        selectCountryCode= txtCountryCode.text.toString().trim()
 
         if (TextUtils.isEmpty(name)) {
             scrollView.scrollTo(0, 150)
@@ -190,7 +197,6 @@ class SignUpActivity : AppCompatActivity() {
             bundle.putString("mobile", phone)
             bundle.putString("imagePath", imagePath)
             startActivity(Intent(this, SignUp2Activity::class.java).putExtras(bundle))
-            finish()
         }
     }
     private fun isCharacterAllowed(validateString: String): Boolean {
@@ -208,7 +214,6 @@ class SignUpActivity : AppCompatActivity() {
         builder.setItems(cCodeList.toArray(arrayOfNulls<String>(cCodeList.size))) { dialogInterface, i ->
             txtCountryCode.text=countryCodes[i]
         }
-
 
         val dialog = builder.create()
         dialog.setCanceledOnTouchOutside(true)
@@ -345,11 +350,11 @@ class SignUpActivity : AppCompatActivity() {
                 if (hasAllPermissionsGranted(grantResults)) {
                     openCameraDialog()
                 } else {
-                    LogUtils.shortToast(this, "Please grant both Camera and Storage permissions")
+                    LogUtils.shortToast(this, getString(R.string.please_grant_both_camera_and_storage_permissions))
 
                 }
             } else if (!hasAllPermissionsGranted(grantResults)) {
-                LogUtils.shortToast(this, "Please grant both Camera and Storage permissions")
+                LogUtils.shortToast(this, getString(R.string.please_grant_both_camera_and_storage_permissions))
             }
         }
     }
@@ -366,7 +371,7 @@ class SignUpActivity : AppCompatActivity() {
                     imagePath = uri!!.path!!
                     Glide.with(this).load("file:///$imagePath").placeholder(R.drawable.user).into(img)
                 } else {
-                    LogUtils.shortToast(this, "something went wrong! please try again")
+                    LogUtils.shortToast(this, getString(R.string.something_went_wrong_please_try_again))
                 }
             }
         } else if (requestCode == PICK_IMAGE_FROM_GALLERY && resultCode == Activity.RESULT_OK && data != null) {

@@ -26,55 +26,11 @@
             app:contentInsetStart="0dp"
             app:contentInsetEnd="0dp"
             android:visibility="gone"
+            android:layoutDirection="ltr"
             app:layout_constraintTop_toTopOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <!--   <ImageView
-                       android:id="@+id/backImg"
-                       android:layout_width="@dimen/_20sdp"
-                       android:layout_height="@dimen/_20sdp"
-                       android:padding="@dimen/_3sdp"
-                       android:src="@drawable/arrow_left"
-                       android:visibility="visible"
-                       android:layout_marginStart="@dimen/_15sdp"
-                       app:layout_constraintStart_toStartOf="parent"
-                       app:layout_constraintTop_toTopOf="parent"
-                       app:layout_constraintBottom_toBottomOf="parent"/>-->
-
-                <!--<ImageView
-                    android:id="@+id/notificationImg"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:src="@drawable/not"
-                    android:layout_marginStart="@dimen/_7sdp"
-                    app:layout_goneMarginStart="@dimen/_15sdp"
-                    app:layout_constraintStart_toEndOf="@+id/backImg"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-                <!--                <ImageView
-                                    android:id="@+id/logoImg"
-                                    android:layout_width="@dimen/_40sdp"
-                                    android:layout_height="@dimen/_40sdp"
-                                    android:src="@drawable/logo"
-                                    android:layout_marginStart="@dimen/_15sdp"
-                                    app:layout_goneMarginStart="@dimen/_30sdp"
-                                    android:layout_marginBottom="@dimen/_7sdp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-                <!--   <ImageView
-                       android:id="@+id/menuImg"
-                       android:layout_width="@dimen/_20sdp"
-                       android:layout_height="@dimen/_20sdp"
-                       android:src="@drawable/profile"
-                      android:layout_marginStart="@dimen/_15sdp"
-                       app:layout_constraintStart_toStartOf="parent"
-                       app:layout_constraintTop_toTopOf="parent"
-                       app:layout_constraintBottom_toBottomOf="parent"/>-->
-
-
                 <TextView
                     android:id="@+id/frag_profile_signup_tv"
                     android:layout_width="wrap_content"
@@ -153,7 +109,8 @@
             app:layout_constraintTop_toTopOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layoutDirection="ltr">
                 <ImageView
                     android:id="@+id/frag_other_backImg"
                     android:layout_width="@dimen/_24sdp"
@@ -164,40 +121,8 @@
                     android:layout_marginStart="@dimen/_15sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <!--<ImageView
-                    android:id="@+id/notificationImg"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:src="@drawable/not"
-                    android:layout_marginStart="@dimen/_7sdp"
-                    app:layout_goneMarginStart="@dimen/_15sdp"
-                    app:layout_constraintStart_toEndOf="@+id/backImg"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-                <!--                <ImageView
-                                    android:id="@+id/logoImg"
-                                    android:layout_width="@dimen/_40sdp"
-                                    android:layout_height="@dimen/_40sdp"
-                                    android:src="@drawable/logo"
-                                    android:layout_marginStart="@dimen/_15sdp"
-                                    app:layout_goneMarginStart="@dimen/_30sdp"
-                                    android:layout_marginBottom="@dimen/_7sdp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-                <!--   <ImageView
-                       android:id="@+id/menuImg"
-                       android:layout_width="@dimen/_20sdp"
-                       android:layout_height="@dimen/_20sdp"
-                       android:src="@drawable/profile"
-                      android:layout_marginStart="@dimen/_15sdp"
-                       app:layout_constraintStart_toStartOf="parent"
-                       app:layout_constraintTop_toTopOf="parent"
-                       app:layout_constraintBottom_toBottomOf="parent"/>-->
-
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="@color/dark_gray" />
 
                 <TextView
                     android:id="@+id/frag_other_signup_tv"
@@ -281,7 +206,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/supplier_fragment_toolbar"
             layout="@layout/supplier_profile_fragment_toolbar"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -649,7 +574,7 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/categoriesnavView"
-        android:layout_width="wrap_content"
+        android:layout_width="175dp"
         android:layout_height="match_parent"
         android:background="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"

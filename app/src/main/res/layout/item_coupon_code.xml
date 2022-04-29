@@ -72,7 +72,7 @@
         android:id="@+id/txtDiscount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Get 20% off upto AED 150"
+        android:text="@string/get_20_off_upto_aed_150"
         android:maxLines="2"
         android:ellipsize="end"
         android:fontFamily="@font/expressway_rg"

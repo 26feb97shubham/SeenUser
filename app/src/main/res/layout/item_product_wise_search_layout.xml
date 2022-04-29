@@ -6,8 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_20sdp"
     android:text="Item Name"
+    android:layout_gravity="start"
+    android:textAlignment="viewStart"
     android:fontFamily="@font/expressway_rg"
-    android:gravity="center_vertical"
+    android:gravity="center_vertical|start"
     android:paddingStart="@dimen/_8sdp"
     android:textSize="@dimen/_10ssp"
     tools:ignore="RtlSymmetry">

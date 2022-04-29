@@ -10,18 +10,20 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="@dimen/_40sdp"
         android:fontFamily="@font/expressway_rg"
+        android:gravity="center_vertical|start"
+        android:textAlignment="viewStart"
+        android:paddingHorizontal="10dp"
+        android:includeFontPadding="false"
         android:src="@drawable/ic_launcher_foreground"
         android:text="@string/my_orders"
-        android:includeFontPadding="false"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="@color/gray_color"
-        android:textSize="@dimen/_18ssp"
         android:textAllCaps="true"
-        android:layout_marginStart="@dimen/_15sdp"
+        android:textColor="@color/gray_color"
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +48,7 @@
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 android:textAllCaps="true"
-                android:fontFamily="@font/farsi_simple_bold"/>
+                android:fontFamily="@font/expressway_rg"/>
             <View
                 android:id="@+id/upcomingView"
                 android:layout_width="match_parent"
@@ -70,7 +72,7 @@
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 android:textAllCaps="true"
-                android:fontFamily="@font/farsi_simple_bold"/>
+                android:fontFamily="@font/expressway_rg"/>
             <View
                 android:id="@+id/historyView"
                 android:layout_width="match_parent"

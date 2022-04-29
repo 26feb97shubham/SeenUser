@@ -26,20 +26,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CategoriesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CategoriesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     var mView: View?=null
     var categoryList=ArrayList<Categories>()
     lateinit var categoryListAdapter: CategoryListAdapter
@@ -68,6 +57,10 @@ class CategoriesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_categories_details, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         return mView
     }
@@ -80,13 +73,6 @@ class CategoriesFragment : Fragment() {
             SharedPreferenceUtility.getInstance().hideSoftKeyBoard(requireContext(), requireActivity().frag_other_backImg)
             findNavController().popBackStack()
         }
-
-        Log.e("category_id",""+category_id)
-
-        queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
-        queryMap.put("category_id", category_id)
-        queryMap.put("account_type", "")
-        defaultProductList(queryMap)
 
         getAccType()
 
@@ -163,10 +149,6 @@ class CategoriesFragment : Fragment() {
         })
     }
 
-    private fun setProducts(productsList: ArrayList<ProductsItemX>) {
-
-    }
-
     private fun getAccType() {
         val call = Utility.apiInterface.getAccType()
         call?.enqueue(object : Callback<AccountTypeResponse?>{
@@ -183,7 +165,12 @@ class CategoriesFragment : Fragment() {
                                 override fun clickPostion(pos: Int) {
                                     acc_type_id = accTypeList[pos].id.toString()
                                     mView!!.cl_dropdown_layout.visibility = View.GONE
-                                    mView!!.tv_dropdown_items_names.text = accTypeList[pos].name
+                                    if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                        mView!!.tv_dropdown_items_names.text = accTypeList[pos].name_ar
+                                    }else{
+                                        mView!!.tv_dropdown_items_names.text = accTypeList[pos].name
+                                    }
+
                                     queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
                                     queryMap.put("category_id", category_id)
                                     queryMap.put("account_type", acc_type_id)
@@ -192,6 +179,18 @@ class CategoriesFragment : Fragment() {
 
                             })
                             mView!!.rv_categories_acc_type.adapter=accountTypeAdapter
+
+
+                            if (SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                mView!!.tv_dropdown_items_names.text = accTypeList[0].name_ar
+                            }else{
+                                mView!!.tv_dropdown_items_names.text = accTypeList[0].name
+                            }
+                            queryMap.put("user_id", SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.UserId, 0).toString())
+                            queryMap.put("category_id", category_id)
+                            queryMap.put("account_type",accTypeList[0].id.toString())
+                            defaultProductList(queryMap)
+
                             accountTypeAdapter.notifyDataSetChanged()
                         }else{
                             mView!!.rv_categories_acc_type.visibility = View.GONE
@@ -215,29 +214,14 @@ class CategoriesFragment : Fragment() {
         })
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CategoriesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                CategoriesFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
 
     override fun onResume() {
         super.onResume()
         /* requireActivity().backImg.visibility=View.GONE*/
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().toolbar.visibility=View.GONE

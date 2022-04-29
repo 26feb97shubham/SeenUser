@@ -1,53 +1,79 @@
 package com.seen.user.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.seen.user.R
-import com.seen.user.adapter.FilteredProductsListAdapter
 import com.seen.user.adapter.GridFilteredProductsListAdapter
 import com.seen.user.interfaces.ClickInterface
+import com.seen.user.model.Products
 import com.seen.user.model.ProductsItem
 import com.seen.user.model.SearchFilterResponse
 import com.seen.user.rest.ApiClient
+import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import com.seen.user.utils.Utility.Companion.apiInterface
 import com.seen.user.utils.Utility.Companion.price_category
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.fragment_filtered_products.view.*
 import kotlinx.android.synthetic.main.fragment_filtered_products.view.iv_filter
+import kotlinx.android.synthetic.main.fragment_home2.view.*
+import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class FilteredProductsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     var mView:View?=null
-    lateinit var filteredProductsListAdapter: FilteredProductsListAdapter
     lateinit var gridFilteredProductsListAdapter: GridFilteredProductsListAdapter
-    private var productsList = ArrayList<ProductsItem>()
+    private var productsList : ArrayList<Products>?=null
     private var queryMap = HashMap<String, String>()
     private var search_keyword : String = ""
     var country_id = ""
     var price_cat = ""
+
+    var product_item_id:String=""
+    var already_added:Boolean=false
+
+
+    var add_cart_type:String=""
+
+
+    var productPrice:String=""
+    lateinit var attrArrayData: JSONArray
+    var attrData: JSONArray = JSONArray()
+    var attributeObj=JSONObject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
            if (it!=null){
                country_id = it.getInt("country_id").toString()
+               productsList = it.getSerializable("productsItemList") as? ArrayList<Products>
+               price_cat = it.getString("price_cat").toString()
            }else{
                country_id = ""
+               price_cat = ""
+               productsList = ArrayList<Products>()
            }
         }
     }
@@ -56,6 +82,10 @@ class FilteredProductsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_filtered_products, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         return mView
     }
@@ -80,6 +110,30 @@ class FilteredProductsFragment : Fragment() {
         queryMap.put("price_from", "")
         queryMap.put("price_to", "")
         defaultProductList(queryMap)
+
+        if(productsList!=null){
+            if(productsList?.size==0){
+                mView!!.tv_no_product.visibility = View.VISIBLE
+                mView!!.scroll_view_filtered_products_frag.visibility = View.GONE
+            }else{
+                mView!!.tv_no_product.visibility = View.GONE
+                mView!!.scroll_view_filtered_products_frag.visibility = View.VISIBLE
+                setProducts(productsList!!)
+            }
+        }else{
+            mView!!.tv_no_product.visibility = View.VISIBLE
+            mView!!.scroll_view_filtered_products_frag.visibility = View.GONE
+        }
+
+
+
+        if (!price_cat.equals("")){
+            mView!!.tv_filterSearch.text = price_cat
+            price_cat = ""
+            Utility.price_category = ""
+        }else{
+            mView!!.tv_filterSearch.text = ""
+        }
 
         mView!!.iv_filter.setOnClickListener {
             val filterBottomSheetDialogFragment = FilterBottomSheetDialogFragment.newInstance(requireContext())
@@ -179,7 +233,8 @@ class FilteredProductsFragment : Fragment() {
             override fun onResponse(call: Call<SearchFilterResponse?>, response: Response<SearchFilterResponse?>) {
                 if (response.isSuccessful){
                     if (response.body()!=null){
-                        productsList = response.body()!!.products as ArrayList<ProductsItem>
+                        productsList = response.body()!!.products as ArrayList<Products>
+                        SharedPreferenceUtility.getInstance().save(SharedPreferenceUtility.searchItem, "")
                         if (!price_cat.equals("")){
                             mView!!.tv_filterSearch.text = price_cat
                             price_cat = ""
@@ -188,13 +243,13 @@ class FilteredProductsFragment : Fragment() {
                             mView!!.tv_filterSearch.text = ""
                         }
 
-                        if(productsList.size==0){
+                        if(productsList?.size==0){
                             mView!!.tv_no_product.visibility = View.VISIBLE
                             mView!!.scroll_view_filtered_products_frag.visibility = View.GONE
                         }else{
                             mView!!.tv_no_product.visibility = View.GONE
                             mView!!.scroll_view_filtered_products_frag.visibility = View.VISIBLE
-                            setProducts(productsList)
+                            setProducts(productsList!!)
                         }
                     }
                 }else {
@@ -209,40 +264,250 @@ class FilteredProductsFragment : Fragment() {
         })
     }
 
-    private fun setProducts(productsList: ArrayList<ProductsItem>) {
+    private fun setProducts(productsList: ArrayList<Products>) {
         Log.e("Products_list", productsList.toString())
         mView!!.rv_filtered_products.layoutManager = GridLayoutManager(requireContext(), 3)
         gridFilteredProductsListAdapter = GridFilteredProductsListAdapter(requireContext(),
                 productsList,findNavController(), object : ClickInterface.ClickPosInterface{
             override fun clickPostion(pos: Int,type: String) {
                 Log.e("Position_1", pos.toString())
+
+/*                Log.e("Position_1", pos.toString())
+                if(type=="Cart"){
+                    val attrbts = productsList[pos].attributes
+                    val jsonArray = JSONArray(productsList[pos].attributes)
+                    val price  = productsList[pos].price
+                    for (i in 0 until jsonArray.length()){
+                       productPrice = JSONObject(jsonArray[i].toString()).getString("price")
+                        attrArrayData = JSONObject(jsonArray[i].toString()).getJSONArray("data")
+                        if (productPrice.equals(price)){
+                            for (i in 0 until attrArrayData.length()){
+                                val attribute_Obj = attrArrayData.getJSONObject(i)
+                                val obj1=JSONObject()
+                                obj1.put("id", attribute_Obj.getInt("id"))
+                                obj1.put("name", attribute_Obj.getString("name"))
+                                obj1.put("type", attribute_Obj.getString("type"))
+//                                obj1.put("value",JSONArray(attribute_Obj.getString("value")) )
+                                obj1.put("primary", 1)
+                                attrData.put(0, obj1)
+                                attributeObj.put("data", attrData)
+                                attributeObj.put("itemAdd", true)
+                            }
+                            break
+                        }else{
+                            Log.e("err", "err")
+                        }
+
+                        if(attrArrayData.length()==2){
+                            checkProductPrice(productsList[pos].id!!, productsList[pos].supplier_id)
+                        }
+                    }
+                }*/
+
+
+
+                if(type=="Cart"){
+                    val attrbts = productsList[pos].attributes
+                    val jsonArray = JSONArray(productsList[pos].attributes)
+                    val price  = productsList[pos].price
+                    for (i in 0 until jsonArray.length()){
+                        productPrice = JSONObject(jsonArray[i].toString()).getString("price")
+                        attrArrayData = JSONObject(jsonArray[i].toString()).getJSONArray("data")
+                        if (productPrice.equals(price)){
+                            for (i in 0 until attrArrayData.length()){
+                                val attribute_Obj = attrArrayData.getJSONObject(i)
+                                val obj1=JSONObject()
+                                obj1.put("id", attribute_Obj.getInt("id"))
+                                obj1.put("name", attribute_Obj.getString("name"))
+                                obj1.put("type", attribute_Obj.getString("type"))
+//                                obj1.put("value",JSONArray(attribute_Obj.getString("value")) )
+                                obj1.put("primary", 1)
+                                attrData.put(0, obj1)
+                                attributeObj.put("data", attrData)
+                                attributeObj.put("itemAdd", true)
+                            }
+                            break
+                        }else{
+                            Log.e("err", "err")
+                        }
+
+                        if(attrArrayData.length()==2){
+                            checkProductPrice(productsList[pos].id!!, productsList[pos].supplierId!!)
+                        }
+                    }
+//                    JSONObject((JSONArray(productsList[pos].attributes)[0] as JSONObject).toString()).getString("price")
+//                    val attrArray = JSONArray(attrbts)
+//                   productDetailPage(productsList[pos].id)
+                }else if(type == "Supplier"){
+                    val bundle = Bundle()
+                    bundle.putInt("supplier_user_id", productsList[pos].supplierId!!)
+                    findNavController().navigate(R.id.supplierDetailsFragment, bundle)
+                }
+
+
+
+
+
+
+
             }
 
         })
         mView!!.rv_filtered_products.adapter = gridFilteredProductsListAdapter
-        gridFilteredProductsListAdapter.notifyDataSetChanged()
-        /*mView!!.rv_products.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recentProductsAdapter = RecentProductsAdapter(requireContext(),productsList,findNavController(), object : ClickInterface.ClickPosInterface{
-            override fun clickPostion(pos: Int,type: String) {
-                Log.e("Position_1", pos.toString())
-                *//* if(type.equals("Like")){
-                     likeUnlikeProduct(pos, productsList)
-                 } else if(type.equals("Cart")) {
-                     LogUtils.shortCenterToast(context, "Item added to cart successfully!!!!. '\n' Thanks alot for purchasing")
-                 } else{
-                         val bundle = Bundle()
-                     bundle.putInt("product_id", productsList[pos].id)
-                     findNavController().navigate(R.id.productDetailsFragment, bundle)
-                 }*//*
+    }
+
+
+
+    private fun checkProductPrice(productId: Int, supplierId: Int) {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
+        val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "data", "device_id", "lang"),
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                productId.toString(),
+                attrArrayData.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""],
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+
+        val call = apiInterface.checkProductPrice(builder.build())
+        call!!.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                try {
+                    if (response.body() != null) {
+                        val jsonObject = JSONObject(response.body()!!.string())
+                        if (jsonObject.getInt("response") == 1){
+
+                            product_item_id=jsonObject.getString("product_item_id")
+                            if(TextUtils.isEmpty(product_item_id)){
+                                LogUtils.shortToast(requireContext(), getString(R.string.this_item_is_currently_out_of_stock))
+                            }
+                            already_added=jsonObject.getBoolean("already_added")
+                            if(already_added){
+                                LogUtils.shortToast(requireContext(), getString(R.string.go_to_cart))
+                                val builder = AlertDialog.Builder(requireContext())
+                                builder.setTitle(getString(R.string.alert_i))
+                                builder.setMessage(getString(R.string.item_already_added))
+                                builder.setPositiveButton(R.string.yes) { dialog, which ->
+                                    dialog.cancel()
+                                    add_cart_type="1"
+                                    validateAndCartAdd(product_item_id, productId, supplierId)
+                                }
+                                builder.setNegativeButton(R.string.no) { dialog, which ->
+                                    dialog.cancel()
+                                }
+                                builder.show()
+                            }else{
+                                validateAndCartAdd(product_item_id, productId, supplierId)
+                            }
+                        }
+
+                        else {
+                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
+            override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
+                LogUtils.e("msg", throwable.message)
+                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
         })
-        mView!!.rv_products.adapter = recentProductsAdapter
-        recentProductsAdapter.notifyDataSetChanged()*/
+
+    }
+
+    private fun validateAndCartAdd(product_item_id: String, productId: Int, supplierId: Int) {
+        if(TextUtils.isEmpty(product_item_id)){
+            LogUtils.shortToast(requireContext(), getString(R.string.this_item_is_currently_out_of_stock))
+        }
+        else{
+            cartAdd(product_item_id, productId, supplierId)
+        }
+    }
+
+
+    private fun cartAdd(product_item_id: String, productId: Int, supplierId:Int) {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+
+        val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
+        val builder = ApiClient.createBuilder(arrayOf("product_id", "product_item_id", "type", "quantity", "product_type", "cart_id", "device_id", "user_id", "add_cart_type", "supplier_id", "lang"),
+            arrayOf(productId.toString(),
+                product_item_id, "1", "1", "" , ""
+                , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString()
+                ,add_cart_type, supplierId.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+
+        val call = apiInterface.cartAdd(builder.build())
+        call!!.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                try {
+                    if (response.body() != null) {
+                        val jsonObject = JSONObject(response.body()!!.string())
+                        if (jsonObject.getInt("response") == 1) {
+                            add_cart_type=""
+                            if(jsonObject.getInt("carts_count")!=0){
+                                requireActivity().cartWedgeCount.visibility=View.VISIBLE
+                                requireActivity().frag_other_cartWedgeCount.visibility=View.VISIBLE
+                                requireActivity().cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
+                                requireActivity().frag_other_cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
+                            }
+                            else{
+                                requireActivity().cartWedgeCount.visibility=View.GONE
+                                requireActivity().frag_other_cartWedgeCount.visibility=View.GONE
+                            }
+                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                            already_added=true
+                        }
+                        else if (jsonObject.getInt("response") == 2) {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setTitle(getString(R.string.alert_i))
+                            builder.setMessage(jsonObject.getString("message"))
+                            builder.setPositiveButton(R.string.yes) { dialog, which ->
+                                dialog.cancel()
+                                add_cart_type="1"
+                                validateAndCartAdd(product_item_id, productId, supplierId)
+                            }
+                            builder.setNegativeButton(R.string.no) { dialog, which ->
+                                dialog.cancel()
+                            }
+                            builder.show()
+                        }
+
+                        else {
+                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
+                LogUtils.e("msg", throwable.message)
+                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        })
+
     }
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

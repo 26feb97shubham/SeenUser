@@ -20,6 +20,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import com.seen.user.utils.Utility.Companion.total_discount
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_apply_coupon.view.*
@@ -31,20 +32,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ApplyCouponFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ApplyCouponFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     var mView:View?=null
     lateinit var couponCodeAdapter: CouponCodeAdapter
     var couponList=ArrayList<Coupon>()
@@ -64,6 +52,10 @@ class ApplyCouponFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_apply_coupon, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         Log.e("amount", ""+amount)
         setUpViews()
         getCoupons(false)
@@ -259,6 +251,10 @@ class ApplyCouponFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         /* requireActivity().backImg.visibility=View.GONE*/
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().toolbar.visibility=View.GONE
@@ -286,24 +282,5 @@ class ApplyCouponFragment : Fragment() {
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
 
-    }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ApplyCouponFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                ApplyCouponFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
     }
 }

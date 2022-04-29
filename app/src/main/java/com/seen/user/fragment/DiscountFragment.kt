@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.ProductListAdapter
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.ProductList
@@ -18,6 +20,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_discount.view.*
 import okhttp3.ResponseBody
@@ -28,32 +31,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DiscountFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DiscountFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     lateinit var mView:View
     lateinit var productListAdapter: ProductListAdapter
     var productList=ArrayList<ProductList>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +43,10 @@ class DiscountFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_discount, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         getOffersAndDiscounts(false)
         return mView
@@ -74,30 +60,6 @@ class DiscountFragment : Fragment() {
             SharedPreferenceUtility.getInstance().hideSoftKeyBoard(requireContext(), requireActivity().frag_other_backImg)
             findNavController().navigate(R.id.homeFragment)
         }
-
-
-
-        mView.rvList.layoutManager= LinearLayoutManager(requireContext())
-        productListAdapter= ProductListAdapter(requireContext(), productList, "discount", object : ClickInterface.ClickPosTypeInterface {
-            override fun clickPostionType(pos: Int, type: String) {
-                if (type == "Like") {
-                    likeUnlikeProduct(pos)
-                }else if(type == "Supplier"){
-                    val bundle = Bundle()
-                    bundle.putInt("supplier_user_id", productList[pos].supplier_id)
-                    findNavController().navigate(R.id.supplierDetailsFragment, bundle)
-                }
-
-                else {
-                    val bundle = Bundle()
-                    bundle.putInt("product_id", productList[pos].id)
-                    findNavController().navigate(R.id.action_discountFragment_to_productDetailsFragment, bundle)
-                }
-
-            }
-
-        })
-        mView.rvList.adapter=productListAdapter
 
         mView.swipeRefresh.setOnRefreshListener {
             getOffersAndDiscounts(true)
@@ -142,6 +104,7 @@ class DiscountFragment : Fragment() {
                                 val d = ProductList()
                                 d.name = jsonObj.getString("name")
                                 d.category_name = jsonObj.getString("category_name")
+                                d.category_name_ar = jsonObj.getString("category_name_ar")
                                 d.supplier_name = jsonObj.getString("supplier_name")
                                 d.supplier_profile_picture = jsonObj.getString("supplier_profile_picture")
                                 d.supplier_id = jsonObj.getInt("supplier_id")
@@ -157,9 +120,9 @@ class DiscountFragment : Fragment() {
 
                             }
                             if(productList.size==1){
-                                mView.tv_no_of_items.text = productList.size.toString() + "item"
+                                mView.tv_no_of_items.text = productList.size.toString() + " "+requireContext().getString(R.string.item)
                             }else{
-                                mView.tv_no_of_items.text = productList.size.toString() + "items"
+                                mView.tv_no_of_items.text = productList.size.toString() + " "+requireContext().getString(R.string.items)
                             }
                         } else {
                             mView.tv_no_of_items.text = "0"
@@ -167,7 +130,27 @@ class DiscountFragment : Fragment() {
                             mView.rvList.visibility = View.GONE
                         }
 
-                        productListAdapter.notifyDataSetChanged()
+                        mView.rvList.layoutManager= LinearLayoutManager(requireContext())
+                        productListAdapter= ProductListAdapter(requireContext(), productList, "discount", object : ClickInterface.ClickPosTypeInterface {
+                            override fun clickPostionType(pos: Int, type: String) {
+                                if (type == "Like") {
+                                    likeUnlikeProduct(pos)
+                                }else if(type == "Supplier"){
+                                    val bundle = Bundle()
+                                    bundle.putInt("supplier_user_id", productList[pos].supplier_id)
+                                    findNavController().navigate(R.id.supplierDetailsFragment, bundle)
+                                }
+
+                                else {
+                                    val bundle = Bundle()
+                                    bundle.putInt("product_id", productList[pos].id)
+                                    findNavController().navigate(R.id.action_discountFragment_to_productDetailsFragment, bundle)
+                                }
+
+                            }
+
+                        })
+                        mView.rvList.adapter=productListAdapter
 
                     }
                 } catch (e: IOException) {
@@ -195,7 +178,8 @@ class DiscountFragment : Fragment() {
             LogUtils.shortToast(requireContext(), getString(R.string.please_login_signup_to_access_this_functionality))
             val args=Bundle()
             args.putString("reference", "OffersDiscount")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             return
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -246,6 +230,10 @@ class DiscountFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
@@ -273,19 +261,6 @@ class DiscountFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
-    }
-
-
-   /* override fun onStop() {
-        super.onStop()
-        setDefaultToolbarIcons()
-    }*/
-
-    private fun setDefaultToolbarIcons() {
-        requireActivity().toolbar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black))
-        requireActivity().frag_other_backImg.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gold))
-        requireActivity().notificationImg.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gold))
-        requireActivity().menuImg.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gold))
     }
 
 }

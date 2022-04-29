@@ -15,6 +15,7 @@ import com.seen.user.R
 import com.seen.user.adapter.CategoryNameListAdapter
 import com.seen.user.model.Categories
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.profile_toolbar_layout.view.*
@@ -36,9 +37,12 @@ class HomeActivity : AppCompatActivity() {
     var loggedInUserEmail : String ? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_home)
         setUpViews()
-//        getProfile()
     }
     companion object{
         var type:String=""
@@ -65,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
 
 
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START)
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
 
         itemMenu.setOnClickListener {
             itemMenu.startAnimation(AlphaAnimation(1f, 0.5f))

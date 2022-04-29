@@ -1,5 +1,7 @@
 package com.seen.user.model
 
+import java.io.Serializable
+
 data class ProductsItem(
         val all_files: List<String?>? = null,
         val quantity: Int? = null,
@@ -24,4 +26,4 @@ data class ProductsItem(
         val id: Int? = null,
         val supplier_name: String? = null,
         val status: Int? = null
-)
+) : Serializable

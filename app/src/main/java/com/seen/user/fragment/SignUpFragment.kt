@@ -34,6 +34,7 @@ import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.fragment_sign_up.view.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -50,17 +51,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of requireContext() fragment.
- */
 class SignUpFragment : Fragment() {
     var mView: View?=null
     var name: String = ""
@@ -97,6 +87,10 @@ class SignUpFragment : Fragment() {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         if(mView == null) {
             mView = inflater.inflate(R.layout.fragment_sign_up, container, false)
+            Utility.changeLanguage(
+                requireContext(),
+                SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+            )
             setUpViews()
             getCountires()
         }
@@ -242,7 +236,11 @@ class SignUpFragment : Fragment() {
                         for (i in 0 until countries.length()) {
                             val jsonObj = countries.getJSONObject(i)
                             countryCodes.add(jsonObj.getString("country_code"))
-                            cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                cCodeList.add(jsonObj.getString("country_name_ar") + " ("+jsonObj.getString("country_code")+")")
+                            }else{
+                                cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            }
                         }
 //                        mView!!.txtCountryCode.text=countryCodes[0]
 
@@ -611,24 +609,5 @@ class SignUpFragment : Fragment() {
             }
         }
 
-    }
-    companion object {
-        /**
-         * Use requireContext() factory method to create a new instance of
-         * requireContext() fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

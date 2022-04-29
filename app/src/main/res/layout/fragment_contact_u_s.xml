@@ -6,17 +6,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/contact_us_background">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:fontFamily="@font/farsi_simple_bold"
+        android:fontFamily="@font/expressway_rg"
         android:src="@drawable/ic_launcher_foreground"
         android:text="@string/contact_us"
         android:includeFontPadding="false"
-        android:textStyle="bold"
         android:gravity="center"
+        android:paddingHorizontal="10dp"
         android:textColor="@color/gray_color"
         android:textSize="@dimen/_20ssp"
         android:textAllCaps="true"
@@ -26,44 +25,46 @@
         />
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/_20sdp"
-        android:paddingBottom="@dimen/_30sdp"
+        android:clipToPadding="true"
+        android:nestedScrollingEnabled="true"
+        android:scrollbars="none"
+        app:layout_constraintVertical_weight="1"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/header">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_20sdp">
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:paddingVertical="10dp">
 
 
             <ImageView
                 android:id="@+id/imgIcon"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:src="@drawable/contact_graphic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtTitle"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:fontFamily="@font/farsi_simple_bold"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/expressway_rg"
                 android:gravity="center"
                 android:text="@string/get_in_touch"
                 android:textColor="@color/gold"
-                android:textSize="@dimen/_20ssp"
-                android:textStyle="bold"
+                android:textSize="@dimen/_15ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgIcon" />
@@ -122,94 +123,114 @@
                     android:src="@drawable/snapchat_icon" />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/edtName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:fontFamily="@font/expressway_rg"
-                android:hint="@string/name"
-                android:imeOptions="actionNext"
-                android:inputType="textCapSentences"
-                android:maxLength="55"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/social_accounts_layout" />
-
-            <EditText
-                android:id="@+id/edtEmail"
-                android:layout_width="0dp"
+            <ScrollView
+                android:id="@+id/childScroll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/expressway_rg"
-                android:hint="@string/email_address"
-                android:imeOptions="actionNext"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="normal"
+                android:nestedScrollingEnabled="true"
+                android:clipChildren="true"
+                android:overScrollMode="always"
+                android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtName" />
+                app:layout_constraintTop_toBottomOf="@+id/social_accounts_layout">
 
-            <EditText
-                android:id="@+id/edtMessage"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_80sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/expressway_rg"
-                android:gravity="top"
-                android:hint="@string/message"
-                android:imeOptions="actionDone"
-                android:maxLength="500"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/edtName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/expressway_rg"
+                        android:hint="@string/name"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapSentences"
+                        android:maxLength="55"
+                        android:maxLines="1"
+                        android:minHeight="40dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="normal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/edtEmail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:fontFamily="@font/expressway_rg"
+                        android:hint="@string/email_address"
+                        android:imeOptions="actionDone"
+                        android:inputType="textEmailAddress"
+                        android:minHeight="40dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="normal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edtName" />
+
+                    <EditText
+                        android:id="@+id/edtMessage"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_80sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:fontFamily="@font/expressway_rg"
+                        android:gravity="top"
+                        android:hint="@string/message"
+                        android:imeOptions="actionDone"
+                        android:maxLength="500"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="normal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
 
             <TextView
                 android:id="@+id/btnSend"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
+                android:layout_marginStart="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_30sdp"
                 android:background="@drawable/gold_filled_small_radius_box_curved"
-                android:fontFamily="@font/farsi_simple_bold"
+                android:fontFamily="@font/expressway_rg"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_30sdp"
                 android:text="@string/send"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_20ssp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtMessage" />
+                app:layout_constraintTop_toBottomOf="@+id/childScroll" />
 
             <TextView
                 android:id="@+id/btnShareAsSupplier"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:background="@drawable/dark_gray_filled_small_radius_curved"
-                android:fontFamily="@font/farsi_simple_bold"
-                android:gravity="center"
-                android:visibility="gone"
-                android:includeFontPadding="false"
                 android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_30sdp"
+                android:background="@drawable/dark_gray_filled_small_radius_curved"
+                android:fontFamily="@font/expressway_rg"
+                android:gravity="center"
+                android:includeFontPadding="false"
                 android:text="@string/share_as_supplier"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_20ssp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnSend" />

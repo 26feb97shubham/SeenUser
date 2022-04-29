@@ -33,6 +33,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.frag_profile.view.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -51,20 +52,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of requireContext() fragment.
- */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     var mView:View?=null
     private val PERMISSION_CAMERA_EXTERNAL_STORAGE_CODE = 301
     private val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -83,13 +71,6 @@ class ProfileFragment : Fragment() {
     var profile_picture:String=""
     var registered_number=""
     var registered_country_code=""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,6 +79,10 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for requireContext() fragment
 //        if(mView==null) {
             mView = inflater.inflate(R.layout.frag_profile, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
             setUpViews()
             getCountires()
 //        }
@@ -219,7 +204,11 @@ class ProfileFragment : Fragment() {
                         for (i in 0 until countries.length()) {
                             val jsonObj = countries.getJSONObject(i)
                             country_code.add(jsonObj.getString("country_code"))
-                            cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                cCodeList.add(jsonObj.getString("country_name_ar") + " ("+jsonObj.getString("country_code")+")")
+                            }else{
+                                cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            }
                         }
 //                        txtCountryCode.text=country_code[0]
 
@@ -333,11 +322,11 @@ class ProfileFragment : Fragment() {
             mView!!.edtEmail.error=getString(R.string.please_enter_valid_email)
 //            LogUtils.shortToast(this, getString(R.string.please_enter_valid_email))
         }
-        else if (TextUtils.isEmpty(selectCountryCode)) {
+      /*  else if (TextUtils.isEmpty(selectCountryCode)) {
 //            edtPhone.error=getString(R.string.please_select_your_country_code)
             LogUtils.shortToast(requireContext(), getString(R.string.please_select_your_country_code))
 
-        }
+        }*/
         else if (TextUtils.isEmpty(mobile)) {
             mView!!.edtPhone.requestFocus()
             mView!!.edtPhone.error=getString(R.string.please_enter_your_phone_number)
@@ -354,8 +343,8 @@ class ProfileFragment : Fragment() {
         else {
             if(registered_number!=mobile){
                 val builder = android.app.AlertDialog.Builder(requireContext())
-                builder.setTitle("Alert!")
-                builder.setMessage("Are you sure you want to updated your phone number")
+                builder.setTitle(requireContext().getString(R.string.alert_i))
+                builder.setMessage(requireContext().getString(R.string.are_you_sure_you_want_to_update_your_phone_number))
                 builder.setPositiveButton(R.string.ok) { dialog, which ->
                     dialog.cancel()
                     editProfile()
@@ -578,11 +567,11 @@ class ProfileFragment : Fragment() {
                 if (hasAllPermissionsGranted(grantResults)) {
                     openCameraDialog()
                 } else {
-                    LogUtils.shortToast(requireContext(), "Please grant both Camera and Storage permissions")
+                    LogUtils.shortToast(requireContext(), requireContext().getString(R.string.please_grant_both_camera_and_storage_permissions))
 
                 }
             } else if (!hasAllPermissionsGranted(grantResults)) {
-                LogUtils.shortToast(requireContext(), "Please grant both Camera and Storage permissions")
+                LogUtils.shortToast(requireContext(),  requireContext().getString(R.string.please_grant_both_camera_and_storage_permissions))
             }
         }
     }
@@ -599,7 +588,7 @@ class ProfileFragment : Fragment() {
                     imagePath = uri!!.path!!
                     Glide.with(requireContext()).load("file:///$imagePath").placeholder(R.drawable.user).into(mView!!.img)
                 } else {
-                    LogUtils.shortToast(requireContext(), "something went wrong! please try again")
+                    LogUtils.shortToast(requireContext(),  requireContext().getString(R.string.something_went_wrong_please_try_again))
                 }
             }
         } else if (requestCode == PICK_IMAGE_FROM_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
@@ -617,28 +606,12 @@ class ProfileFragment : Fragment() {
 
     }
 
-    companion object {
-        /**
-         * Use requireContext() factory method to create a new instance of
-         * requireContext() fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         getProfile()
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.GONE

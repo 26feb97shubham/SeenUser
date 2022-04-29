@@ -36,7 +36,7 @@
             android:layout_height="@dimen/_50sdp"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginEnd="@dimen/_15sdp"
-            android:fontFamily="@font/farsi_simple_bold"
+            android:fontFamily="@font/expressway_rg"
             android:gravity="center"
             android:src="@drawable/ic_launcher_foreground"
             android:text="@string/language"
@@ -109,7 +109,7 @@
                         android:fontFamily="@font/expressway_rg"
                         android:gravity="center"
                         android:textSize="@dimen/_18ssp"
-                        android:text="@string/arabic"
+                        android:text="عربي"
                         android:src="@drawable/ic_launcher_foreground"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -176,7 +176,7 @@
                         android:fontFamily="@font/expressway_rg"
                         android:gravity="center"
                         android:textSize="@dimen/_18ssp"
-                        android:text="@string/english"
+                        android:text="English"
                         android:src="@drawable/ic_launcher_foreground"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

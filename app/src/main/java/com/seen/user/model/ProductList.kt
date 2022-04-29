@@ -9,6 +9,7 @@ class ProductList {
     var supplier_name:String = ""
     var supplier_profile_picture:String=""
     var category_name:String=""
+    var category_name_ar:String=""
     var product_item_id:String=""
     var price:String=""
     var original_price:String=""

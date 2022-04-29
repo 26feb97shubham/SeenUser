@@ -18,6 +18,7 @@ import com.seen.user.rest.ApiInterface
 import com.seen.user.rest.ApiUtils
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.activity_forgot_password.edtPhone
 import kotlinx.android.synthetic.main.activity_forgot_password.frag_other_backImg
@@ -38,16 +39,20 @@ class ForgotPasswordActivity : AppCompatActivity() {
     var cCodeList= arrayListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_forgot_password)
-        getCountires()
+      //  getCountires()
         setUpViews()
     }
     private fun setUpViews() {
-        txtCountryCode_forgot.setOnClickListener {
+/*        txtCountryCode_forgot.setOnClickListener {
             if(cCodeList.size != 0){
                 showCountryCodeList()
             }
-        }
+        }*/
 
         edtPhone.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -84,11 +89,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     private fun validateAndForgot() {
         phone = edtPhone.text.toString()
         selectCountryCode= txtCountryCode_forgot.text.toString()
-        if (TextUtils.isEmpty(selectCountryCode)){
-            txtCountryCode_forgot.requestFocus()
-            txtCountryCode_forgot.error = getString(R.string.please_select_your_country_code)
-        }
-        else if (TextUtils.isEmpty(phone)) {
+         if (TextUtils.isEmpty(phone)) {
             edtPhone.requestFocus()
             edtPhone.error=getString(R.string.please_enter_your_phone_number)
 //            LogUtils.shortToast(this@ForgotPasswordActivity, getString(R.string.please_enter_your_mob_number))
@@ -114,7 +115,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 , ApiUtils.DeviceType, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))*/
 
         val builder = ApiClient.createBuilder(arrayOf("mobile", "country_code", "fcm_token", "device_type", "lang"),
-            arrayOf(phone.trim({ it <= ' ' }),  selectCountryCode, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.FCMTOKEN, ""]
+            arrayOf(phone.trim({ it <= ' ' }),  "+971", SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.FCMTOKEN, ""]
                 , ApiUtils.DeviceType, SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
         val call = apiInterface.forgotPassword(builder.build())
@@ -133,9 +134,11 @@ class ForgotPasswordActivity : AppCompatActivity() {
                             bundle.putString("ref", "2")
                             bundle.putString("user_id", data.getInt("user_id").toString())
                             findNavController().navigate(R.id.action_forgotPasswordFragment_to_otpVerificationFragment, bundle)*/
+                            val bundle=Bundle()
+                            bundle.putString("ref", "2")
+                            bundle.putString("user_id", data.getInt("user_id").toString())
                             startActivity(
-                                Intent(this@ForgotPasswordActivity, ResetPasswordActivity::class.java).putExtra("ref", "2")
-                                .putExtra("user_id", data.getInt("user_id").toString()))
+                                Intent(this@ForgotPasswordActivity, OtpVerificationActivity::class.java).putExtras(bundle))
 
                         }
                         else if (jsonObject.getInt("response") == 2){
@@ -209,7 +212,11 @@ class ForgotPasswordActivity : AppCompatActivity() {
                         for (i in 0 until countries.length()) {
                             val jsonObj = countries.getJSONObject(i)
                             countryCodes.add(jsonObj.getString("country_code"))
-                            cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].equals("ar")){
+                                cCodeList.add(jsonObj.getString("country_name_ar") + " ("+jsonObj.getString("country_code")+")")
+                            }else{
+                                cCodeList.add(jsonObj.getString("country_name") + " ("+jsonObj.getString("country_code")+")")
+                            }
                         }
                         txtCountryCode_forgot.text=countryCodes[0]
 

@@ -53,9 +53,9 @@
         <action
             android:id="@+id/action_homeFragment_to_discountFragment"
             app:destination="@id/discountFragment" />
-        <action
+     <!--   <action
             android:id="@+id/action_homeFragment_to_privacyPolicyFragment"
-            app:destination="@id/privacyPolicyFragment" />
+            app:destination="@id/privacyPolicyFragment" />-->
         <action
             android:id="@+id/action_homeFragment_to_faqFragment"
             app:destination="@id/faqFragment" />
@@ -261,10 +261,10 @@
             android:id="@+id/action_filterbottomsheetdialogfragment_to_filteredproductsfragment"
             app:destination="@id/filteredproductsfragment" />
         </fragment>
-    <fragment
+   <!-- <fragment
         android:id="@+id/privacyPolicyFragment"
         android:name="com.seen.user.fragment.PrivacyPolicyFragment"
-        android:label="PrivacyPolicyFragment" />
+        android:label="PrivacyPolicyFragment" />-->
     <fragment
         android:id="@+id/faqFragment"
         android:name="com.seen.user.fragment.FaqFragment"

@@ -15,6 +15,7 @@ class Cart {
     var category_name:String=""
     var product_name:String=""
     var supplier_name:String=""
+    var supplier_image:String=""
     lateinit var product_available_message:String
     lateinit var price:String
     lateinit var discount:String

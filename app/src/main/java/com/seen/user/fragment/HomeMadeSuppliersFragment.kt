@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.CategoryListAdapter
 import com.seen.user.adapter.NameListAdapter
 import com.seen.user.interfaces.ClickInterface
@@ -19,12 +21,12 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_filtered_products.view.*
 import kotlinx.android.synthetic.main.fragment_health_and_beauty.view.*
 import kotlinx.android.synthetic.main.fragment_home_made_suppliers.view.*
 import kotlinx.android.synthetic.main.fragment_home_made_suppliers.view.imgSearch
-import kotlinx.android.synthetic.main.fragment_home_made_suppliers.view.progressBar
 import kotlinx.android.synthetic.main.fragment_home_made_suppliers.view.rvList
 import kotlinx.android.synthetic.main.fragment_home_made_suppliers.view.txtNoDataFound
 import okhttp3.ResponseBody
@@ -35,20 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeMadeSuppliersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeMadeSuppliersFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     var mView: View?=null
     var nameAdapter: NameListAdapter?=null
     var catNameList=ArrayList<CategoryName>()
@@ -60,14 +49,6 @@ class HomeMadeSuppliersFragment : Fragment() {
     private var search_keyword : String = ""
     private var queryMap = HashMap<String, String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,6 +56,10 @@ class HomeMadeSuppliersFragment : Fragment() {
         // Inflate the layout for this fragment
 //        if(mView==null) {
             mView = inflater.inflate(R.layout.fragment_home_made_suppliers, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
             setUpViews()
             //setNameTab()
 
@@ -174,13 +159,8 @@ class HomeMadeSuppliersFragment : Fragment() {
     }
 
     private fun getNamesAndCategories(queryMap: HashMap<String, String>) {
-      /*  requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        if(!isReferesh) {
-            mView!!.progressBar.visibility = View.VISIBLE
-        }*/
-
+        mView!!.progressBarHomeMadeSuppliersFragment.visibility = View.VISIBLE
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
-
         val builder = ApiClient.createBuilder(arrayOf("user_id", "account_types_id", "search", "country_id"),
                 arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
                         queryMap["account_types_id"].toString(),
@@ -189,10 +169,7 @@ class HomeMadeSuppliersFragment : Fragment() {
         val call = apiInterface.getNamesAndCategories(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
-             /*   if(mView!!.swipeRefresh.isRefreshing){
-                    mView!!.swipeRefresh.isRefreshing=false
-                }*/
-                mView!!.progressBar.visibility = View.GONE
+                mView!!.progressBarHomeMadeSuppliersFragment.visibility = View.GONE
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 try {
                     if (response.body() != null) {
@@ -208,6 +185,9 @@ class HomeMadeSuppliersFragment : Fragment() {
                                 cate.user_id = jsonObj.getInt("user_id")
                                 cate.name = jsonObj.getString("name")
                                 cate.categories = jsonObj.getString("categories")
+                                cate.categories_ar = jsonObj.getString("categories_ar")
+                                cate.country_name_ar = jsonObj.getString("country_name_ar")
+                                cate.country_served_name_ar = jsonObj.getString("country_served_name_ar")
                                 cate.rating = jsonObj.getDouble("rating")
                                 cate.profile_picture = jsonObj.getString("profile_picture")
                                 cate.country_name = jsonObj.getString("country_name")
@@ -268,12 +248,9 @@ class HomeMadeSuppliersFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
-               /* if(mView!!.swipeRefresh.isRefreshing){
-                    mView!!.swipeRefresh.isRefreshing=false
-                }*/
                 LogUtils.e("msg", throwable.message)
                 LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
-                mView!!.progressBar.visibility = View.GONE
+                mView!!.progressBarHomeMadeSuppliersFragment.visibility = View.GONE
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         })
@@ -374,11 +351,12 @@ class HomeMadeSuppliersFragment : Fragment() {
 //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
             val args=Bundle()
             args.putString("reference", "HomeMadeSuppliers")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             return
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        mView!!.progressBar.visibility= View.VISIBLE
+        mView!!.progressBarHomeMadeSuppliersFragment.visibility = View.VISIBLE
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
 
@@ -389,7 +367,7 @@ class HomeMadeSuppliersFragment : Fragment() {
         val call = apiInterface.likeUnlike(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
-                mView!!.progressBar.visibility = View.GONE
+                mView!!.progressBarHomeMadeSuppliersFragment.visibility = View.GONE
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 try {
                     if (response.body() != null) {
@@ -418,7 +396,7 @@ class HomeMadeSuppliersFragment : Fragment() {
             override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
                 LogUtils.e("msg", throwable.message)
                 LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
-                mView!!.progressBar.visibility = View.GONE
+                mView!!.progressBarHomeMadeSuppliersFragment.visibility = View.GONE
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         })
@@ -426,6 +404,10 @@ class HomeMadeSuppliersFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.VISIBLE
         requireActivity().frag_other_toolbar.visibility=View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
@@ -452,25 +434,5 @@ class HomeMadeSuppliersFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility = View.GONE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeMadeSuppliersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeMadeSuppliersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

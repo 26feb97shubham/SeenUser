@@ -9,45 +9,49 @@
     android:layout_marginEnd="@dimen/_15sdp"
     tools:context=".fragment.HotDealsFragment">
 
-        <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="0.8"
-                android:layout_height="match_parent"
-                android:text="@string/hot_deals"
-                android:fontFamily="@font/expressway_rg"
-                android:textSize="@dimen/_14ssp"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:textColor="@color/gray_color"
-                app:drawableStartCompat="@drawable/hot_sale_small"
-                android:drawablePadding="@dimen/_10sdp"/>
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/txt_total_count_hot_deals"
-                android:layout_width="0dp"
-                android:layout_weight="0.2"
-                android:layout_height="match_parent"
-                android:text=""
-                android:fontFamily="@font/expressway_rg"
-                android:textSize="@dimen/_11ssp"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:gravity="center_vertical|right"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:textColor="@color/gray_color" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:drawablePadding="@dimen/_10sdp"
+            android:fontFamily="@font/expressway_rg"
+            android:gravity="center_vertical"
+            android:text="@string/hot_deals"
+            android:textAllCaps="true"
+            android:textColor="@color/gray_color"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/hot_sale_small" />
+
+        <TextView
+            android:id="@+id/txt_total_count_hot_deals"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="0.2"
+            android:fontFamily="@font/expressway_rg"
+            android:gravity="center_vertical|right"
+            android:text=""
+            android:textAllCaps="false"
+            android:textColor="@color/gray_color"
+            android:textSize="@dimen/_11ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/loc_view"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:maxHeight="?attr/actionBarSize"
+            android:layout_height="@dimen/_34sdp"
             android:layout_marginEnd="@dimen/_6sdp"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/header"

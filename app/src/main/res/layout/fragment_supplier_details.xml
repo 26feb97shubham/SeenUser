@@ -24,24 +24,12 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/_15sdp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/supplier_details_img"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:src="@drawable/user"
-                    app:civ_border_color="@color/gold"
-                    app:civ_border_width="@dimen/_3sdp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_margin="@dimen/_8sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/supplier_details_img"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:elevation="@dimen/_5sdp">
 
@@ -49,12 +37,14 @@
                         android:id="@+id/txtSupplier"
                         android:layout_width="@dimen/_120sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:fontFamily="@font/farsi_simple_bold"
+                        android:fontFamily="@font/expressway_rg"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_14ssp"
                         android:textStyle="bold"
                         android:ellipsize="end"
-                        android:gravity="start"
+                        android:gravity="center_vertical|start"
+                        android:textAlignment="viewStart"
+                        android:paddingHorizontal="10dp"
                         android:text="Ivana Jones"
                         android:textDirection="locale"
                         android:layout_marginStart="@dimen/_10sdp"
@@ -98,7 +88,7 @@
                         android:ellipsize="end"
                         android:visibility="visible"
                         android:text="Sharjah, UAE"
-                        android:gravity="start"
+                        android:gravity="end"
                         android:drawablePadding="@dimen/_4sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
@@ -110,34 +100,34 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ratingView"
-                        android:layout_width="@dimen/_100sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:visibility="visible"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        app:layout_constraintStart_toStartOf="@id/address"
+                        app:layout_constraintEnd_toEndOf="@+id/address"
                         app:layout_constraintTop_toBottomOf="@+id/address">
+
                         <TextView
                             android:id="@+id/txtRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/expressway_rg"
+                            android:textColor="@color/text_color_light"
+                            android:textSize="@dimen/_10ssp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:textColor="@color/text_color_light"
-                            android:fontFamily="@font/expressway_rg"
-                            android:textSize="@dimen/_10ssp"/>
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <RatingBar
                             android:id="@+id/ratingBar"
+                            style="?attr/ratingBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_2sdp"
                             android:theme="@style/grayeRatingBar"
-                            android:layout_marginStart="@dimen/_5sdp"
                             app:layout_constraintStart_toEndOf="@id/txtRating"
-                            style="?attr/ratingBarStyleSmall"
-                            app:layout_constraintTop_toTopOf="parent"
-                            />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     <!--<View
@@ -203,7 +193,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/_30sdp"
                                 android:layout_marginTop="@dimen/_5sdp"
-                                android:fontFamily="@font/farsi_simple_bold"
+                                android:fontFamily="@font/expressway_rg"
                                 android:text="@string/bio"
                                 android:textAllCaps="true"
                                 android:textColor="@color/black"
@@ -214,8 +204,27 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/txtNoBioFound"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:fontFamily="@font/expressway_rg"
+                                android:gravity="center"
+                                android:visibility="gone"
+                                android:text="@string/no_bio_details_found"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_14ssp"
+                                android:textStyle="normal"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
                                 android:id="@+id/txtBioContent"
                                 android:layout_width="match_parent"
+                                android:visibility="visible"
                                 android:layout_height="match_parent"
                                 android:fontFamily="@font/expressway_rg"
                                 android:textDirection="locale"
@@ -259,7 +268,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             android:layout_marginStart="@dimen/_15sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
-                            android:fontFamily="@font/farsi_simple_bold"
+                            android:fontFamily="@font/expressway_rg"
                             android:src="@drawable/ic_launcher_foreground"
                             android:text="@string/categories"
                             android:includeFontPadding="false"
@@ -370,11 +379,10 @@
                             app:layout_constraintStart_toStartOf="parent"
                             android:layout_marginStart="@dimen/_15sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
-                            android:fontFamily="@font/farsi_simple_bold"
+                            android:fontFamily="@font/expressway_rg"
                             android:src="@drawable/ic_launcher_foreground"
                             android:text="@string/products"
                             android:includeFontPadding="false"
-                            android:textStyle="bold"
                             android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_15ssp"

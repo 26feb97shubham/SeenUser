@@ -18,7 +18,7 @@ interface ClickInterface {
         fun clickArray(idArray: JSONArray)
     }
     interface ClickJSonObjInterface{
-        fun clickJSonObj(obj: JSONObject)
+        fun clickJSonObj(obj1: JSONObject)
     }
     interface ClickPosItemViewInterface{
         fun clickPosItemView(pos:Int, itemView: View)

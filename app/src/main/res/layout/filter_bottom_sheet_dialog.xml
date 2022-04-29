@@ -93,20 +93,22 @@
 
             <TextView
                 android:id="@+id/tv_category_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/category"
-                android:textSize="@dimen/_13ssp"
-                android:fontFamily="@font/expressway_rg"
-                android:textStyle="bold"
-                android:textColor="#515151"
-                app:layout_constraintTop_toBottomOf="@+id/price_range_layout"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textAllCaps="true"/>
+                android:fontFamily="@font/expressway_rg"
+                android:text="@string/category"
+                android:textAllCaps="true"
+                android:paddingHorizontal="4dp"
+                android:gravity="center_vertical|start"
+                android:textAlignment="viewStart"
+                android:textColor="#515151"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/price_range_layout"
+                app:layout_constraintStart_toStartOf="@+id/price_range_layout"
+                app:layout_constraintTop_toBottomOf="@+id/price_range_layout" />
 
             <LinearLayout
                 android:id="@+id/category_layout"
@@ -127,13 +129,15 @@
                     android:layout_marginStart="@dimen/_12sdp"
                     android:hint="@string/fashion"
                     android:text=""
+                    android:paddingHorizontal="4dp"
+                    android:gravity="center_vertical|start"
+                    android:textAlignment="viewStart"
                     android:fontFamily="@font/expressway_rg"
                     android:textColor="#515151"
                     android:textSize="@dimen/_12ssp"
-                    android:gravity="center_vertical"
                     android:drawablePadding="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
-                    app:drawableEndCompat="@drawable/down_arrow_icon" />
+                    app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
             </LinearLayout>
 
@@ -171,20 +175,22 @@
 
             <TextView
                 android:id="@+id/tv_brands_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/brand"
-                android:textSize="@dimen/_13ssp"
-                android:fontFamily="@font/expressway_rg"
-                android:textStyle="bold"
-                android:textColor="#515151"
                 android:layout_gravity="center_vertical"
+                android:paddingHorizontal="4dp"
+                android:gravity="center_vertical|start"
+                android:textAlignment="viewStart"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/expressway_rg"
+                android:text="@string/brand"
                 android:textAllCaps="true"
-                app:layout_constraintTop_toBottomOf="@id/ll_categories_list"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="@dimen/_8sdp"/>
+                android:textColor="#515151"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/category_layout"
+                app:layout_constraintStart_toStartOf="@+id/category_layout"
+                app:layout_constraintTop_toBottomOf="@id/ll_categories_list" />
 
 
             <LinearLayout
@@ -206,13 +212,15 @@
                     android:layout_marginStart="@dimen/_12sdp"
                     android:hint="@string/versace"
                     android:text=""
+                    android:paddingHorizontal="4dp"
+                    android:gravity="center_vertical|start"
+                    android:textAlignment="viewStart"
                     android:fontFamily="@font/expressway_rg"
                     android:textColor="#515151"
                     android:textSize="@dimen/_12ssp"
-                    android:gravity="center_vertical"
                     android:drawablePadding="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
-                    app:drawableEndCompat="@drawable/down_arrow_icon" />
+                    app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
             </LinearLayout>
             <RelativeLayout
@@ -249,20 +257,23 @@
 
             <TextView
                 android:id="@+id/tv_suplier_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/supplier"
-                android:textSize="@dimen/_13ssp"
-                android:fontFamily="@font/expressway_rg"
-                android:textStyle="bold"
-                android:textColor="#515151"
                 android:layout_gravity="center_vertical"
-                android:textAllCaps="true"
-                app:layout_constraintTop_toBottomOf="@id/ll_type_list"
                 android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:fontFamily="@font/expressway_rg"
+                android:text="@string/supplier"
+                android:textAllCaps="true"
+                android:textColor="#515151"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                android:paddingHorizontal="4dp"
+                android:gravity="center_vertical|start"
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toEndOf="@+id/brand_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_type_list" />
             <LinearLayout
                 android:id="@+id/supplier_layout"
                 android:layout_width="match_parent"
@@ -280,14 +291,17 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_12sdp"
-                    android:text="@string/bloggers"
+                    android:hint="@string/bloggers"
+                    android:text=""
+                    android:paddingHorizontal="4dp"
+                    android:gravity="center_vertical|start"
+                    android:textAlignment="viewStart"
                     android:fontFamily="@font/expressway_rg"
                     android:textColor="#515151"
                     android:textSize="@dimen/_12ssp"
-                    android:gravity="center_vertical"
                     android:drawablePadding="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
-                    app:drawableEndCompat="@drawable/down_arrow_icon" />
+                    app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
             </LinearLayout>
             <RelativeLayout
@@ -324,20 +338,19 @@
 
             <TextView
                 android:id="@+id/tv_price_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/price"
-                android:textSize="@dimen/_13ssp"
-                android:fontFamily="@font/expressway_rg"
-                android:textStyle="bold"
-                android:textColor="#515151"
                 android:layout_gravity="center_vertical"
-                android:textAllCaps="true"
-                app:layout_constraintTop_toBottomOf="@id/ll_suppliers_list"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:fontFamily="@font/expressway_rg"
+                android:text="@string/price"
+                android:textAllCaps="true"
+                android:textColor="#515151"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/supplier_layout"
+                app:layout_constraintStart_toStartOf="@+id/supplier_layout"
+                app:layout_constraintTop_toBottomOf="@id/ll_suppliers_list" />
 
             <LinearLayout
                 android:id="@+id/price_filter_layout"
@@ -361,10 +374,12 @@
                     android:fontFamily="@font/expressway_rg"
                     android:textColor="#515151"
                     android:textSize="@dimen/_12ssp"
-                    android:gravity="center_vertical"
+                    android:paddingHorizontal="4dp"
+                    android:gravity="center_vertical|start"
+                    android:textAlignment="viewStart"
                     android:drawablePadding="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
-                    app:drawableEndCompat="@drawable/down_arrow_icon" />
+                    app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
             </LinearLayout>
 
@@ -421,20 +436,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/ll_price_filter"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 app:layout_constraintStart_toStartOf="parent">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/emirate"
                     android:textSize="@dimen/_13ssp"
                     android:fontFamily="@font/expressway_rg"
                     android:textStyle="bold"
                     android:textColor="#515151"
+                    android:paddingHorizontal="4dp"
+                    android:gravity="center_vertical|start"
+                    android:textAlignment="viewStart"
                     android:layout_gravity="center_vertical"
                     android:textAllCaps="true"/>
 
@@ -442,7 +460,6 @@
                     android:id="@+id/emi_filter_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
-                    android:layout_marginStart="@dimen/_25sdp"
                     android:background="@drawable/transparent_gray_outer_rect_box"
                     android:layout_marginTop="@dimen/_6sdp">
 
@@ -451,15 +468,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:text="@string/dubai"
+                        android:text="@string/select_emirate_one"
                         android:fontFamily="@font/expressway_rg"
                         android:textColor="#515151"
                         android:textSize="@dimen/_12ssp"
-                        android:gravity="center_vertical"
+                        android:paddingHorizontal="4dp"
+                        android:gravity="center_vertical|start"
+                        android:textAlignment="viewStart"
                         android:drawablePadding="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"
-                        app:drawableEndCompat="@drawable/down_arrow_icon" />
+                        android:layout_marginHorizontal="@dimen/_12sdp"
+                        app:drawableEndCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -507,7 +525,7 @@
                 android:textSize="@dimen/_14ssp"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textStyle="bold"
+                android:fontFamily="@font/expressway_rg"
                 android:textAllCaps="true"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

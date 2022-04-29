@@ -1,6 +1,8 @@
 package com.seen.user.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +11,13 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.ProductsItemX
 import com.seen.user.rest.ApiClient
@@ -26,6 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
+
 class SimilarItemsAdapter(
     private val context: Context,
     private val similarItemsList: ArrayList<ProductsItemX>,
@@ -40,8 +49,73 @@ class SimilarItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: SimilarItemsAdapterVH, position: Int) {
-        Glide.with(context).load(similarItemsList[position].files)
-            .placeholder(R.drawable.user).into(holder.itemView.product_image)
+        val requestOptions: RequestOptions =
+            RequestOptions().error(R.drawable.def_product).centerCrop()
+
+        val similarProductsImage = if (similarItemsList[position].files!!.isEmpty()){
+            context.getDrawable(R.drawable.def_product).toString()
+        }else{
+            similarItemsList[position].files
+        }
+
+        val supplierImage = if (similarItemsList[position].files!!.isEmpty()){
+            context.getDrawable(R.drawable.def_product).toString()
+        }else{
+            similarItemsList[position].files
+        }
+
+
+        Glide.with(context).load(supplierImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.similarItemListProgressBar.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.similarItemListProgressBar.visibility = View.GONE
+                    return false
+                }
+
+            })
+            .apply(requestOptions).into(holder.itemView.civ_supplier_image)
+
+        Glide.with(context).load(similarProductsImage)
+            .listener(object : RequestListener<Drawable>{
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.similarItemListProgressBar.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    holder.itemView.similarItemListProgressBar.visibility = View.GONE
+                    return false
+                }
+
+            })
+            .apply(requestOptions).into(holder.itemView.product_image)
         holder.itemView.item_name.text = similarItemsList[position].name
         holder.itemView.item_price.text = "AED ${similarItemsList[position].price}"
 
@@ -59,7 +133,8 @@ class SimilarItemsAdapter(
                 LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
                 val args= Bundle()
                 args.putString("reference", "OffersDiscount")
-                findNavController.navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController.navigate(R.id.chooseLoginSingUpFragment, args)
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
                 return@setOnClickListener
             }
 
@@ -104,8 +179,32 @@ class SimilarItemsAdapter(
         }
 
         holder.itemView.add_to_cart_iv.setOnClickListener {
-            clickPosInterface.clickPostion(position, "Cart")
+            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
+                val args= Bundle()
+                args.putString("reference", "similar items ")
+//                navController.navigate(R.id.chooseLoginSingUpFragment, args)
+                context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
+                return@setOnClickListener
+            }else{
+            }
+          // clickPosInterface.clickPostion(position, "Cart")
         }
+
+        holder.itemView.civ_supplier_image.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                    LogUtils.shortToast(context, context.getString(R.string.please_login_signup_to_access_this_functionality))
+                    val args= Bundle()
+                    args.putString("reference", "similar items")
+                    context.startActivity(Intent(context, LoginActivity::class.java).putExtras(args))
+                    return
+                }else{
+                    clickPosInterface.clickPostion(position, "Supplier")
+                }
+            }
+
+        })
 
         holder.itemView.setOnClickListener {
             val bundle = Bundle()

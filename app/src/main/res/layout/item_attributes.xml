@@ -7,7 +7,7 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_20sdp"
-        android:text="Size:"
+        android:text="@string/size"
         android:textColor="@color/black"
         android:textSize="@dimen/_11ssp"
         android:maxLines="1"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textAllCaps="false"
         android:layout_marginTop="@dimen/_5sdp"
-        android:fontFamily="@font/farsi_simple_bold"/>
+        android:fontFamily="@font/expressway_rg"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvList"
         android:layout_width="0dp"

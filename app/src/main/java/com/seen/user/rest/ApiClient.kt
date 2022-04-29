@@ -7,6 +7,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import com.google.gson.GsonBuilder
+
+import com.google.gson.Gson
+
+
+
 
 class ApiClient {
     companion object {
@@ -21,7 +27,11 @@ class ApiClient {
 //                        .readTimeout(80, TimeUnit.SECONDS).writeTimeout(80, TimeUnit.SECONDS)
 //                        .addInterceptor(okHttpClient).build()
 
-                retrofit = Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build()
+                val gson = GsonBuilder()
+                    .setLenient()
+                    .create()
+
+                retrofit = Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addConverterFactory(GsonConverterFactory.create(gson)).build()
             }
             return retrofit
         }

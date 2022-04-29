@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Seen</string>
+    <string name="app_name">Seen User</string>
     <string name="my_key">AIzaSyCh5hBReaLSROrja5l_F4k8a30c18lM9sE</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -42,6 +42,7 @@
     <string name="products">Products</string>
     <string name="no_categories_found">No categories found</string>
     <string name="categories">Categories</string>
+    <string name="categories_side_menu">Categories</string>
     <string name="category">Category</string>
     <string name="hayley_williams">Hayley Williams</string>
     <string name="hayleywilliams_gmail_com">hayleywilliams@gmail.com</string>
@@ -127,7 +128,7 @@
     <string name="total_price">Total price:</string>
     <string name="checkout">Checkout</string>
     <string name="product_name">Product Name</string>
-    <string name="supplier_name">Supplier name</string>
+    <string name="supplier_name">Supplier details</string>
     <string name="_10_off">10% off</string>
     <string name="offers_and_discounts">Offers and discounts</string>
     <string name="please_choose_your_language">Please choose your language</string>
@@ -158,6 +159,7 @@
     <string name="search">Search</string>
     <string name="no_product_found">No product found</string>
     <string name="bio">Bio</string>
+    <string name="no_bio_details_found">No Bio Details Found</string>
     <string name="view_all">View All</string>
     <string name="suppliers">Suppliers</string>
     <string name="notifications_settings">Notifications Settings</string>
@@ -166,7 +168,7 @@
     <string name="card_1">Card 1</string>
     <string name="edit">Edit</string>
     <string name="ok">Ok</string>
-    <string name="continue_as_a_guest_user">Continue as a guest user</string>
+    <string name="continue_as_a_guest_user">Continue as a Guest User</string>
     <string name="search_dot">Search...</string>
     <string name="title">Title</string>
     <string name="country">Country</string>
@@ -300,19 +302,20 @@
     <string name="please_enter_valid_expiry_date">Please enter valid expiry date</string>
     <string name="please_enter_cvv">Please enter CVV</string>
     <string name="please_enter_valid_cvv">Please enter valid CVV</string>
-<!--    <string name="google_maps_api_key" translatable="false">AIzaSyDKnRXcoeORzLdIeQ1c-uy2HSFSyI7rJvg</string>-->
+    <!--    <string name="google_maps_api_key" translatable="false">AIzaSyDKnRXcoeORzLdIeQ1c-uy2HSFSyI7rJvg</string>-->
     <string name="type">Type</string>
     <string name="title_activity_view_image">View Image</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
+    <string name="hello_user">Hello User</string>
     <string name="payment_confirmed">PAYMENT CONFIRMED</string>
     <string name="emirate">Emirate</string>
     <string name="payment_options">Payment Options</string>
     <string name="tap_payments">TAP Payments</string>
     <string name="discount">Discount</string>
+    <string name="item_already_added">This item is already added in the cart. Want to add more items?</string>
     <string name="jumeirah_lakes_towers_hds_business" translatable="false">Jumeirah Lakes Towers, HDS Business</string>
     <string name="already_a_user">Already a user?</string>
     <string name="thank_you_for_purchasing_n_please_check_the_details_below_of_your_delivery">Thank you for purchasing!   Please check the details below of your delivery.</string>
@@ -324,4 +327,38 @@
     <string name="item">item</string>
     <string name="items">items</string>
     <string name="read_more">Read more ...</string>
+    <string name="read_less">Read less ...</string>
+    <string name="filter_search_health_n_beauty">Filter Search</string>
+    <string name="location_health_n_beauty">Location</string>
+    <string name="apply_filter_health_n_beauty">APPLY FILTER</string>
+    <string name="apartment_no_location">Apartment No.</string>
+    <string name="building_no_location">Building No.</string>
+    <string name="items_to_be_delivered_order_status">Items to be delivered:</string>
+    <string name="delivery_status_order_status">Delivery Status:</string>
+    <string name="submit_rating_order_status">Submit Rating</string>
+    <string name="size">Size:</string>
+    <string name="view">View</string>
+    <string name="submit_rating">Submit Rating</string>
+    <string name="location_permission_required">Location Permission Required</string>
+    <string name="please_enable_location_permissions_from_settings">Please enable location permissions from settings</string>
+    <string name="please_grant_both_camera_and_storage_permissions">"Please grant both Camera and Storage permissions"</string>
+    <string name="something_went_wrong_please_try_again">"Something went wrong!Please try again"</string>
+    <string name="please_enter_title_for_your_location">Please enter title for your location</string>
+    <string name="please_enter_country_name_for_your_location">Please enter country name for your location</string>
+    <string name="please_enter_city_name_for_your_location">Please enter city name for your location</string>
+    <string name="please_enter_street_name_for_your_location">Please enter street name for your location</string>
+    <string name="please_enter_apartment_number_for_your_location">Please enter apartment number for your location</string>
+    <string name="please_enter_building_number_for_your_location">Please enter building number for your location</string>
+    <string name="are_you_sure_you_want_to_update_your_phone_number">Are you sure you want to update your phone number</string>
+    <string name="select_country_code">Select country code</string>
+    <string name="select_emirate">Select Country</string>
+    <string name="select_emirate_one">Select Emirates</string>
+    <string name="you_recently_received_your_item">You recently received your item:</string>
+    <string name="add_your_ratings">Add your ratings</string>
+    <string name="add_rating">Add Rating</string>
+    <string name="add_supplier_rating">Add Supplier Rating</string>
+    <string name="by_adding_your_honest_product_rating_you_are_helping_our_community_to_have_a_standard_of_quality_products_for_all_our_customers_n_n_thank_you_for_your_cooperation">By adding your honest product rating, you are helping our community to have a standard of quality products for all our customers.   Thank you for your cooperation!</string>
+    <string name="get_20_off_upto_aed_150">Get 20% off upto AED 150</string>
+    <string name="location_access_is_mandate_to_get_the_data">Location access is mandate to get the data</string>
+    <string name="location_access">Location Access:</string>
 </resources>

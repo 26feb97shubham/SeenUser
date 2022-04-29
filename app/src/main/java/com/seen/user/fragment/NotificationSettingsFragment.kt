@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
+import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.seen.user.R
@@ -13,6 +14,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_notification_settings.view.*
 import okhttp3.ResponseBody
@@ -23,32 +25,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NotificationSettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NotificationSettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     lateinit var mView: View
     var isOfferShow:Int=0
     var isItemAdded:Int=0
     var isCoupons:Int=0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +37,10 @@ class NotificationSettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_notification_settings, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setUpViews()
         getProfile()
         return mView
@@ -70,7 +55,7 @@ class NotificationSettingsFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        mView.switchOffer.setOnClickListener {
+        /*mView.switchOffer.setOnClickListener {
             if(isOfferShow==1){
                 isOfferShow=0
             }
@@ -96,12 +81,12 @@ class NotificationSettingsFragment : Fragment() {
                 isCoupons=1
             }
             chnageNotificationStatus()
-        }
-       /* mView.switchOffer.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
+        }*/
+        mView.switchOffer.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
                if(isChecked){
                     isOfferShow=1
-                   chnageNotificationStatus()
+                    chnageNotificationStatus()
                 } else{
                    isOfferShow=0
                    chnageNotificationStatus()
@@ -132,7 +117,7 @@ class NotificationSettingsFragment : Fragment() {
                 }
             }
 
-        })*/
+        })
     }
     private fun getProfile() {
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -159,7 +144,6 @@ class NotificationSettingsFragment : Fragment() {
                             mView.switchNewItems.isChecked = isItemAdded==1
                             mView.switchOffer.isChecked = isOfferShow==1
                             mView.switchCoupons.isChecked = isCoupons==1
-
                         }
 
                         else {
@@ -225,27 +209,13 @@ class NotificationSettingsFragment : Fragment() {
         })
 
     }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NotificationSettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NotificationSettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

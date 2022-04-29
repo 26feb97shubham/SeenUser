@@ -1,5 +1,6 @@
 package com.seen.user.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.seen.user.R
+import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.GlobalItemListAdapter
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.Supplier
@@ -17,6 +19,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_global_market_details.view.*
 import okhttp3.ResponseBody
@@ -53,6 +56,10 @@ class GlobalMarketDetailsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
            mView = inflater.inflate(R.layout.fragment_global_market_details, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
            setUpViews()
            getGlobalMarketSuppliers(false)
            return mView
@@ -125,6 +132,7 @@ class GlobalMarketDetailsFragment : Fragment() {
                                 s.user_id = jsonObj.getInt("user_id")
                                 s.name = jsonObj.getString("name")
                                 s.categories = jsonObj.getString("categories")
+                                s.categories_ar = jsonObj.getString("categories_ar")
                                 s.rating = jsonObj.getDouble("rating")
                                 s.profile_picture = jsonObj.getString("profile_picture")
                                 s.country_name = jsonObj.getString("country_name")
@@ -182,7 +190,8 @@ class GlobalMarketDetailsFragment : Fragment() {
 //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
             val args=Bundle()
             args.putString("reference", "GlobalMarketDetails")
-            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//            findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
         }
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         mView!!.progressBar.visibility= View.VISIBLE
@@ -233,6 +242,10 @@ class GlobalMarketDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         requireActivity().home_frag_categories.visibility=View.GONE
         requireActivity().frag_other_toolbar.visibility=View.VISIBLE
         requireActivity().supplier_fragment_toolbar.visibility=View.GONE

@@ -15,6 +15,7 @@ import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
+import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_terms_and_conditions.*
 import kotlinx.android.synthetic.main.fragment_cms.view.*
 import okhttp3.ResponseBody
@@ -28,6 +29,10 @@ import java.io.IOException
 class TermsAndConditionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Utility.changeLanguage(
+            this,
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
         setContentView(R.layout.activity_terms_and_conditions)
         setUpViews()
         getTermsConditions()
@@ -37,10 +42,9 @@ class TermsAndConditionsActivity : AppCompatActivity() {
         if(intent.extras != null){
             title=intent.getStringExtra("title").toString()
         }
-        txtTitle.text=title
 
-        frag_other_backImg.setOnClickListener {
-            frag_other_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
+        other_frag_backImg.setOnClickListener {
+            other_frag_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
             onBackPressed()
         }
 

@@ -32,9 +32,6 @@ import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.*
 import com.seen.user.dialog.LogoutDialog
 import com.seen.user.interfaces.ClickInterface
-import com.seen.user.model.Categories
-import com.seen.user.model.HomeCategories
-import com.seen.user.model.Products
 import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
 import com.seen.user.utils.LogUtils
@@ -44,6 +41,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
+import com.seen.user.model.*
+import com.seen.user.utils.Utility
 import io.nlopez.smartlocation.OnLocationUpdatedListener
 import io.nlopez.smartlocation.SmartLocation
 import kotlinx.android.synthetic.main.about_us_more_info_frag_toolbar.view.*
@@ -52,6 +51,7 @@ import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.activity_introduction.view.*
 import kotlinx.android.synthetic.main.categories_side_menu_layout.*
 import kotlinx.android.synthetic.main.categories_side_menu_layout.view.*
+import kotlinx.android.synthetic.main.fragment_filtered_products.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.iv_filter
@@ -59,6 +59,7 @@ import kotlinx.android.synthetic.main.fragment_home.view.loc_view
 import kotlinx.android.synthetic.main.fragment_home.view.rvListCat
 import kotlinx.android.synthetic.main.fragment_home2.*
 import kotlinx.android.synthetic.main.fragment_home2.view.*
+import kotlinx.android.synthetic.main.fragment_product_details.view.*
 import kotlinx.android.synthetic.main.fragment_products.view.*
 import kotlinx.android.synthetic.main.home_frag_categories_layout.view.*
 import kotlinx.android.synthetic.main.item_recent_products.*
@@ -67,6 +68,7 @@ import kotlinx.android.synthetic.main.side_menu_layout.*
 import kotlinx.android.synthetic.main.side_top_view.*
 import kotlinx.android.synthetic.main.supplier_profile_fragment_toolbar.view.*
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -75,7 +77,10 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
+import android.view.LayoutInflater
+import android.view.ViewGroup
 
+import android.view.Gravity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -94,6 +99,7 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var mView: View?=null
+    var attributeObj=JSONObject()
     var homeCatList=ArrayList<HomeCategories>()
     lateinit var homeCategoriesAdapter: HomeCategoriesAdapter
     var catList=ArrayList<Categories>()
@@ -106,10 +112,22 @@ class HomeFragment : Fragment() {
     private val RequestPermissionsSettings = 500
     var latitude:String=""
     var longitude:String=""
+    var add_cart_type:String="1"
+    var supplierId:Int=0
     var address:String=""
     var isRefresh:Boolean=false
+    var already_added:Boolean=false
     var reference:String=""
+    var old_product_item_id:String=""
+    var new_product_item_id:String=""
+    var productPrice:String=""
     var profile_picture : String = ""
+    var supplier_id : Int = 0
+    var attrList=ArrayList<Attributes>()
+    var categoryId : Int = 0
+    var attrData: JSONArray = JSONArray()
+    var newAttrDataForCheckProductPriceAPI: JSONArray = JSONArray()
+    lateinit var attrArrayData: JSONArray
     var currentItem = 0
     var NUM_PAGES = 0
     lateinit var popuplayoutInflater: LayoutInflater
@@ -123,6 +141,9 @@ class HomeFragment : Fragment() {
     lateinit var bannerAdapter: BannerAdapter
     var bannersList=ArrayList<Categories>()
     var productsList = ArrayList<Products>()
+    var productsItemList = ArrayList<ProductsItem>()
+    var price_cat = ""
+    private var queryMap = HashMap<String, String>()
 
     var catNameList=ArrayList<String>()
     var categoryList=ArrayList<Categories>()
@@ -130,6 +151,13 @@ class HomeFragment : Fragment() {
     var allCatList=ArrayList<Categories>()
     private var category_id:String = ""
     private var category_name = ""
+    private var category_name_ar = ""
+    private var totalQuantityOfItems = 0
+    private var isOfferApplierToProduct = false
+    private var discountOnProduct = 0
+
+
+    var myJsonArrayResponse = JSONArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,33 +168,42 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-            mView = inflater.inflate(R.layout.fragment_home2, container, false)
+        mView = inflater.inflate(R.layout.fragment_home2, container, false)
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
 
-       /* val toast =Toast.makeText(requireContext(), "Hello User!!", Toast.LENGTH_LONG)
-        toast.show()*/
         isLoggedIn = SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.isLoggedIn, false)
         if (!isLoggedIn){
             isLoggedIn = true
             SharedPreferenceUtility.getInstance().save(SharedPreferenceUtility.isLoggedIn, isLoggedIn)
-            val toast =Toast.makeText(requireContext(), "Hello User!!", Toast.LENGTH_LONG)
+//            val toast =Toast.makeText(requireContext(), requireContext().getString(R.string.hello_user), Toast.LENGTH_LONG)
+            val li = layoutInflater
+            val layout: View = li.inflate(
+                R.layout.custom_pop_up_toast,
+                requireActivity().findViewById(R.id.custom_toast_layout_id)
+            )
+            val toast = Toast(requireContext())
+            toast.duration = Toast.LENGTH_SHORT
+            toast.setGravity(Gravity.BOTTOM, 0, 0)
+            toast.setView(layout) //setting the view of custom toast layout
+
             toast.show()
         }
+        mView!!.mainView2.visibility=View.GONE
+        isRefresh=false
 
-        setUpViews()
+//        setUpViews()
+
         if(TextUtils.isEmpty(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.IsDefaultLoc, ""])){
             requestLocation()
-            getHomes()
         }
         else{
-        /*    address=SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.IsDefaultLoc, ""]
-            mView!!.txtLoc.text = address
-            latitude = SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SavedLat, ""]
-            longitude= SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SavedLng, ""]*/
-            getHomes()
-            /*findNavController().navigate(R.id.action_filterbottomsheetdialogfragment_to_filteredproductsfragment)*/
+            setUpViews()
         }
 
         return mView
@@ -177,9 +214,6 @@ class HomeFragment : Fragment() {
         if(!TextUtils.isEmpty(HomeActivity.type)){
             manageNotificationRedirection()
         }
-
-        mView!!.mainView2.visibility=View.GONE
-        isRefresh=false
 //        requireActivity().backImg.visibility=View.GONE
 
         getHomes()
@@ -207,30 +241,40 @@ class HomeFragment : Fragment() {
         mView!!.swipeRefresh2.setOnRefreshListener {
             isRefresh=true
             if(TextUtils.isEmpty(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.IsDefaultLoc, ""])){
-      /*          requestLocation()*/
+                /*          requestLocation()*/
             }
             else{
-     /*           address=SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.IsDefaultLoc, ""]
-                mView!!.txtLoc.text = address
-                latitude = SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SavedLat, ""]
-                longitude= SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SavedLng, ""]*/
+                /*           address=SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.IsDefaultLoc, ""]
+                           mView!!.txtLoc.text = address
+                           latitude = SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SavedLat, ""]
+                           longitude= SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SavedLng, ""]*/
                 getHomes()
                 /*findNavController().navigate(R.id.action_filterbottomsheetdialogfragment_to_filteredproductsfragment)*/
             }
         }
 
         mView!!.iv_filter.setOnClickListener {
-        /*    val filterBottomSheetDialogFragment = FilterBottomSheetDialogFragment.newInstance(requireContext())
-            filterBottomSheetDialogFragment.show(requireActivity().supportFragmentManager, FilterBottomSheetDialogFragment.TAG)
-            filterBottomSheetDialogFragment.setFilterClickListenerCallback(object : FilterBottomSheetDialogFragment.OnFilterClick{
-                override fun onFilter(queryMap: HashMap<String, String>) {
-                }
-                *//*  override fun onFilter() {
+            /*    val filterBottomSheetDialogFragment = FilterBottomSheetDialogFragment.newInstance(requireContext())
+                filterBottomSheetDialogFragment.show(requireActivity().supportFragmentManager, FilterBottomSheetDialogFragment.TAG)
+                filterBottomSheetDialogFragment.setFilterClickListenerCallback(object : FilterBottomSheetDialogFragment.OnFilterClick{
+                    override fun onFilter(queryMap: HashMap<String, String>) {
+                    }
+                    *//*  override fun onFilter() {
                       findNavController().navigate(R.id.action_filterbottomsheetdialogfragment_to_filteredproductsfragment)
                   }*//*
             })*/
 
-            findNavController().navigate(R.id.action_filterbottomsheetdialogfragment_to_filteredproductsfragment)
+//            findNavController().navigate(R.id.action_filterbottomsheetdialogfragment_to_filteredproductsfragment)
+
+            val filterBottomSheetDialogFragment = FilterBottomSheetDialogFragment.newInstance(requireContext())
+            filterBottomSheetDialogFragment.show(requireActivity().supportFragmentManager, FilterBottomSheetDialogFragment.TAG)
+            filterBottomSheetDialogFragment.setFilterClickListenerCallback(object : FilterBottomSheetDialogFragment.OnFilterClick{
+                override fun onFilter(queryMap: HashMap<String, String>, price_category: String) {
+                    this@HomeFragment.queryMap = queryMap
+                    price_cat = price_category
+                    defaultProductList(queryMap)
+                }
+            })
         }
 
         mView!!.loc_view.setOnClickListener {
@@ -242,26 +286,212 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+    private fun defaultProductList(queryMap: HashMap<String, String>) {
+        val builder = ApiClient.createBuilder(arrayOf("user_id", "device_id", "search", "category_id", "account_type","country_id", "price", "price_from", "price_to"),
+            arrayOf(queryMap.get("user_id").toString(),
+                queryMap.get("device_id").toString(),
+                queryMap.get("search").toString(),
+                queryMap.get("category_id").toString(),
+                queryMap.get("account_type").toString(),
+                queryMap.get("country_id").toString(),
+                queryMap.get("price").toString(),
+                queryMap.get("price_from").toString(),
+                queryMap.get("price_to").toString()))
+        val call = Utility.apiInterface.searchFilter(builder.build())
+        call?.enqueue(object : Callback<SearchFilterResponse?>{
+            override fun onResponse(call: Call<SearchFilterResponse?>, response: Response<SearchFilterResponse?>) {
+                if (response.isSuccessful){
+                    if (response.body()!=null){
+                        productsItemList.clear()
+                        productsItemList = response.body()!!.products as ArrayList<ProductsItem>
+                        val bundle = Bundle()
+                        bundle.putSerializable("productsItemList", productsItemList)
+                        val countryId = if (queryMap.get("country_id").toString().isEmpty()){
+                            0
+                        }else{
+                            queryMap.get("country_id")!!.toInt()
+                        }
+                        bundle.putInt("country_id", countryId)
+                        bundle.putString("price_cat", price_cat)
+                        findNavController().navigate(R.id.filteredproductsfragment, bundle)
+                    }
+                }else {
+                    LogUtils.shortCenterToast(requireContext(), getString(R.string.no_results_found))
+                }
+            }
+
+            override fun onFailure(call: Call<SearchFilterResponse?>, t: Throwable) {
+                LogUtils.shortToast(requireContext(), t.message)
+            }
+
+        })
+    }
+
     fun setProducts(){
         Log.e("Products_list", productsList.toString())
         mView!!.rv_products.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recentProductsAdapter = RecentProductsAdapter(requireContext(),productsList,findNavController(), object : ClickInterface.ClickPosInterface{
             override fun clickPostion(pos: Int,type: String) {
                 Log.e("Position_1", pos.toString())
-               /* if(type.equals("Like")){
-                    likeUnlikeProduct(pos, productsList)
-                } else if(type.equals("Cart")) {
-                    LogUtils.shortCenterToast(context, "Item added to cart successfully!!!!. '\n' Thanks alot for purchasing")
-                } else{
-                        val bundle = Bundle()
-                    bundle.putInt("product_id", productsList[pos].id)
-                    findNavController().navigate(R.id.productDetailsFragment, bundle)
-                }*/
+                if(type=="Cart"){
+                    myJsonArrayResponse = JSONArray(productsList[pos].attributes)
+                    val price  = productsList[pos].actualPrice
+                    myForLoop@ for (i in 0 until myJsonArrayResponse.length()){
+                        productPrice = JSONObject(myJsonArrayResponse[i].toString()).getString("price")
+                        attrArrayData = JSONObject(myJsonArrayResponse[i].toString()).getJSONArray("data")
+                        old_product_item_id = JSONObject(myJsonArrayResponse[i].toString()).getString("id")
+                        totalQuantityOfItems = JSONObject(myJsonArrayResponse[i].toString()).getInt("quantity")
+                        if (productPrice.equals(price)){
+                            attrData = JSONArray()
+                            for (i in 0 until attrArrayData.length()){
+                                val attribute_Obj = attrArrayData.getJSONObject(i)
+                                val obj1=JSONObject()
+                                val obj2=JSONObject()
+                                obj1.put("id", attribute_Obj.getInt("id"))
+                                obj2.put("id", attribute_Obj.getInt("id"))
+                                obj1.put("name", attribute_Obj.getString("name"))
+                                obj2.put("name", attribute_Obj.getString("name"))
+                                if (attribute_Obj.has("name_ar")){
+                                    obj1.put("name_ar", attribute_Obj.getString("name_ar"))
+                                    obj2.put("name_ar", attribute_Obj.getString("name_ar"))
+                                }else{
+                                    obj1.put("name_ar", "")
+                                    obj2.put("name_ar", "")
+                                }
+                                obj1.put("type", attribute_Obj.getString("type"))
+                                obj2.put("type", attribute_Obj.getString("type"))
+                                obj2.put("value", attribute_Obj.getString("value"))
+                                val valuejsonArray = JSONArray()
+                                valuejsonArray.put(0, attribute_Obj.getString("value"))
+                                obj1.put("value",valuejsonArray)
+//                                obj1.put("primary", 1)
+                                attrData.put(i, obj2)
+                            }
+                            attributeObj.put("data", attrData)
+                            attributeObj.put("itemAdd", false)
+                            attributeObj.put("productItemId", old_product_item_id)
+                            break@myForLoop
+                        }else{
+                            Log.e("err", "err")
+                        }
+                    }
+
+                    if(totalQuantityOfItems<=0){
+                        Toast.makeText(requireContext(), getString(R.string.this_item_is_currently_out_of_stock), Toast.LENGTH_LONG).show()
+                    }else{
+                        if (attrData.length()==2){
+                            checkProductPrice(productsList[pos].id!!,productsList[pos].supplierId!!,old_product_item_id)
+                        }
+                    }
+
+
+//                    JSONObject((JSONArray(productsList[pos].attributes)[0] as JSONObject).toString()).getString("price")
+//                    val attrArray = JSONArray(attrbts)
+//                   productDetailPage(productsList[pos].id)
+                }else if(type == "Supplier"){
+                    val bundle = Bundle()
+                    bundle.putInt("supplier_user_id", productsList[pos].supplierId!!)
+                    findNavController().navigate(R.id.supplierDetailsFragment, bundle)
+                }
             }
 
         })
         mView!!.rv_products.adapter = recentProductsAdapter
         recentProductsAdapter.notifyDataSetChanged()
+    }
+
+    private fun checkProductPrice(productId: Int, supplierId: Int, old_product_item_id: String) {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        mView!!.progressBar_home.visibility= View.VISIBLE
+        val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
+        val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "data", "device_id", "lang", "product_item_id"),
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                productId.toString(),
+                attrData.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""],
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString(),
+            old_product_item_id))
+
+        val call = apiInterface.checkProductPrice(builder.build())
+        call!!.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                mView!!.progressBar_home.visibility= View.GONE
+
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                try {
+                    if (response.body() != null) {
+                        val jsonObject = JSONObject(response.body()!!.string())
+                        if (jsonObject.getInt("response") == 1){
+
+                            //product_item_id=jsonObject.getString("product_item_id")
+                            if(TextUtils.isEmpty(this@HomeFragment.old_product_item_id)){
+                                LogUtils.shortToast(requireContext(), getString(R.string.this_item_is_currently_out_of_stock))
+                            }else{
+                                already_added=jsonObject.getBoolean("already_added")
+                                if(already_added){
+                                    val builder = AlertDialog.Builder(requireContext())
+                                    builder.setTitle(getString(R.string.alert_i))
+                                    builder.setMessage(getString(R.string.item_already_added))
+                                    builder.setPositiveButton(R.string.yes) { dialog, which ->
+                                        dialog.cancel()
+                                        add_cart_type=""
+                                        validateAndCartAdd(this@HomeFragment.old_product_item_id, productId, supplierId)
+                                    }
+                                    builder.setNegativeButton(R.string.no) { dialog, which ->
+                                        dialog.cancel()
+                                    }
+                                    builder.show()
+                                }else{
+                                    validateAndCartAdd(this@HomeFragment.old_product_item_id, productId, supplierId)
+                                }
+                            }
+
+                            /*already_added=jsonObject.getBoolean("already_added")
+                            if(already_added){
+                                LogUtils.shortToast(requireContext(), getString(R.string.go_to_cart))
+                                val builder = AlertDialog.Builder(requireContext())
+                                builder.setTitle(getString(R.string.alert_i))
+                                builder.setMessage(getString(R.string.item_already_added))
+                                builder.setPositiveButton(R.string.yes) { dialog, which ->
+                                    dialog.cancel()
+                                    add_cart_type="1"
+                                    validateAndCartAdd(product_item_id, productId, supplierId)
+                                }
+                                builder.setNegativeButton(R.string.no) { dialog, which ->
+                                    dialog.cancel()
+                                }
+                                builder.show()
+                            }else{
+                                validateAndCartAdd(product_item_id, productId, supplierId)
+                            }*/
+
+                        }
+
+                        else {
+                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
+                LogUtils.e("msg", throwable.message)
+                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                mView!!.progressBar_home.visibility= View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        })
+
+    }
+
+    private fun validateAndCartAdd(product_item_id: String, productId: Int, supplierId: Int) {
+        cartAdd(product_item_id, productId, supplierId)
     }
 
     private fun likeUnlikeProduct(pos: Int, productsList: ArrayList<Products>) {
@@ -279,7 +509,7 @@ class HomeFragment : Fragment() {
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
 
         val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "lang"),
-                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), productsList[pos].id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), productsList[pos].id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
         val call = apiInterface.likeUnlikeProduct(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
@@ -289,7 +519,7 @@ class HomeFragment : Fragment() {
                         val jsonObject = JSONObject(response.body()!!.string())
 
                         if(jsonObject.getInt("response")==1){
-                            this@HomeFragment.productsList[pos].like = !this@HomeFragment.productsList[pos].like
+                            this@HomeFragment.productsList[pos].like = !this@HomeFragment.productsList[pos].like!!
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
                             recentProductsAdapter.notifyDataSetChanged()
 
@@ -319,7 +549,7 @@ class HomeFragment : Fragment() {
     private fun getCategories() {
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("user_id", "lang"),
-                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
         val call = apiInterface.getCategories(builder.build())
         call!!.enqueue(object : retrofit2.Callback<ResponseBody?> {
             override fun onResponse(call: retrofit2.Call<ResponseBody?>, response: retrofit2.Response<ResponseBody?>) {
@@ -336,6 +566,7 @@ class HomeFragment : Fragment() {
                                 val jsonObj = categories.getJSONObject(i)
                                 val c = Categories()
                                 c.name = jsonObj.getString("name")
+                                c.name_ar = jsonObj.getString("name_ar")
                                 c.id = jsonObj.getInt("id")
                                 /* c.image = jsonObj.getString("image")
                                  c.desc = jsonObj.getString("desc")
@@ -351,10 +582,12 @@ class HomeFragment : Fragment() {
                                 override fun clickPostion(pos: Int) {
                                     category_id = categoryList[pos].id.toString()
                                     category_name = categoryList[pos].name.toString()
+                                    category_name_ar = categoryList[pos].name_ar.toString()
                                     opencloseDrawer()
                                     val bundle = Bundle()
                                     bundle.putString("category_id", category_id)
                                     bundle.putString("category_name", category_name)
+                                    bundle.putString("category_name_ar", category_name_ar)
                                     findNavController().navigate(R.id.categoriesDetailsFragment, bundle)
                                 }
                             })
@@ -396,82 +629,82 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.myOrdersFragment, bundle)
         }
         HomeActivity.type=""
-       /* else if(HomeActivity.type.equals("reject", true)){
-            findNavController().navigate(R.id.myOrdersFragment)
-        }*/
+        /* else if(HomeActivity.type.equals("reject", true)){
+             findNavController().navigate(R.id.myOrdersFragment)
+         }*/
     }
 
-   /* private fun setCategoriesAdapter() {
-        mView!!.rvList2.layoutManager = GridLayoutManager(activity, 3).also {
-            it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return if (position== 0)
-                        3
-                    else
-                        1
-                }
-            }
-        }
+    /* private fun setCategoriesAdapter() {
+         mView!!.rvList2.layoutManager = GridLayoutManager(activity, 3).also {
+             it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                 override fun getSpanSize(position: Int): Int {
+                     return if (position== 0)
+                         3
+                     else
+                         1
+                 }
+             }
+         }
 
-        categoriesAdapter= CategoriesAdapter(
-                requireContext(),
-                catList,
-                object : ClickInterface.ClickPosInterface {
-                    override fun clickPostion(pos: Int) {
-                        val bundle = Bundle()
-                        bundle.putInt("category_id", catList[pos].id)
-                        findNavController().navigate(
-                                R.id.action_homeFragment_to_productsFragment,
-                                bundle
-                        )
-                    }
+         categoriesAdapter= CategoriesAdapter(
+                 requireContext(),
+                 catList,
+                 object : ClickInterface.ClickPosInterface {
+                     override fun clickPostion(pos: Int) {
+                         val bundle = Bundle()
+                         bundle.putInt("category_id", catList[pos].id)
+                         findNavController().navigate(
+                                 R.id.action_homeFragment_to_productsFragment,
+                                 bundle
+                         )
+                     }
 
-                })
-        mView!!.rvList2.adapter=categoriesAdapter
-    }*/
+                 })
+         mView!!.rvList2.adapter=categoriesAdapter
+     }*/
 
     private fun setHomeCategoryAdapter() {
         requireActivity().home_frag_categories.rv_categories.layoutManager= LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         homeCategoriesAdapter= HomeCategoriesAdapter(
-                requireContext(),
-                homeCatList,
-                object : ClickInterface.ClickPosInterface {
-                    override fun clickPostion(pos: Int, status : String) {
-                        if (homeCatList[pos].id == 0){
+            requireContext(),
+            homeCatList,
+            object : ClickInterface.ClickPosInterface {
+                override fun clickPostion(pos: Int, status : String) {
+                    if (homeCatList[pos].id == 0){
 //                            findNavController().popBackStack()
-                            opencloseDrawer()
-                        } else if (homeCatList[pos].id == 1) {
-                            /*findNavController().navigate(R.id.action_homeFragment_to_homeMadeSuppliersFragment)*/
-                                if(findNavController().currentDestination?.id!=R.id.homeMadeSuppliersFragment){
-                                    findNavController().navigate(R.id.homeMadeSuppliersFragment)
-                                }
-                        } else if (homeCatList[pos].id == 2) {
-                            /*findNavController().navigate(R.id.action_mainHomeFragment_to_brandsFragment)*/
-                            if(findNavController().currentDestination?.id!=R.id.brandsFragment){
-                                findNavController().navigate(R.id.brandsFragment)
-                            }
-                        } else if (homeCatList[pos].id == 3) {
-                           /* findNavController().navigate(R.id.action_homeFragment_to_bloggersFragment)*/
-                            if(findNavController().currentDestination?.id!=R.id.bloggersFragment){
-                                findNavController().navigate(R.id.bloggersFragment)
-                            }
-                        } else if (homeCatList[pos].id == 4) {
-                            /*findNavController().navigate(R.id.action_homeFragment_to_healthandBeautyFragment)*/
-                            if(findNavController().currentDestination?.id!=R.id.healthandBeautyFragment){
-                                findNavController().navigate(R.id.healthandBeautyFragment)
-                            }
-                        } else if (homeCatList[pos].id == 5) {
-                            /*findNavController().navigate(R.id.action_homeFragment_to_globalMarketFragment)*/
-                            if(findNavController().currentDestination?.id!=R.id.globalMarketFragment){
-                                findNavController().navigate(R.id.globalMarketFragment)
-                            }
+                        opencloseDrawer()
+                    } else if (homeCatList[pos].id == 1) {
+                        /*findNavController().navigate(R.id.action_homeFragment_to_homeMadeSuppliersFragment)*/
+                        if(findNavController().currentDestination?.id!=R.id.homeMadeSuppliersFragment){
+                            findNavController().navigate(R.id.homeMadeSuppliersFragment)
+                        }
+                    } else if (homeCatList[pos].id == 2) {
+                        /*findNavController().navigate(R.id.action_mainHomeFragment_to_brandsFragment)*/
+                        if(findNavController().currentDestination?.id!=R.id.brandsFragment){
+                            findNavController().navigate(R.id.brandsFragment)
+                        }
+                    } else if (homeCatList[pos].id == 3) {
+                        /* findNavController().navigate(R.id.action_homeFragment_to_bloggersFragment)*/
+                        if(findNavController().currentDestination?.id!=R.id.bloggersFragment){
+                            findNavController().navigate(R.id.bloggersFragment)
+                        }
+                    } else if (homeCatList[pos].id == 4) {
+                        /*findNavController().navigate(R.id.action_homeFragment_to_healthandBeautyFragment)*/
+                        if(findNavController().currentDestination?.id!=R.id.healthandBeautyFragment){
+                            findNavController().navigate(R.id.healthandBeautyFragment)
+                        }
+                    } else if (homeCatList[pos].id == 5) {
+                        /*findNavController().navigate(R.id.action_homeFragment_to_globalMarketFragment)*/
+                        if(findNavController().currentDestination?.id!=R.id.globalMarketFragment){
+                            findNavController().navigate(R.id.globalMarketFragment)
                         }
                     }
-                })
+                }
+            })
         requireActivity().home_frag_categories.rv_categories.adapter=homeCategoriesAdapter
         homeCategoriesAdapter.notifyDataSetChanged()
     }
@@ -488,7 +721,7 @@ class HomeFragment : Fragment() {
     private fun clickOnHomeItems() {
         mView!!.loc_view.setOnClickListener {
             mView!!.loc_view.startAnimation(AlphaAnimation(1f, 0.5f))
-            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+            /*if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
                         requireContext(),
                         getString(R.string.please_login_signup_to_access_this_functionality)
@@ -496,6 +729,16 @@ class HomeFragment : Fragment() {
                 val args=Bundle()
                 args.putString("reference", "Home")
                 findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+            }*/
+            if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
+                LogUtils.shortToast(
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
+                )
+                val args=Bundle()
+                args.putString("reference", "Home")
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else {
                 findNavController().navigate(R.id.myLocationFragment)
@@ -566,8 +809,8 @@ class HomeFragment : Fragment() {
     private fun openNotificationFrag() {
         if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0] == 0){
             LogUtils.shortToast(
-                    requireContext(),
-                    getString(R.string.please_login_signup_to_access_this_functionality)
+                requireContext(),
+                getString(R.string.please_login_signup_to_access_this_functionality)
             )
 //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
             val args=Bundle()
@@ -581,9 +824,9 @@ class HomeFragment : Fragment() {
 
     private fun setBanners() {
         val linearLayoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         mView!!.rv_banners.layoutManager= linearLayoutManager
         bannerAdapter= BannerAdapter(requireContext(), bannersList)
@@ -593,9 +836,9 @@ class HomeFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) mView!!.swipeRefresh2.isEnabled =
-                        true
+                    true
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) mView!!.swipeRefresh2.isEnabled =
-                        false
+                    false
             }
         })
 
@@ -607,7 +850,7 @@ class HomeFragment : Fragment() {
             override fun run() {
                 if (linearLayoutManager.findLastCompletelyVisibleItemPosition() < (bannerAdapter.itemCount) - 1) {
                     linearLayoutManager.smoothScrollToPosition(mView!!.rv_banners, RecyclerView.State(),
-                            linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1)
+                        linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1)
                 } else {
                     linearLayoutManager.smoothScrollToPosition(mView!!.rv_banners, RecyclerView.State(), 0)
                 }
@@ -623,30 +866,30 @@ class HomeFragment : Fragment() {
             }, 5000)
         }*/
 
-      /*  mView!!.rvListCat.post { mView!!.rvListCat.smoothScrollToPosition(mView!!.rvListCat.adapter!!.itemCount) }
-        var i = 1
-        if(i<mView!!.rvListCat.adapter!!.itemCount){
-            handler.postDelayed(object : Runnable {
-                override fun run() {
-                    mView!!.rvListCat.smoothScrollToPosition(i)
-                }
-            }, 5000)
-        }else{
-            i=1
-        }
+        /*  mView!!.rvListCat.post { mView!!.rvListCat.smoothScrollToPosition(mView!!.rvListCat.adapter!!.itemCount) }
+          var i = 1
+          if(i<mView!!.rvListCat.adapter!!.itemCount){
+              handler.postDelayed(object : Runnable {
+                  override fun run() {
+                      mView!!.rvListCat.smoothScrollToPosition(i)
+                  }
+              }, 5000)
+          }else{
+              i=1
+          }
 
-        var pos = 0
-        if (pos>=mView!!.rvListCat.adapter!!.itemCount){
-            pos = 0
-        }else{
-            handler.postDelayed(object : Runnable{
-                override fun run() {
-                    mView!!.rvListCat.smoothScrollToPosition(pos)
-                }
-            }, 5000)
-        }
-*/
-   /*     startAutoSlider(mView!!.rvListCat.adapter!!.itemCount)*/
+          var pos = 0
+          if (pos>=mView!!.rvListCat.adapter!!.itemCount){
+              pos = 0
+          }else{
+              handler.postDelayed(object : Runnable{
+                  override fun run() {
+                      mView!!.rvListCat.smoothScrollToPosition(pos)
+                  }
+              }, 5000)
+          }
+  */
+        /*     startAutoSlider(mView!!.rvListCat.adapter!!.itemCount)*/
 
 
 
@@ -717,28 +960,28 @@ class HomeFragment : Fragment() {
              }
 
          }*/
-       /* requireActivity().itemProfile.setOnClickListener {
-            if(findNavController().currentDestination?.id!=R.id.profileFragment){
-                requireActivity().itemProfile.startAnimation(AlphaAnimation(1f, 0.5f))
-                if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0] == 0){
-                    LogUtils.shortToast(
-                            requireContext(),
-                            getString(R.string.please_login_signup_to_access_this_functionality)
-                    )
-//                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
-                    val args=Bundle()
-                    args.putString("reference", "Profile")
-                    findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
-                }
-                else {
-                    setBottomView()
-                    requireActivity().itemProfile.setImageResource(R.drawable.user_active_icon)
-                    findNavController().navigate(R.id.profileFragment)
-                }
-            }
+        /* requireActivity().itemProfile.setOnClickListener {
+             if(findNavController().currentDestination?.id!=R.id.profileFragment){
+                 requireActivity().itemProfile.startAnimation(AlphaAnimation(1f, 0.5f))
+                 if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0] == 0){
+                     LogUtils.shortToast(
+                             requireContext(),
+                             getString(R.string.please_login_signup_to_access_this_functionality)
+                     )
+ //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
+                     val args=Bundle()
+                     args.putString("reference", "Profile")
+                     findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                 }
+                 else {
+                     setBottomView()
+                     requireActivity().itemProfile.setImageResource(R.drawable.user_active_icon)
+                     findNavController().navigate(R.id.profileFragment)
+                 }
+             }
 
-        }
-*/
+         }
+ */
 
         requireActivity().itemHotSale.setOnClickListener {
             if(findNavController().currentDestination?.id!=R.id.hotdealsFragment){
@@ -780,20 +1023,20 @@ class HomeFragment : Fragment() {
 
     fun requestLocation() {
         if (ActivityCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED) {
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED) {
             displayLocationSettingsRequest(requireActivity())
         } else {
             requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_CODE
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_CODE
             )
         }
     }
     private fun displayLocationSettingsRequest(context: Context) {
         val googleApiClient = GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API).build()
+            .addApi(LocationServices.API).build()
         googleApiClient.connect()
         val locationRequest = LocationRequest.create()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -802,8 +1045,8 @@ class HomeFragment : Fragment() {
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
         builder.setAlwaysShow(true)
         val result = LocationServices.SettingsApi.checkLocationSettings(
-                googleApiClient,
-                builder.build()
+            googleApiClient,
+            builder.build()
         )
         result.setResultCallback { result ->
             val status = result.status
@@ -814,18 +1057,18 @@ class HomeFragment : Fragment() {
                 }
                 LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
                     Log.i(
-                            TAG,
-                            "Location settings are not satisfied. Show the user a dialog to upgrade location settings "
+                        TAG,
+                        "Location settings are not satisfied. Show the user a dialog to upgrade location settings "
                     )
                     try {
                         startIntentSenderForResult(
-                                status.getResolution()?.getIntentSender(),
-                                REQUEST_CHECK_SETTINGS,
-                                null,
-                                0,
-                                0,
-                                0,
-                                null
+                            status.getResolution()?.getIntentSender(),
+                            REQUEST_CHECK_SETTINGS,
+                            null,
+                            0,
+                            0,
+                            0,
+                            null
                         )
 
                     } catch (e: IntentSender.SendIntentException) {
@@ -834,8 +1077,8 @@ class HomeFragment : Fragment() {
                 }
                 LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
                     Log.i(
-                            TAG,
-                            "Location settings are inadequate, and cannot be fixed here. Dialog not created."
+                        TAG,
+                        "Location settings are inadequate, and cannot be fixed here. Dialog not created."
                     )
 
                 }
@@ -844,38 +1087,39 @@ class HomeFragment : Fragment() {
     }
     fun getSmartLocation(){
         if(!isRefresh){
-//            mView!!.progressBar.visibility=View.VISIBLE
             mView!!.mainView2.visibility=View.GONE
             mView!!.shimmerLayout2.visibility=View.VISIBLE
             mView!!.shimmerLayout2.startShimmer()
         }
 
         SmartLocation.with(activity).location()
-                .oneFix()
-                .start(object : OnLocationUpdatedListener {
-                    override fun onLocationUpdated(location: Location) {
-                        latitude = location.latitude.toString()
-                        longitude = location.longitude.toString()
-                        /*latitude= "36.778259"
-                        longitude= "-119.417931"*/
-                        try {
-                            val geocoder = Geocoder(activity, Locale.getDefault())
-                            val addresses = geocoder.getFromLocation(
-                                    location.latitude,
-                                    location.longitude,
-                                    1
-                            )
-                            address = addresses[0].getAddressLine(0).toString()
-                         /*   mView!!.txtLoc.text = address*/
-                            getHomes()
+            .oneFix()
+            .start(object : OnLocationUpdatedListener {
+                override fun onLocationUpdated(location: Location) {
+                    latitude = location.latitude.toString()
+                    longitude = location.longitude.toString()
+                    /*latitude= "36.778259"
+                    longitude= "-119.417931"*/
+                    try {
+                        val geocoder = Geocoder(activity, Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(
+                            location.latitude,
+                            location.longitude,
+                            1
+                        )
+                        address = addresses[0].getAddressLine(0).toString()
+                        /*   mView!!.txtLoc.text = address*/
+//                       getHomes()
+                        mView!!.home_progress_bar.visibility = View.VISIBLE
+                        setUpViews()
 //                            address = "Jaipur,Rajasthan"
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-
-
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                })
+
+
+                }
+            })
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -886,7 +1130,8 @@ class HomeFragment : Fragment() {
                    studentHomeList()*/
             }
             else{
-                getHomes()
+                //getHomes()
+                setUpViews()
             }
 
         }
@@ -907,33 +1152,34 @@ class HomeFragment : Fragment() {
         startActivityForResult(intent, RequestPermissionsSettings)
     }
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.size > 0) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(
-                                    requireActivity(),
-                                    Manifest.permission.ACCESS_FINE_LOCATION
-                            ) == PackageManager.PERMISSION_GRANTED) {
+                            requireActivity(),
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED) {
                         displayLocationSettingsRequest(requireActivity())
 //                        getSmartLocation()
 //                        getLocationFromLocationManager()
                     }
                 } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("Location Permission Required")
-                    builder.setMessage("Please enable  location permissions in settings")
+                    builder.setTitle(requireContext().getString(R.string.location_permission_required))
+                    builder.setMessage(requireContext().getString(R.string.please_enable_location_permissions_from_settings))
+                    builder.setCancelable(false)
                     builder.setPositiveButton(R.string.settings) { dialog, which ->
                         dialog.cancel()
                         goToSettings()
                     }
-                    builder.setNegativeButton(R.string.cancel) { dialog, which ->
+/*                    builder.setNegativeButton(R.string.cancel) { dialog, which ->
                         dialog.cancel()
-                    }
+                    }*/
                     builder.show()
 
                 }
@@ -943,18 +1189,18 @@ class HomeFragment : Fragment() {
         }
 
     }
- /*   private fun getLocationFromLocationManager() {
-        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            val locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val locationListener: LocationListener = object : LocationListener {
-                override fun onLocationChanged(location: Location) {
-                    latitude= location.latitude.toString()
-                    longitude= location.longitude.toString()
-                    try {
-                        val geocoder = Geocoder(activity, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                        address = addresses[0].getAddressLine(0).toString()
-                        *//*if(isShimmerShow){
+    /*   private fun getLocationFromLocationManager() {
+           if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+               val locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+               val locationListener: LocationListener = object : LocationListener {
+                   override fun onLocationChanged(location: Location) {
+                       latitude= location.latitude.toString()
+                       longitude= location.longitude.toString()
+                       try {
+                           val geocoder = Geocoder(activity, Locale.getDefault())
+                           val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                           address = addresses[0].getAddressLine(0).toString()
+                           *//*if(isShimmerShow){
                             isShimmerShow=false
                             studentHomeList()
                         }*//*
@@ -985,12 +1231,13 @@ class HomeFragment : Fragment() {
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else{
                 findNavController().navigate(R.id.homeFragment)
@@ -1001,12 +1248,13 @@ class HomeFragment : Fragment() {
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else{
                 findNavController().navigate(R.id.homeFragment)
@@ -1034,19 +1282,22 @@ class HomeFragment : Fragment() {
         requireActivity().llCategory.setOnClickListener {
             requireActivity().llCategory.startAnimation(AlphaAnimation(1f, 0.5f))
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
-            findNavController().navigate(R.id.categoriesFragment)
+            val bundle = Bundle()
+            bundle.putString("category_id", "")
+            findNavController().navigate(R.id.categoriesFragment, bundle)
         }
         requireActivity().llMyCards.setOnClickListener {
             requireActivity().llMyCards.startAnimation(AlphaAnimation(1f, 0.5f))
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else {
                 findNavController().navigate(R.id.myCardsFragment)
@@ -1057,32 +1308,37 @@ class HomeFragment : Fragment() {
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
-              else {
-                  findNavController().navigate(R.id.myLocationFragment)
-              }
+            else {
+                findNavController().navigate(R.id.myLocationFragment)
+            }
         }
         requireActivity().llMyOrders.setOnClickListener {
             requireActivity().llMyOrders.startAnimation(AlphaAnimation(1f, 0.5f))
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
-              else {
-                  findNavController().navigate(R.id.myOrdersFragment)
-              }
+            else {
+                val bundle = Bundle()
+                bundle.putInt("direction",2)
+                bundle.putString("type","")
+                findNavController().navigate(R.id.myOrdersFragment, bundle)
+            }
         }
         requireActivity().llFavourites.setOnClickListener {
             requireActivity().llFavourites.startAnimation(AlphaAnimation(1f, 0.5f))
@@ -1090,12 +1346,13 @@ class HomeFragment : Fragment() {
 
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else{
                 findNavController().navigate(R.id.favouritesFragment)
@@ -1106,12 +1363,13 @@ class HomeFragment : Fragment() {
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0]==0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
                 val args=Bundle()
                 args.putString("reference", "Home")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }
             else {
                 findNavController().navigate(R.id.notificationSettingsFragment)
@@ -1134,9 +1392,9 @@ class HomeFragment : Fragment() {
         requireActivity().llFAQ.setOnClickListener {
             requireActivity().llFAQ.startAnimation(AlphaAnimation(1f, 0.5f))
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
-           /* val args=Bundle()
-            args.putString("title", getString(R.string.faq))
-            findNavController().navigate(R.id.webViewFragment, args)*/
+            /* val args=Bundle()
+             args.putString("title", getString(R.string.faq))
+             findNavController().navigate(R.id.webViewFragment, args)*/
             findNavController().navigate(R.id.faqFragment)
         }
         requireActivity().llPrivacyPolicy.setOnClickListener {
@@ -1158,13 +1416,14 @@ class HomeFragment : Fragment() {
             requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
             if(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0] == 0){
                 LogUtils.shortToast(
-                        requireContext(),
-                        getString(R.string.please_login_signup_to_access_this_functionality)
+                    requireContext(),
+                    getString(R.string.please_login_signup_to_access_this_functionality)
                 )
 //                    startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
                 val args=Bundle()
                 args.putString("reference", "Profile")
-                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+//                findNavController().navigate(R.id.chooseLoginSingUpFragment, args)
+                requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             } else {
                 requireActivity().llAccount.startAnimation(AlphaAnimation(1f, 0.5f))
                 requireActivity().drawerLayout.closeDrawer(GravityCompat.START)
@@ -1190,8 +1449,8 @@ class HomeFragment : Fragment() {
             })
             logoutDialog.show(requireActivity().supportFragmentManager, "HomeFragment")
 
-           /* startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
-            requireActivity().finishAffinity()*/
+            /* startActivity(Intent(requireContext(), ChooseLoginSignUpActivity::class.java))
+             requireActivity().finishAffinity()*/
         }
     }
 
@@ -1254,11 +1513,11 @@ class HomeFragment : Fragment() {
         h5.icon=R.drawable.health_n_beauty_icon
         homeCatList.add(h5)
 
-    /*    val h6 = HomeCategories()
-        h6.id=5
-        h6.name=getString(R.string.gallery)
-        h6.icon=R.drawable.gallery
-        homeCatList.add(h6)*/
+        /*    val h6 = HomeCategories()
+            h6.id=5
+            h6.name=getString(R.string.gallery)
+            h6.icon=R.drawable.gallery
+            homeCatList.add(h6)*/
 
         val h6 = HomeCategories()
         h6.id=5
@@ -1272,8 +1531,8 @@ class HomeFragment : Fragment() {
     private fun getHomes() {
         mView!!.home_progress_bar.visibility = View.VISIBLE
         requireActivity().window.setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
         /*if(!isReferesh) {
             mView!!.progressBar.visibility = View.VISIBLE
@@ -1282,16 +1541,16 @@ class HomeFragment : Fragment() {
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
 
         val builder = ApiClient.createBuilder(
-                arrayOf(
-                        "user_id",
-                        "device_id",
-                        "lang"
-                ),
-                arrayOf(
-                        SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
-                        SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""],
-                        SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()
-                )
+            arrayOf(
+                "user_id",
+                "device_id",
+                "lang"
+            ),
+            arrayOf(
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""],
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()
+            )
         )
         val call = apiInterface.getHomes(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {
@@ -1343,17 +1602,17 @@ class HomeFragment : Fragment() {
 //                        autoScrollViewPagerAdapter.notifyDataSetChanged()
 
 
-                     /*   val categories = jsonObject.getJSONArray("categories")
-                        catList.clear()
-                        for (i in 0 until categories.length()) {
-                            val jsonObj = categories.getJSONObject(i)
-                            val cate = Categories()
-                            cate.id = jsonObj.getInt("id")
-                            cate.name = jsonObj.getString("name")
-                            cate.image = jsonObj.getString("image")
-                            catList.add(cate)
-                        }
-                        categoriesAdapter.notifyDataSetChanged()*/
+                        /*   val categories = jsonObject.getJSONArray("categories")
+                           catList.clear()
+                           for (i in 0 until categories.length()) {
+                               val jsonObj = categories.getJSONObject(i)
+                               val cate = Categories()
+                               cate.id = jsonObj.getInt("id")
+                               cate.name = jsonObj.getString("name")
+                               cate.image = jsonObj.getString("image")
+                               catList.add(cate)
+                           }
+                           categoriesAdapter.notifyDataSetChanged()*/
 
                         val products = jsonObject.getJSONArray("products")
                         if(products.length()==0){
@@ -1370,33 +1629,61 @@ class HomeFragment : Fragment() {
                                 products.like = jsonObj.getBoolean("like")
                                 products.name = jsonObj.getString("name")
                                 products.price = jsonObj.getString("price")
+                                products.actualPrice = jsonObj.getString("actual_price")
                                 products.id = jsonObj.getInt("id")
+                                products.userId = jsonObj.getInt("user_id")
+                                products.categoryId = jsonObj.getInt("category_id")
+                                products.attributes = jsonObj.getString("attributes")
+                                products.supplierId = jsonObj.getInt("supplier_id")
+                                products.supplierProfilePicture =
+                                    jsonObj.getString("supplier_profile_picture").toString()
+                                products.description = jsonObj.getString("description")
+                                products.allowCoupans = jsonObj.getInt("allow_coupans")
+                                products.addOffer = jsonObj.getInt("add_offer")
+                                products.discount = jsonObj.getInt("discount")
+                                products.fromDate = jsonObj.getString("from_date")
+                                products.toDate = jsonObj.getString("to_date")
+                                products.deleteStatus = jsonObj.getInt("delete_status")
+                                products.status = jsonObj.getInt("status")
+                                products.hotDealStatus = jsonObj.getInt("hot_deal_status")
+                                products.hotDealFromDate = jsonObj.getString("hot_deal_to_date")
+                                products.hotDealToDate = jsonObj.getString("hot_deal_to_date")
+                                products.modified = jsonObj.getString("modified")
+                                products.created = jsonObj.getString("created")
+                                products.supplierName = jsonObj.getString("supplier_name")
+                                products.rating = jsonObj.getInt("rating")
+                                products.quantity = jsonObj.getInt("quantity")
+                                products.categoryName = jsonObj.getString("category_name")
+//                                products.allFiles = jsonObj.getJSONArray("all_files")
                                 productsList.add(products)
                             }
-//                        recentProductsAdapter.notifyDataSetChanged()
                             setProducts()
 
                         }
 
                         val profile = jsonObject.getJSONObject("profile")
                         requireActivity().name.setTextColor(
-                                getColor(
-                                        requireContext(),
-                                        R.color.black
-                                )
+                            getColor(
+                                requireContext(),
+                                R.color.black
+                            )
                         )
                         requireActivity().name.text = profile.getString("name")
                         requireActivity().email.text = profile.getString("email")
                         profile_picture = profile.getString("profile_picture")
                         Glide.with(requireContext()).load(profile.getString("profile_picture"))
-                                .placeholder(R.drawable.user).into(requireActivity().frag_other_menuImg)
+                            .placeholder(R.drawable.user).into(requireActivity().frag_other_menuImg)
                         Glide.with(requireContext()).load(profile.getString("profile_picture"))
-                                .placeholder(R.drawable.user).into(requireActivity().menuImg)
+                            .placeholder(R.drawable.user).into(requireActivity().menuImg)
                         Glide.with(requireContext()).load(profile.getString("profile_picture"))
-                                .placeholder(R.drawable.user).into(requireActivity().userIcon)
+                            .placeholder(R.drawable.user).into(requireActivity().userIcon)
                         Glide.with(requireContext()).load(profile.getString("profile_picture"))
-                                .placeholder(R.drawable.user)
-                                .into(requireActivity().about_us_fragment_toolbar.aboutUsFragment_menuImg)
+                            .placeholder(R.drawable.user)
+                            .into(requireActivity().about_us_fragment_toolbar.aboutUsFragment_menuImg)
+
+                        Glide.with(requireContext()).load(profile.getString("profile_picture"))
+                            .placeholder(R.drawable.user)
+                            .into(requireActivity().supplier_fragment_toolbar.frag_profile)
 
                     }
                 } catch (e: IOException) {
@@ -1425,6 +1712,82 @@ class HomeFragment : Fragment() {
     }
 
 
+
+    private fun cartAdd(product_item_id: String, productId: Int, supplierId:Int) {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        mView!!.home_progress_bar.visibility= View.VISIBLE
+
+        val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
+        val builder = ApiClient.createBuilder(arrayOf("product_id", "product_item_id",
+            "type", "quantity", "product_type", "cart_id", "device_id", "user_id", "add_cart_type", "supplier_id", "lang"),
+            arrayOf(productId.toString(),
+                product_item_id, "1", "1", "" , ""
+                , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString()
+                ,add_cart_type, supplierId.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+
+        val call = apiInterface.cartAdd(builder.build())
+        call!!.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                mView!!.home_progress_bar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                try {
+                    if (response.body() != null) {
+                        val jsonObject = JSONObject(response.body()!!.string())
+                        if (jsonObject.getInt("response") == 1) {
+                            add_cart_type=""
+                            if(jsonObject.getInt("carts_count")!=0){
+                                requireActivity().cartWedgeCount.visibility=View.VISIBLE
+                                requireActivity().frag_other_cartWedgeCount.visibility=View.VISIBLE
+                                requireActivity().cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
+                                requireActivity().frag_other_cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
+                            }
+                            else{
+                                requireActivity().cartWedgeCount.visibility=View.GONE
+                                requireActivity().frag_other_cartWedgeCount.visibility=View.GONE
+                            }
+                            attributeObj.put("itemAdd", true)
+                            already_added=true
+                        }
+                        else if (jsonObject.getInt("response") == 2) {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setTitle(getString(R.string.alert_i))
+                            builder.setMessage(jsonObject.getString("message"))
+                            builder.setPositiveButton(R.string.yes) { dialog, which ->
+                                dialog.cancel()
+                                add_cart_type="1"
+                                validateAndCartAdd(old_product_item_id, productId, supplierId)
+                                add_cart_type=""
+                            }
+                            builder.setNegativeButton(R.string.no) { dialog, which ->
+                                dialog.cancel()
+                            }
+                            builder.show()
+                        }
+
+                        else {
+                            LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
+                        }
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody?>, throwable: Throwable) {
+                LogUtils.e("msg", throwable.message)
+                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                mView!!.home_progress_bar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        })
+
+    }
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -1447,7 +1810,11 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-       /* requireActivity().backImg.visibility=View.GONE*/
+        Utility.changeLanguage(
+            requireContext(),
+            SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
+        )
+        /* requireActivity().backImg.visibility=View.GONE*/
         requireActivity().frag_other_toolbar.visibility=View.GONE
         requireActivity().toolbar.visibility=View.VISIBLE
         requireActivity().profile_fragment_toolbar.visibility=View.GONE
@@ -1477,5 +1844,9 @@ class HomeFragment : Fragment() {
         requireActivity().about_us_fragment_toolbar.visibility=View.GONE
         requireActivity().home_frag_categories.visibility=View.GONE
 
+    }
+
+    private fun offerPriceCalculator(mainPrice:Double, discount:Double) : Double{
+        return mainPrice*(1-(discount/100))
     }
 }
