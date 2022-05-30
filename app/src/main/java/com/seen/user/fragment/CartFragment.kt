@@ -2,6 +2,7 @@ package com.seen.user.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.seen.user.R
 import com.seen.user.activity.LoginActivity
 import com.seen.user.adapter.CartAdapter
 import com.seen.user.interfaces.ClickInterface
+import com.seen.user.model.CalcShippingFees
 import com.seen.user.model.Cart
 import com.seen.user.rest.ApiClient
 import com.seen.user.rest.ApiInterface
@@ -39,6 +41,11 @@ class CartFragment : Fragment() {
     var cartList=ArrayList<Cart>()
     var userId:Int=0
     var responseBody:String=""
+    var myShippingFees=0
+    var myTotalPrice=0
+    var myTotalDisc=0
+    var myTaxes=0
+    var mySubTotal=0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,7 +104,14 @@ class CartFragment : Fragment() {
                     else -> {
                         type="3"
                         product_type=""
-                        cartAdd(cartList[pos].product_id, cartList[pos].product_item_id,  cartList[pos].id, cartList[pos].quantity,  type, product_type)
+                        cartAdd(
+                            cartList[pos].product_id,
+                            cartList[pos].product_item_id,
+                            cartList[pos].id,
+                            cartList[pos].quantity,
+                            type,
+                            product_type
+                        )
                     }
                 }
             }
@@ -144,19 +158,24 @@ class CartFragment : Fragment() {
                         responseBody=response.body()!!.string()
                         val jsonObject = JSONObject(responseBody)
                         if (jsonObject.getInt("response") == 1){
-                            mView.subTot.text="AED "+jsonObject.getString("sub_total")
-                            if(jsonObject.getString("total_discount")!="0"){
+
+                /*            if(jsonObject.getString("total_discount")!="0"){
                                 mView.txtTotalDiscount.visibility=View.VISIBLE
                                 mView.totalDiscAmt.visibility=View.VISIBLE
                             }
                             else{
                                 mView.txtTotalDiscount.visibility=View.GONE
                                 mView.totalDiscAmt.visibility=View.GONE
-                            }
-                            mView.totalDiscAmt.text="- AED "+jsonObject.getString("total_discount")
-                            mView.shipFee.text="AED "+jsonObject.getString("shipping_fee")
-                            mView.taxes.text="AED "+jsonObject.getString("taxes")
-                            mView.totalPrice.text="AED "+jsonObject.getString("total_price")
+                            }*/
+
+                            mView.txtTotalDiscount.visibility=View.VISIBLE
+                            mView.totalDiscAmt.visibility=View.VISIBLE
+
+
+                            mySubTotal = jsonObject.getString("sub_total").toInt()
+                            myTotalDisc = jsonObject.getString("total_discount").toInt()
+                            myTaxes = jsonObject.getString("taxes").toInt()
+
                             val carts=jsonObject.getJSONArray("carts")
                             cartList.clear()
                             mView.txtNoDataFound.visibility=View.GONE
@@ -188,6 +207,8 @@ class CartFragment : Fragment() {
                                 c.supplier_id = obj.getInt("supplier_id")
                                 cartList.add(c)
                             }
+
+                            calculateShippingFees()
 
                         }
 
@@ -222,12 +243,62 @@ class CartFragment : Fragment() {
 
 
     }
-    private fun cartAdd(productId: Int, productItemId: String, cartId: Int, quantity: Int, type: String, productType: String) {
+
+    private fun calculateShippingFees() {
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         mView.progressBar.visibility= View.VISIBLE
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
-        val builder = ApiClient.createBuilder(arrayOf("product_id", "product_item_id", "type", "quantity", "product_type", "cart_id", "device_id", "user_id",  "lang"),
+        val builder = ApiClient.createBuilder(arrayOf("user_id"),
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString()))
+
+        val call = apiInterface.calcShippingFees(builder.build())
+        call!!.enqueue(object : Callback<CalcShippingFees?> {
+            override fun onResponse(call: Call<CalcShippingFees?>, response: Response<CalcShippingFees?>) {
+                mView.progressBar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                try {
+                    if (response.body() != null) {
+                        myShippingFees = response.body()!!.response!!.shippingFee!!
+                        mView.totalDiscAmt.text="- AED "+myTotalDisc
+                        mView.subTot.text="AED "+mySubTotal
+                        mView.shipFee.text="AED "+myShippingFees
+                        mView.taxes.text="AED "+myTaxes
+                        myTotalPrice = myShippingFees + myTaxes + mySubTotal - myTotalDisc
+                        mView.totalPrice.text="AED "+myTotalPrice
+                        Log.e("Shipping Fee", response.body()!!.response.toString())
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<CalcShippingFees?>, throwable: Throwable) {
+                LogUtils.e("msg", throwable.message)
+                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                mView.progressBar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        })
+    }
+
+    private fun cartAdd(
+        productId: Int,
+        productItemId: String,
+        cartId: Int,
+        quantity: Int,
+        type: String,
+        productType: String
+    ) {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        mView.progressBar.visibility= View.VISIBLE
+
+        val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
+        val builder = ApiClient.createBuilder(arrayOf("product_id", "product_item_id", "type", "quantity", "product_type", "cart_id", "device_id", "user_id", "lang"),
                 arrayOf(productId.toString(), productItemId, type, quantity.toString(), productType, cartId.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""]
                         , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
@@ -243,8 +314,6 @@ class CartFragment : Fragment() {
                             if(jsonObject.getInt("carts_count")!=0){
                                 requireActivity().cartWedgeCount.visibility=View.VISIBLE
                                 requireActivity().frag_other_cartWedgeCount.visibility=View.VISIBLE
-                               /* requireActivity().cartWedgeCount.text=jsonObject.getInt("carts_count").toString()
-                                requireActivity().frag_other_cartWedgeCount.text=jsonObject.getInt("carts_count").toString()*/
                             }
                             else{
                                 requireActivity().cartWedgeCount.visibility=View.GONE

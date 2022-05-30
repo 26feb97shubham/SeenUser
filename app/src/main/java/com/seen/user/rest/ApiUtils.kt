@@ -41,6 +41,7 @@ class ApiUtils {
         const val CartAdd:String = "cartAdd"
         const val MyCart:String = "myCart"
         const val PlaceOrder:String = "createCharge"
+        const val CalcShippingFee:String = "calservice"
         const val MyOrder:String = "myOrder"
         const val GetCoupons:String = "getCoupons"
         const val ApplyCoupons:String = "applyCoupons"
@@ -55,5 +56,6 @@ class ApiUtils {
         const val SUPPLIERSEARCH = "getSuppliers"
         const val POSTRATING = "postRating"
         const val HOTDEALS = "getHotDeals"
+        const val getTrackDetails:String = "GetTrackDetails"
     }
 }

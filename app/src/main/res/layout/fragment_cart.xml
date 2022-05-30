@@ -51,7 +51,7 @@
                     android:layout_marginVertical="@dimen/_10sdp"
                     android:layout_marginHorizontal="@dimen/_15sdp"
                     android:elevation="@dimen/_15sdp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:background="#F5F5F5">
 
                     <TextView
@@ -92,7 +92,7 @@
                         android:fontFamily="@font/expressway_rg"
                         android:includeFontPadding="false"
                         android:textStyle="normal"
-                        android:textColor="@color/txt_gray"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_9ssp"
                         android:visibility="gone"
                         android:textAlignment="viewEnd"

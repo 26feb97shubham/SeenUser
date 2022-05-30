@@ -80,6 +80,11 @@ class ProductDetailsFragment : Fragment() {
 
     private var isDataLoaded = false
 
+    private var myLength = ""
+    private var myWidth = ""
+    private var myHeight = ""
+    private var myWeight = ""
+
     lateinit var mContext: Context
     private var queryMap = HashMap<String, String>()
 
@@ -244,12 +249,12 @@ class ProductDetailsFragment : Fragment() {
                 args.putString("reference", "Home")
                 requireContext().startActivity(Intent(requireContext(), LoginActivity::class.java).putExtras(args))
             }else{
-            if(already_added){
-                goToCart()
-            }
-            else{
-                cartAdd()
-            }
+                if(already_added){
+                    goToCart()
+                }
+                else{
+                    cartAdd()
+                }
             }
         }
         setProductDetails()
@@ -262,7 +267,7 @@ class ProductDetailsFragment : Fragment() {
             false
         )
         mView!!.rvProductImageList.layoutManager= linearLayoutManager
-       productImageAdapter = ProductImageAdapter(mContext, productFiles)
+        productImageAdapter = ProductImageAdapter(mContext, productFiles)
 
         val linearSnapHelper = LinearSnapHelper()
         linearSnapHelper.attachToRecyclerView(mView!!.rvProductImageList)
@@ -306,8 +311,8 @@ class ProductDetailsFragment : Fragment() {
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id",  "device_id", "lang"),
-                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), product_id.toString()
-                    , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), product_id.toString()
+                , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
 
         val call = apiInterface.productDetailPage(builder.build())
@@ -331,6 +336,11 @@ class ProductDetailsFragment : Fragment() {
                             }else{
                                 mView.productPrice.text="AED "+product.getString("price")
                             }
+
+                            myLength = product.getString("length")
+                            myWidth = product.getString("width")
+                            myHeight = product.getString("height")
+                            myWeight = product.getString("weight")
 
                             mView.txtProductRating.text=product.getDouble("product_rating").toString()
                             mView.productRatingBar.rating=product.getDouble("product_rating").toFloat()
@@ -423,9 +433,9 @@ class ProductDetailsFragment : Fragment() {
 
         val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
         val builder = ApiClient.createBuilder(arrayOf("user_id", "product_id", "data", "lang"),
-                arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
-                    product_id.toString(), dataJsonArray.toString(),
-                    SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(),
+                product_id.toString(), dataJsonArray.toString(),
+                SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
 
         val call = apiInterface.checkProductAvailable(builder.build())
@@ -440,7 +450,7 @@ class ProductDetailsFragment : Fragment() {
                             mView.productPrice.text="AED "+jsonObject.getString("price")
                             product_item_id= jsonObject.getString("product_item_id").toString()
                             if (product_item_id.isEmpty()){
-                               // LogUtils.shortToast(mContext, getString(R.string.this_item_is_currently_out_of_stock))
+                                // LogUtils.shortToast(mContext, getString(R.string.this_item_is_currently_out_of_stock))
                                 mView.yes.isSelected=false
                                 mView.no.isSelected=true
                                 mView.btnAddToCart.isEnabled = false
@@ -554,7 +564,7 @@ class ProductDetailsFragment : Fragment() {
         val builder = ApiClient.createBuilder(arrayOf("product_id", "product_item_id", "type", "quantity", "product_type", "cart_id", "device_id", "user_id", "add_cart_type", "supplier_id", "lang"),
             arrayOf(product_id.toString(), my_product_item_id, "1", "1", "1" , ""
                 , SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""], SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString()
-                   ,add_cart_type, supplier_id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
+                ,add_cart_type, supplier_id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
         val call = apiInterface.cartAdd(builder.build())
         call!!.enqueue(object : Callback<ResponseBody?> {

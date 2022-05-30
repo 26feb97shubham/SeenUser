@@ -20,6 +20,12 @@ class ApiClient {
         private const val  CONNECTION_TIMEOUT = (1000 * 30).toLong()
         private const val RETROFIT_LOGGER = "Result "
         private val baseUrl: String = "https://seen-uae.com/BuyerApi/"
+
+
+        private var emiratesPostTrackRetrofit: Retrofit? = null
+        val emiratesPostTrackingBaseUrl: String =
+            "https://osbtest.epg.gov.ae/ebs/epg.pos.trackandtrace.rest/"
+
 //       private val baseUrl: String = "https://seen-e-commerce.devtechnosys.tech/BuyerApi/"
         fun getClient(): Retrofit? {
             if (retrofit == null) {
@@ -79,6 +85,30 @@ class ApiClient {
                 okClientBuilder.writeTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)
                 return okClientBuilder.build()
             }
+
+        fun emiratesPostTrackGetClient(): Retrofit? {
+            if (emiratesPostTrackRetrofit == null) {
+                val okHttpClient = OkHttpClient().newBuilder().connectTimeout(8, TimeUnit.MINUTES)
+                    .readTimeout(80, TimeUnit.SECONDS).writeTimeout(80, TimeUnit.SECONDS)
+                    .addInterceptor(BasicAuthInterceptor("osb.user", "EPG@12345")).build()
+
+                emiratesPostTrackRetrofit =
+                    Retrofit.Builder().baseUrl(emiratesPostTrackingBaseUrl).client(okHttpClient)
+                        .addConverterFactory(GsonConverterFactory.create()).build()
+            }
+            return emiratesPostTrackRetrofit
+        }
+
+        class BasicAuthInterceptor(username: String, password: String) : Interceptor {
+            private var credentials: String = Credentials.basic(username, password)
+
+            override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+                var request = chain.request()
+                request = request.newBuilder().header("Authorization", credentials).build()
+
+                return chain.proceed(request)
+            }
+        }
 
        /* class LoginInterceptor : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {

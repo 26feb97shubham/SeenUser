@@ -8,5 +8,9 @@ class Attributes : Serializable {
     var type:String=""
     var name:String=""
     var name_ar:String=""
+    var length:String=""
+    var width:String=""
+    var height:String=""
+    var weight:String=""
     lateinit var value:JSONArray
 }

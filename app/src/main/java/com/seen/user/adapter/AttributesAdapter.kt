@@ -223,6 +223,10 @@ class AttributesAdapter(private val context: Context, private val data: ArrayLis
 
                         obj.put("data", attrData)
                         obj.put("data1", attrData1)
+                        obj.put("length", data[position].length)
+                        obj.put("width", data[position].width)
+                        obj.put("height",  data[position].height)
+                        obj.put("weight",  data[position].weight)
                         obj.put("itemAdd", itemAdd)
                         clickInstance.clickJSonObj(obj)
                     }
@@ -327,6 +331,10 @@ class AttributesAdapter(private val context: Context, private val data: ArrayLis
                         }
                         obj.put("data", attrData)
                         obj.put("data1", attrData1)
+                        obj.put("length", data[position].length)
+                        obj.put("width", data[position].width)
+                        obj.put("height",  data[position].height)
+                        obj.put("weight",  data[position].weight)
                         obj.put("itemAdd", itemAdd)
                         clickInstance.clickJSonObj(obj)
                     }
@@ -433,6 +441,10 @@ class AttributesAdapter(private val context: Context, private val data: ArrayLis
 
                         obj.put("data", attrData)
                         obj.put("data1", attrData1)
+                        obj.put("length", data[position].length)
+                        obj.put("width", data[position].width)
+                        obj.put("height",  data[position].height)
+                        obj.put("weight",  data[position].weight)
                         obj.put("itemAdd", itemAdd)
                         clickInstance.clickJSonObj(obj)
                     }
@@ -538,6 +550,10 @@ class AttributesAdapter(private val context: Context, private val data: ArrayLis
 
                         obj.put("data", attrData)
                         obj.put("data1", attrData1)
+                        obj.put("length", data[position].length)
+                        obj.put("width", data[position].width)
+                        obj.put("height",  data[position].height)
+                        obj.put("weight",  data[position].weight)
                         obj.put("itemAdd", itemAdd)
                         clickInstance.clickJSonObj(obj)
                     }
@@ -641,6 +657,10 @@ class AttributesAdapter(private val context: Context, private val data: ArrayLis
 
                         obj.put("data", attrData)
                         obj.put("data1", attrData1)
+                        obj.put("length", data[position].length)
+                        obj.put("width", data[position].width)
+                        obj.put("height",  data[position].height)
+                        obj.put("weight",  data[position].weight)
                         obj.put("itemAdd", itemAdd)
                         clickInstance.clickJSonObj(obj)
                     }

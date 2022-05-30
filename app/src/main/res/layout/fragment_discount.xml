@@ -27,9 +27,10 @@
             android:text="@string/offers_and_discounts"
             android:textAlignment="viewStart"
             android:textAllCaps="true"
-            android:textStyle="bold"
             android:textColor="@color/gray_color"
             android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_no_of_items"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

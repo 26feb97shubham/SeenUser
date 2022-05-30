@@ -18,6 +18,7 @@ import com.seen.user.R
 import com.seen.user.adapter.ItemListAdapter
 import com.seen.user.adapter.PaymentCardsAdapter
 import com.seen.user.interfaces.ClickInterface
+import com.seen.user.model.CalcShippingFees
 import com.seen.user.model.Cards
 import com.seen.user.model.Cart
 import com.seen.user.rest.ApiClient
@@ -26,8 +27,13 @@ import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
 import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fragment_cart.view.*
 import kotlinx.android.synthetic.main.fragment_check_out.view.*
 import kotlinx.android.synthetic.main.fragment_check_out.view.progressBar
+import kotlinx.android.synthetic.main.fragment_check_out.view.taxes
+import kotlinx.android.synthetic.main.fragment_check_out.view.totalDiscAmt
+import kotlinx.android.synthetic.main.fragment_check_out.view.totalPrice
+import kotlinx.android.synthetic.main.fragment_check_out.view.txtTotalDiscount
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
@@ -50,6 +56,11 @@ class CheckOutFragment : Fragment() {
     var location_id:Int=0
     var coupon_id:Int=0
     var subtotal:String=""
+    var myShippingFees=0
+    var myTotalPrice=0
+    var myTotalDisc=0
+    var myTaxes=0
+    var mySubTotal=0
     var shipping_fee:String=""
     var total_discount:String=""
     var taxes:String=""
@@ -62,7 +73,9 @@ class CheckOutFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-            mView = inflater.inflate(R.layout.fragment_check_out, container, false)
+
+
+        mView = inflater.inflate(R.layout.fragment_check_out, container, false)
         Utility.changeLanguage(
             requireContext(),
             SharedPreferenceUtility.getInstance().get(SharedPreferenceUtility.SelectedLang, "")
@@ -198,12 +211,18 @@ class CheckOutFragment : Fragment() {
                         val jsonObject = JSONObject(responseBody)
                         if (jsonObject.getInt("response") == 1){
 
-                            subtotal=jsonObject.getString("sub_total")
+         /*                   subtotal=jsonObject.getString("sub_total")
                             shipping_fee=jsonObject.getString("shipping_fee")
                             taxes=jsonObject.getString("taxes")
                             total_price=jsonObject.getString("total_price")
-                            total_discount=jsonObject.getString("total_discount")
+                            total_discount=jsonObject.getString("total_discount")*/
                             allowCoupans = jsonObject.getInt("total_allow_coupons_count")
+
+
+                            mySubTotal = jsonObject.getString("sub_total").toInt()
+                            myTaxes = jsonObject.getString("taxes").toInt()
+                            myTotalDisc = jsonObject.getString("total_discount").toInt()
+
 
                             if(allowCoupans>0){
                                 mView!!.txtCouponCode.visibility = View.VISIBLE
@@ -226,11 +245,7 @@ class CheckOutFragment : Fragment() {
                                 mView!!.totalDiscAmt.visibility=View.GONE
                             }
 
-                            mView!!.txtSubTotalPrice.text= "AED $subtotal"
-                            mView!!.totalDiscAmt.text= "- AED "+total_discount
-                            mView!!.shippingFee.text= "AED $shipping_fee"
-                            mView!!.taxes.text= "AED $taxes"
-                            mView!!.totalPrice.text= "AED $total_price"
+
 
                             val carts=jsonObject.getJSONArray("carts")
                             cartList.clear()
@@ -304,6 +319,8 @@ class CheckOutFragment : Fragment() {
                             }else{
                                 mView!!.txtAddress.text=location.getString("address")
                             }
+
+                            calculateShippingFees()
                         }
                         else {
                             LogUtils.shortToast(requireContext(), jsonObject.getString("message"))
@@ -333,6 +350,53 @@ class CheckOutFragment : Fragment() {
         Log.e("allowCoupans 1", ""+allowCoupans)
 
     }
+
+
+    private fun calculateShippingFees() {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        mView!!.progressBar.visibility= View.VISIBLE
+
+        val apiInterface = ApiClient.getClient()!!.create(ApiInterface::class.java)
+        val builder = ApiClient.createBuilder(arrayOf("user_id"),
+            arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString()))
+
+        val call = apiInterface.calcShippingFees(builder.build())
+        call!!.enqueue(object : Callback<CalcShippingFees?> {
+            override fun onResponse(call: Call<CalcShippingFees?>, response: Response<CalcShippingFees?>) {
+                mView!!.progressBar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                try {
+                    if (response.body() != null) {
+                        myShippingFees = response.body()!!.response!!.shippingFee!!
+
+                        mView!!.txtSubTotalPrice.text= "AED "+mySubTotal
+                        mView!!.totalDiscAmt.text= "- AED "+myTotalDisc
+                        mView!!.shippingFee.text= "AED "+myShippingFees
+                        mView!!.taxes.text= "AED "+myTaxes
+                        myTotalPrice = myShippingFees + myTaxes + mySubTotal - myTotalDisc
+                        mView!!.totalPrice.text=  "AED "+myTotalPrice
+                        Log.e("Shipping Fee", response.body()!!.response.toString())
+                        Log.e("Shipping Fee", response.body()!!.response.toString())
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<CalcShippingFees?>, throwable: Throwable) {
+                LogUtils.e("msg", throwable.message)
+                LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                mView!!.progressBar.visibility = View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        })
+    }
+
+
     private fun placeOrder() {
         Log.e("order_data", order_data.toString())
         mView!!.progressBar.visibility= View.VISIBLE
@@ -341,7 +405,7 @@ class CheckOutFragment : Fragment() {
         val builder = ApiClient.createBuilder(arrayOf("user_id", "device_id", "order_data", "location_id", "coupon_id"
             , "subtotal", "shipping_fee", "taxes", "total_price", "total_discount", "cart_ids",  "card_id", "supplier_id", "lang"),
             arrayOf(SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.UserId, 0].toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.DeviceId, ""]
-                ,order_data.toString(), location_id.toString(), coupon_id.toString(), subtotal, shipping_fee, taxes, total_price, total_discount, cart_ids.toString(), card_id.toString()
+                ,order_data.toString(), location_id.toString(), coupon_id.toString(), mySubTotal.toString(), myShippingFees.toString(), myTaxes.toString(), myTotalPrice.toString(), myTotalDisc.toString(), cart_ids.toString(), card_id.toString()
                 , supplier_id.toString(), SharedPreferenceUtility.getInstance()[SharedPreferenceUtility.SelectedLang, ""].toString()))
 
 

@@ -48,7 +48,7 @@ class MyOrdersFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-             notType = it.getString("type").toString()
+            notType = it.getString("type").toString()
             direction = it.getInt("direction")
 
         }
@@ -58,8 +58,6 @@ class MyOrdersFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        /*  if(mView==null) {*/
         mView = inflater.inflate(R.layout.fragment_my_orders, container, false)
         Utility.changeLanguage(
             requireContext(),
@@ -73,9 +71,6 @@ class MyOrdersFragment : Fragment() {
             setUpcomingTab()
         }
 
-
-//        }
-
         return mView
     }
     private fun setUpViews() {
@@ -86,7 +81,7 @@ class MyOrdersFragment : Fragment() {
             requireActivity().frag_other_backImg.startAnimation(AlphaAnimation(1f, 0.5f))
             SharedPreferenceUtility.getInstance().hideSoftKeyBoard(requireContext(), requireActivity().frag_other_backImg)
             if (direction==1){
-                findNavController().navigate(R.id.home)
+                findNavController().navigate(R.id.homeFragment)
             }else{
                 findNavController().popBackStack()
             }
@@ -156,6 +151,7 @@ class MyOrdersFragment : Fragment() {
                                 m.total_price = obj.getString("total_price")
                                 m.delivery_date = obj.getString("delivery_date")
                                 m.file = obj.getString("file")
+                                m.AWBNumber = obj.getString("AWBNumber")
 
                                 if(type=="3"){
                                     historyList.add(m)
@@ -225,6 +221,7 @@ class MyOrdersFragment : Fragment() {
                 bundle.putString("order_id", historyList[pos].order_id)
                 bundle.putInt("id", historyList[pos].id)
                 bundle.putInt("supplier_id", historyList[pos].supplier_id)
+                bundle.putString("AWBNumber", historyList[pos].AWBNumber)
                 findNavController().navigate(R.id.action_myOrdersFragment_to_orderDetailsFragment, bundle)
             }
 
@@ -255,6 +252,7 @@ class MyOrdersFragment : Fragment() {
                 bundle.putString("order_id", upcomingList[pos].order_id)
                 bundle.putInt("id", upcomingList[pos].id)
                 order_status = upcomingList[pos].status
+                bundle.putString("AWBNumber", upcomingList[pos].AWBNumber)
                 bundle.putInt("order_status", upcomingList[pos].status)
                 findNavController().navigate(R.id.action_myOrdersFragment_to_orderStatusFragment, bundle)
             }

@@ -153,6 +153,10 @@ class HomeFragment : Fragment() {
     private var category_name = ""
     private var category_name_ar = ""
     private var totalQuantityOfItems = 0
+    private var lengthOfItems = 0
+    private var widthOfItems = 0
+    private var weightOfItems = 0
+    private var heightOfItems = 0
     private var isOfferApplierToProduct = false
     private var discountOnProduct = 0
 
@@ -342,6 +346,10 @@ class HomeFragment : Fragment() {
                         attrArrayData = JSONObject(myJsonArrayResponse[i].toString()).getJSONArray("data")
                         old_product_item_id = JSONObject(myJsonArrayResponse[i].toString()).getString("id")
                         totalQuantityOfItems = JSONObject(myJsonArrayResponse[i].toString()).getInt("quantity")
+                        lengthOfItems = JSONObject(myJsonArrayResponse[i].toString()).getInt("length")
+                        widthOfItems = JSONObject(myJsonArrayResponse[i].toString()).getInt("width")
+                        heightOfItems = JSONObject(myJsonArrayResponse[i].toString()).getInt("height")
+                        weightOfItems = JSONObject(myJsonArrayResponse[i].toString()).getInt("weight")
                         if (productPrice.equals(price)){
                             attrData = JSONArray()
                             for (i in 0 until attrArrayData.length()){
@@ -1485,7 +1493,7 @@ class HomeFragment : Fragment() {
 
         val h = HomeCategories()
         h.id=0
-        h.name=getString(R.string.category)
+        h.name=getString(R.string.category_one)
         h.icon=R.drawable.dots_menu_transparent
         homeCatList.add(h)
 

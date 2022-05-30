@@ -34,7 +34,6 @@ class HomeCategoriesAdapter(private val context:Context, private val data:ArrayL
         Glide.with(context).load(data[position].icon).placeholder(R.drawable.ic_launcher_foreground).into(holder.itemView.img)
 
         holder.itemView.setOnClickListener {
-           /* clickInstance.clickPostion(position)*/
             clickInstance.clickPostion(position, "")
             selectPos=position
             notifyDataSetChanged()

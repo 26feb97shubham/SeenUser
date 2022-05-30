@@ -5,7 +5,9 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AlphaAnimation
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,11 +15,29 @@ import com.seen.user.R
 import com.seen.user.adapter.Orders_Products_Adapter
 import com.seen.user.interfaces.ClickInterface
 import com.seen.user.model.ProductList
+import com.seen.user.model.TrackFinalResultResponse
+import com.seen.user.rest.ApiClient
+import com.seen.user.rest.ApiInterface
+import com.seen.user.utils.LogUtils
 import com.seen.user.utils.SharedPreferenceUtility
 import com.seen.user.utils.Utility
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.fragment_order_details.view.*
 import kotlinx.android.synthetic.main.fragment_order_status.view.*
+import kotlinx.android.synthetic.main.fragment_order_status.view.btnsubmitrating
+import kotlinx.android.synthetic.main.fragment_order_status.view.deliveredImg
+import kotlinx.android.synthetic.main.fragment_order_status.view.deliveryDate
+import kotlinx.android.synthetic.main.fragment_order_status.view.onWayImg
+import kotlinx.android.synthetic.main.fragment_order_status.view.orderNum
+import kotlinx.android.synthetic.main.fragment_order_status.view.pickedUpImg
+import kotlinx.android.synthetic.main.fragment_order_status.view.progressBar
+import kotlinx.android.synthetic.main.fragment_order_status.view.rvList
 import org.json.JSONArray
+import org.json.JSONException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 class OrderStatusFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -34,7 +54,9 @@ class OrderStatusFragment : Fragment() {
     var order_id:String=""
     var my_id:Int=0
     var status : String = ""
+    var AWBNumber : String = ""
     var order_status : Int = 0
+    var myTrackStatus = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,6 +67,7 @@ class OrderStatusFragment : Fragment() {
             taxes = it.getString("taxes").toString()
             total_price = it.getString("total_price").toString()
             order_id = it.getString("order_id").toString()
+            AWBNumber = it.getString("AWBNumber").toString()
             my_id = it.getInt("id")
             order_status = it.getInt("order_status")
         }
@@ -91,15 +114,16 @@ class OrderStatusFragment : Fragment() {
             }
         }
 
-        if (MyOrdersFragment.order_status == 0){
+        trackProduct(AWBNumber)
+       /* if (myTrackStatus == 0){
             mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
             mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
             mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
-        }else if(MyOrdersFragment.order_status == 1){
+        }else if(myTrackStatus == 1){
             mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
             mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
             mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
-        }else if(MyOrdersFragment.order_status == 2){
+        }else if(myTrackStatus == 2){
             mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
             mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
             mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
@@ -107,7 +131,7 @@ class OrderStatusFragment : Fragment() {
             mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
             mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
             mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
-        }
+        }*/
 
 
 
@@ -142,6 +166,108 @@ class OrderStatusFragment : Fragment() {
 
 
     }
+
+
+
+    private fun trackProduct(AWBNumber: String) {
+        if(AWBNumber.isEmpty()){
+            Toast.makeText(requireContext(), requireContext().getString(R.string.your_tracking_number_is_empty_or_invalid), Toast.LENGTH_LONG).show()
+            myTrackStatus = 0
+
+            when (myTrackStatus) {
+                0 -> {
+                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                }
+                1 -> {
+                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                }
+                2 -> {
+                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                }
+                else -> {
+                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                }
+            }
+        }else{
+            requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            mView!!.progressBar.visibility= View.VISIBLE
+
+            val apiInterface = ApiClient.emiratesPostTrackGetClient()!!.create(ApiInterface::class.java)
+
+            val call = apiInterface.getTrackDetails(AWBNumber)
+
+            call!!.enqueue(object : Callback<TrackFinalResultResponse?> {
+                override fun onResponse(call: Call<TrackFinalResultResponse?>, response: Response<TrackFinalResultResponse?>) {
+                    mView!!.progressBar.visibility = View.GONE
+                    requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    try {
+                        if (response.body() != null) {
+                            val trackFinalResultArrayList = response.body()!!.trackFinalResult
+                            val subStatusCode = trackFinalResultArrayList[0].subStatusCode
+                            myTrackStatus = when(subStatusCode){
+                                "B" -> 1
+                                "CLC9" -> 2
+                                "CLC11" -> 2
+                                "CLC12" -> 3
+                                "CLC30" -> 2
+                                "CLC55" -> 1
+                                else -> 0
+                            }
+
+                            when (myTrackStatus) {
+                                0 -> {
+                                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                                }
+                                1 -> {
+                                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                                }
+                                2 -> {
+                                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gray_bg)
+                                }
+                                else -> {
+                                    mView!!.pickedUpImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                                    mView!!.onWayImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                                    mView!!.deliveredImg.setBackgroundResource(R.drawable.black_ring_gold_bg)
+                                }
+                            }
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onFailure(call: Call<TrackFinalResultResponse?>, throwable: Throwable) {
+                    LogUtils.e("msg", throwable.message)
+                    LogUtils.shortToast(requireContext(), getString(R.string.check_internet))
+                    mView!!.progressBar.visibility = View.GONE
+                    requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                }
+            })
+        }
+
+    }
+
+
+
+
 
     override fun onResume() {
         super.onResume()

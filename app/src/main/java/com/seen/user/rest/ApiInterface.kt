@@ -7,6 +7,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiInterface {
     @POST(ApiUtils.LOGIN)
@@ -129,6 +130,9 @@ interface ApiInterface {
     @POST(ApiUtils.PlaceOrder)
     fun placeOrder(@Body body: RequestBody?): Call<ResponseBody?>?
 
+    @POST(ApiUtils.CalcShippingFee)
+    fun calcShippingFees(@Body body: RequestBody?): Call<CalcShippingFees?>?
+
     @POST(ApiUtils.MyOrder)
     fun myOrder(@Body body: RequestBody?): Call<ResponseBody?>?
 
@@ -170,4 +174,7 @@ interface ApiInterface {
 
     @POST(ApiUtils.HOTDEALS)
     fun getHotDeals(@Body body: RequestBody?) : Call<ResponseBody?>?
+
+    @GET(ApiUtils.getTrackDetails)
+    fun getTrackDetails(@Query("track_id") track_id : String) : Call<TrackFinalResultResponse?>?
 }

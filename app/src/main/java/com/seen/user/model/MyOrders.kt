@@ -11,6 +11,7 @@ class MyOrders {
     var taxes:String = ""
     var total_price:String = ""
     var delivery_date:String = ""
+    var AWBNumber:String = ""
     var file:String = ""
     var status : Int = 0
     var supplier_id : Int = 0

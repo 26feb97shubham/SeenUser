@@ -39,7 +39,8 @@
     <string name="no_categories_found">لم يتم العثور على فئات</string>
     <string name="categories">يكمل</string>
     <string name="categories_side_menu">فئات</string>
-    <string name="category">يكمل </string>
+    <string name="category">فئة  </string>
+    <string name="category_one">فئات </string>
     <string name="hayley_williams">هايلي ويليامز</string>
     <string name="hayleywilliams_gmail_com">hayleywilliams@gmail.com</string>
     <string name="latest_offers">آخر العروض</string>
@@ -244,7 +245,7 @@
     <string name="new_items_added">تمت إضافة عناصر جديدة</string>
     <string name="filter">راووق</string>
     <string name="hot_deals"> صفقات مميزة</string>
-    <string name="search_in_seen">انقر للبحث</string>
+    <string name="search_in_seen">ابحث هنا </string>
     <string name="sponsors">الكفلاء</string>
     <string name="recent_products">المنتجات الحديثة</string>
     <string name="item_name">اسم العنصر</string>
@@ -353,4 +354,10 @@
     <string name="by_adding_your_honest_product_rating_you_are_helping_our_community_to_have_a_standard_of_quality_products_for_all_our_customers_n_n_thank_you_for_your_cooperation">من خلال إضافة تقييمك الصادق للمنتج ، فإنك تساعد مجتمعنا في الحصول على معيار للمنتجات عالية الجودة لجميع عملائنا. شكرا لتعاونكم!</string>
     <string name="add_rating">إضافة التقييم</string>
     <string name="add_supplier_rating">إضافة تصنيف المورد</string>
+    <string name="select_emirate_one">اختر الامارة</string>
+    <string name="get_20_off_upto_aed_150">احصل على خصم 20٪ حتى 150 درهم إماراتي</string>
+    <string name="location_access_is_mandate_to_get_the_data">الوصول إلى الموقع هو تفويض للحصول على البيانات</string>
+    <string name="location_access">الوصول إلى الموقع:</string>
+    <string name="privacy_and_policy_one">سياسة الخصوصية</string>
+    <string name="your_tracking_number_is_empty_or_invalid">معرف التتبع الخاص بك غير صالح أو فارغ</string>
 </resources>
